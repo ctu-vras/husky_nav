@@ -9,12 +9,14 @@ Install husky simulation, [reference](http://wiki.ros.org/husky_navigation/Tutor
 sudo apt-get install ros-<distro>-husky-*
 echo "export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro" >> ~/.bashrc
 ```
+Husky simulation is tested on Gazebo 7 + ROS kinetic.
 
 In case you want to use a turtlebot3 simulation, [reference](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/):
 ```bash
 sudo apt-get install ros-<distro>-turtlebot3-*
 echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
 ```
+Turtlebot simulation is tested both on Gazebo 7 + ROS kinetic and Gazebo 9 + ROS melodic set-ups.
 
 ## Waypoints following example
 Bringup simulated environment and spawn a husky robot in it.

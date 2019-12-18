@@ -4,15 +4,15 @@ ROS package for mobile robot navigation based on move_base.
 <img src="https://github.com/RuslanAgishev/navigation_goals/blob/master/figures/husky_example.png"/>
 
 ## Installation
-Install husky simulation, [reference](http://wiki.ros.org/husky_gazebo/Tutorials/Simulating%20Husky):
+Install husky simulation, [reference](http://wiki.ros.org/husky_navigation/Tutorials):
 ```bash
-sudo apt-get install ros-<distro>-husky-simulator
+sudo apt-get install ros-<distro>-husky-*
 echo "export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro" >> ~/.bashrc
 ```
 
 In case you want to use a turtlebot3 simulation, [reference](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/):
 ```bash
-sudo apt-get install ros-kinetic-turtlebot3-*
+sudo apt-get install ros-<distro>-turtlebot3-*
 echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
 ```
 

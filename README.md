@@ -32,7 +32,7 @@ roslaunch navigation_goals husky_main.launch
 ```
 Or in order to spwan a turtlebot in a simulated environment:
 ```bash
-roslaunch navigation_goals gazebo_navigation_rviz.launch
+roslaunch navigation_goals turtlebot3_main.launch
 ```
 Command a robot to visit a sequence of waypoints.
 ```bash

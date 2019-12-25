@@ -36,5 +36,5 @@ roslaunch navigation_goals turtlebot3_main.launch
 ```
 Command a robot to visit a sequence of waypoints.
 ```bash
-roslaunch navigation_goals movebase_seq.launch
+roslaunch navigation_goals send_wp_sequence.launch
 ```

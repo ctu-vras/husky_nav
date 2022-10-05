@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- arguments -->
+  <arg name="world_path" default="$(find husky_gazebo)/worlds/clearpath_playpen.world" />
+  <arg name="headless" default="true"/>
+<!--  <arg name="description" default="'$(find cras_husky_description)/urdf/husky.urdf.xacro'"/>-->
+  <arg name="description" default="$(find husky_description)/urdf/husky.urdf.xacro"/>
+<!--  <arg name="description" default="'$(find ctu_cras_norlab_husky_sensor_config_1)/urdf/robot_from_sdf.xacro'"/>-->
+  <arg name="gui" default="false"/>
+  <arg name="gpu" default="false"/>
+  <arg name="multi_robot_name" default=""/>
+
+  <param name="use_sim_time" value="true" />
+
+  <!-- robot model with sensors and simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_path)" />
+    <arg name="debug" value="false" />
+    <arg name="paused" value="false"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- spawn the robot model -->
+  <param name="robot_description" command="$(find xacro)/xacro $(arg description) gpu:=$(arg gpu)"/>
+  <node name="husky_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -param robot_description -model husky
+        -x 0 -y 0 -z 0.2  -R 0 -P 0 -Y 0">
+  </node>
+
+  <!-- robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <!-- joint state publisher -->
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <!-- controller -->
+<!--  <node pkg="twist_mux" type="twist_mux" name="twist_mux">-->
+<!--    <rosparam command="load" file="$(find husky_control)/config/twist_mux.yaml" />-->
+<!--    <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>-->
+<!--  </node>-->
+
+  <!-- RVIZ -->
+  <node name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find navigation_goals)/config/husky.rviz"/>
+
+</launch>

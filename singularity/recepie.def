@@ -1,0 +1,31 @@
+Bootstrap: docker
+From: ros:melodic-perception
+
+%post
+    export XDG_CACHE_HOME=/tmp/singularity-cache # pip cache
+
+    # Install Apt packages
+    packages="
+        gcc
+        g++
+        bridge-utils
+        build-essential
+        htop
+        net-tools
+        screen
+        sshpass
+        tmux
+        vim
+        wget
+        curl
+        git
+        python-pip
+        python-catkin-tools
+        ros-melodic-ros-numpy
+        ros-melodic-jsk-rviz-plugins
+        ros-melodic-rviz
+        ros-melodic-navigation
+        ros-melodic-husky-*"
+
+    apt update
+    apt install -y ${packages}

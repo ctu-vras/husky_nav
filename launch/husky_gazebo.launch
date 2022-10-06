@@ -5,15 +5,19 @@
   <arg name="world_path" default="$(find husky_gazebo)/worlds/clearpath_playpen.world" />
   <arg name="headless" default="true"/>
 <!--  <arg name="description" default="'$(find cras_husky_description)/urdf/husky.urdf.xacro'"/>-->
-  <arg name="description" default="$(find husky_description)/urdf/husky.urdf.xacro"/>
+  <arg name="description" default="$(find navigation_goals)/urdf/husky.urdf.xacro"/>
 <!--  <arg name="description" default="'$(find ctu_cras_norlab_husky_sensor_config_1)/urdf/robot_from_sdf.xacro'"/>-->
   <arg name="gui" default="false"/>
-  <arg name="gpu" default="false"/>
-  <arg name="multi_robot_name" default=""/>
+  <arg name="rviz" default="false"/>
+  <arg name="enable_ekf" default="$(optenv ENABLE_EKF true)"/>
+  <arg name="config_extras"
+       default="$(eval optenv('HUSKY_CONFIG_EXTRAS', find('husky_control') + '/config/empty.yaml'))"/>
+  <!-- Optionally disable teleop control -->
+  <arg name="joystick" default="true" />
 
   <param name="use_sim_time" value="true" />
 
-  <!-- robot model with sensors and simulated world -->
+  <!-- simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(arg world_path)" />
     <arg name="debug" value="false" />
@@ -22,33 +26,64 @@
     <arg name="gui" value="$(arg gui)"/>
   </include>
 
-  <!-- spawn the robot model -->
-  <param name="robot_description" command="$(find xacro)/xacro $(arg description) gpu:=$(arg gpu)"/>
-  <node name="husky_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
-        args="-urdf -param robot_description -model husky
-        -x 0 -y 0 -z 0.2  -R 0 -P 0 -Y 0">
+<!--  <include file="$(find husky_gazebo)/launch/spawn_husky.launch"/>-->
+
+  <!-- Load robot description -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(arg description)'"/>
+
+  <!-- Load controller configuration -->
+  <rosparam command="load" file="$(find husky_control)/config/control.yaml" />
+
+  <!-- Spawn controllers -->
+  <node name="base_controller_spawner" pkg="controller_manager" type="spawner"
+        args="husky_joint_publisher husky_velocity_controller"/>
+  <rosparam param="wheel_radius_multiplier" ns="husky_velocity_controller" subst_value="True">
+        $(optenv HUSKY_WHEEL_MULTIPLIER 1.0)
+  </rosparam>
+
+  <!-- Start EKF for localization -->
+  <group if="$(arg enable_ekf)" >
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
+      <rosparam command="load" file="$(find husky_control)/config/localization.yaml" />
+    </node>
+  </group>
+
+  <node pkg="interactive_marker_twist_server" type="marker_server" name="twist_marker_server" output="screen">
+    <param name="link_name" value="base_link" />
   </node>
 
-  <!-- robot state publisher -->
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="50.0" />
-    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+    <rosparam command="load" file="$(find husky_control)/config/twist_mux.yaml" />
+    <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>
   </node>
 
-  <!-- joint state publisher -->
-  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
-    <param name="publish_frequency" type="double" value="50.0" />
-    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
-  </node>
+  <!-- Override the default control parameters, see config/empty.yaml for default. -->
+  <rosparam command="load" file="$(arg config_extras)" subst_value="true" />
 
-  <!-- controller -->
-<!--  <node pkg="twist_mux" type="twist_mux" name="twist_mux">-->
-<!--    <rosparam command="load" file="$(find husky_control)/config/twist_mux.yaml" />-->
-<!--    <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>-->
-<!--  </node>-->
+  <include file="$(find husky_control)/launch/teleop.launch">
+    <arg name="joystick" value="$(arg joystick)" />
+  </include>
+
+  <!-- Additional nodes for specific accessories -->
+  <group if="$(optenv HUSKY_REALSENSE_ENABLED 0)">
+    <include file="$(find husky_gazebo)/launch/realsense.launch" />
+  </group>
+
+  <!-- Spawn robot in gazebo -->
+  <node name="spawn_husky_model" pkg="gazebo_ros" type="spawn_model"
+      args="-x 0
+            -y 0
+            -z 0.2
+            -Y 0
+            -unpause
+            -urdf
+            -param robot_description
+            -model husky"/>
 
   <!-- RVIZ -->
-  <node name="rviz" pkg="rviz" type="rviz"
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
         args="-d $(find navigation_goals)/config/husky.rviz"/>
 
 </launch>

@@ -60,7 +60,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="laser_ust10_rear_rpy"      default="$(optenv HUSKY_UST10_SECONDARY_RPY 0 0 3.14159)" />
 
   <!-- Velodyne LiDAR Primary and Secondary -->
-  <xacro:arg name="laser_3d_enabled"              default="$(optenv HUSKY_LASER_3D_ENABLED 0)" />
+  <xacro:arg name="laser_3d_enabled"              default="$(optenv HUSKY_LASER_3D_ENABLED 1)" />
   <xacro:arg name="laser_3d_topic"                default="$(optenv HUSKY_LASER_3D_TOPIC points)"/>
   <xacro:arg name="laser_3d_tower"                default="$(optenv HUSKY_LASER_3D_TOWER 1)"/>
   <xacro:arg name="laser_3d_prefix"               default="$(optenv HUSKY_LASER_3D_PREFIX )"/>
@@ -77,7 +77,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="laser_3d_secondary_rpy"        default="$(optenv HUSKY_LASER_3D_SECONDARY_RPY 0 0 -3.14159)" />
 
   <!-- Realsense Camera Primary and Secondary -->
-  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 0)" />
+  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 1)" />
   <xacro:arg name="realsense_topic"               default="$(optenv HUSKY_REALSENSE_TOPIC realsense)" />
   <xacro:arg name="realsense_prefix"              default="$(optenv HUSKY_REALSENSE_PREFIX camera)" />
   <xacro:arg name="realsense_parent"              default="$(optenv HUSKY_REALSENSE_PARENT top_plate_link)" />
@@ -129,7 +129,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:include filename="$(find husky_description)/urdf/accessories/flir_blackfly_mount.urdf.xacro"/>
   <xacro:include filename="$(find husky_description)/urdf/accessories/sensor_arch.urdf.xacro"/>
   <xacro:include filename="$(find husky_description)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/>
-  <xacro:include filename="$(find husky_description)/urdf/accessories/vlp16_mount.urdf.xacro"/>
+<!--  <xacro:include filename="$(find husky_description)/urdf/accessories/vlp16_mount.urdf.xacro"/>-->
   <xacro:include filename="$(find husky_description)/urdf/decorations.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/wheel.urdf.xacro" />
   <xacro:include filename="$(find ouster_description)/urdf/OS1-64.urdf.xacro"/>
@@ -331,34 +331,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 <!--    </xacro:unless>-->
 <!--  </xacro:if>-->
 
-  <!-- Ouster sensor links and fixed joints -->
-    <joint name="ouster_base_mount_joint" type="fixed">
-      <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
-      <parent link="$(arg laser_3d_parent)"/>
-      <child link="ouster_link"/>
-    </joint>
-
-    <link name="ouster_link">
-      <inertial>
-         <mass value="0.33"/>
-         <origin xyz="0 0 0.0365" rpy="0 0 0" />
-         <inertia ixx="0.000241148" ixy="0" ixz="0"
-          iyy="0.000241148" iyz="0" izz="0.000264"/>
-      </inertial>
-      <collision name="base_collision">
-         <origin xyz="0 0 0.0365" rpy="0 0 0" />
-         <geometry>
- 	   <cylinder radius="0.04" length="0.073"/>
-         </geometry>
-      </collision>
-      <visual name="base_visual">
-         <origin xyz="0 0 0" rpy="0 0 1.5707" />
-         <geometry>
-	    <mesh filename="package://ouster_description/meshes/os1_64.dae" />
-         </geometry>
-      </visual>
-   </link>
-
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>$(arg robot_namespace)</robotNamespace>
@@ -387,8 +359,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       <updateRate>40</updateRate>
       <bodyName>base_link</bodyName>
       <frameId>base_link</frameId>
-      <topicName>navsat/fix</topicName>
-      <velocityTopicName>navsat/vel</velocityTopicName>
+      <topicName>/fix</topicName>
+      <velocityTopicName>/vel</velocityTopicName>
       <referenceLatitude>49.9</referenceLatitude>
       <referenceLongitude>8.9</referenceLongitude>
       <referenceHeading>0</referenceHeading>
@@ -397,10 +369,37 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </plugin>
   </gazebo>
 
-  <!-- Gazebo requires the ouster_gazebo_plugins package -->
-    <gazebo reference="ouster_link">
+  <xacro:if value="$(arg laser_3d_enabled)">
+    <!-- Ouster sensor links and fixed joints -->
+    <joint name="ouster_base_mount_joint" type="fixed">
+      <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
+      <parent link="$(arg laser_3d_parent)"/>
+      <child link="ouster_link"/>
+    </joint>
+
+    <link name="ouster_link">
+      <inertial>
+         <mass value="0.33"/>
+         <origin xyz="0 0 0.0365" rpy="0 0 0" />
+         <inertia ixx="0.000241148" ixy="0" ixz="0"
+          iyy="0.000241148" iyz="0" izz="0.000264"/>
+      </inertial>
+      <collision name="base_collision">
+         <origin xyz="0 0 0.0365" rpy="0 0 0" />
+         <geometry>
+ 	   <cylinder radius="0.04" length="0.073"/>
+         </geometry>
+      </collision>
+      <visual name="base_visual">
+         <origin xyz="0 0 0" rpy="0 0 1.5707" />
+         <geometry>
+	    <mesh filename="package://ouster_description/meshes/os1_64.dae" />
+         </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo requires the ouster_gazebo_plugins package -->
+    <gazebo eference="ouster_link">
         <sensor type="ray" name="ouster-OS1-64">
-<!--          <pose>0 0 0 0 0 0</pose>-->
           <pose>0 0 0.035925 0 0 0</pose>
           <visualize>false</visualize>
           <update_rate>10</update_rate>
@@ -408,26 +407,19 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
           <ray>
             <scan>
               <horizontal>
-<!--                <samples>220</samples>-->
                 <samples>1024</samples>
                 <resolution>1</resolution>
                 <min_angle>-3.1415926535897931</min_angle>
                 <max_angle>3.1415926535897931</max_angle>
               </horizontal>
               <vertical>
-<!--                <samples>64</samples>-->
                 <samples>128</samples>
 		        <resolution>1</resolution>
-<!--                <min_angle>-0.26</min_angle> &lt;!&ndash;15*3.1415926535897931/180.0&ndash;&gt;-->
-<!--                <max_angle>0.26</max_angle>-->
                 <min_angle>-${pi/4}</min_angle>
                 <max_angle>${pi/4}</max_angle>
               </vertical>
             </scan>
             <range>
-<!--              <min>0.9</min>-->
-<!--              <max>75</max>-->
-<!--              <resolution>0.03</resolution>-->
               <min>0.25</min>  <!-- Datasheet says 0 cm, but that's a lie. -->
               <max>50</max>
               <resolution>0.01</resolution>
@@ -435,7 +427,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             <noise>
               <type>gaussian</type>
               <mean>0.0</mean>
-<!--              <stddev>0.0</stddev>-->
               <stddev>0.01</stddev>
             </noise>
           </ray>
@@ -448,6 +439,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
           </plugin>
         </sensor>
     </gazebo>
+  </xacro:if>
 
   <!-- Optional custom includes. -->
   <xacro:include filename="$(arg urdf_extras)" />

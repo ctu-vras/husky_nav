@@ -6,10 +6,13 @@
                                                    one of ['00000', '00001', '00002', '00003', '00004']"/>
 
     <!-- Bag file data -->
-    <include file="$(dirname)/husky_gazebo.launch"/>
+    <include file="$(dirname)/husky_gazebo.launch">
+<!--        <arg name="world_path" value="$(dirname)/../worlds/emptyfarm.world"/>-->
+        <arg name="world_path" value="$(find husky_gazebo)/worlds/clearpath_playpen.world"/>
+    </include>
 
 <!--    Point cloud segmentation -->
-    <node name="cloud_segmentation" pkg="traversability_estimation" type="cloud_segmentation_rgb" output="screen">
+    <node name="cloud_segmentation" pkg="traversability_estimation" type="cloud_segmentation_rgb">
         <rosparam subst_value="true">
             device: $(arg device)
             max_age: 0.2
@@ -28,44 +31,45 @@
     </node>
 
 <!--    Cloud voxel filtering: 10 cm -->
-<!--    <node name="cloud_voxel_filter_10cm" pkg="nodelet" type="nodelet"-->
-<!--          args="standalone cloud_proc/voxel_filter"-->
-<!--            respawn="true" respawn_delay="1.0" output="log">-->
-<!--        <rosparam>-->
-<!--            field: x-->
-<!--            grid: 0.1-->
-<!--            zero_valid: false-->
-<!--        </rosparam>-->
-<!--        <remap from="input" to="cloud_segmentation/points"/>-->
-<!--        <remap from="output" to="cloud_segmentation/points_10cm"/>-->
-<!--    </node>-->
-<!--&lt;!&ndash;    Cloud voxel filtering: 20 cm &ndash;&gt;-->
-<!--    <node name="cloud_voxel_filter_20cm" pkg="nodelet" type="nodelet"-->
-<!--          args="standalone cloud_proc/voxel_filter"-->
-<!--            respawn="true" respawn_delay="1.0" output="log">-->
-<!--        <rosparam>-->
-<!--            field: x-->
-<!--            grid: 0.2-->
-<!--            zero_valid: false-->
-<!--        </rosparam>-->
-<!--        <remap from="input" to="cloud_segmentation/points_10cm"/>-->
-<!--        <remap from="output" to="cloud_segmentation/points_20cm"/>-->
-<!--    </node>-->
+    <node name="cloud_voxel_filter_10cm" pkg="nodelet" type="nodelet"
+          args="standalone cloud_proc/voxel_filter"
+            respawn="true" respawn_delay="1.0" output="log">
+        <rosparam>
+            field: x
+            grid: 0.1
+            zero_valid: false
+        </rosparam>
+        <remap from="input" to="cloud_segmentation/points"/>
+        <remap from="output" to="cloud_segmentation/points_10cm"/>
+    </node>
+<!--    Cloud voxel filtering: 20 cm -->
+    <node name="cloud_voxel_filter_20cm" pkg="nodelet" type="nodelet"
+          args="standalone cloud_proc/voxel_filter"
+            respawn="true" respawn_delay="1.0" output="log">
+        <rosparam>
+            field: x
+            grid: 0.2
+            zero_valid: false
+        </rosparam>
+        <remap from="input" to="cloud_segmentation/points_10cm"/>
+        <remap from="output" to="cloud_segmentation/points_20cm"/>
+    </node>
 
-<!--    &lt;!&ndash; Cloud distance filtering &ndash;&gt;-->
-<!--    <node pkg="gps_to_path" type="trav_to_obstacles" name="trav_to_obstacles" output="screen">-->
-<!--        <param name="max_height" type="double" value="1."/>-->
-<!--        <param name="min_height" type="double" value="0.05"/>-->
-<!--        <param name="max_dist" type="double" value="7." />-->
-<!--        <param name="min_dist" type="double" value="0.5"/>-->
-<!--        <param name="max_age" type="double" value="0.2"/>-->
-<!--        <param name="robot_base_frame" type="string" value="base_link"/>-->
-<!--&lt;!&ndash;        <param name="cloud_in" type="str" value="cloud_fusion/points_20cm"/>&ndash;&gt;-->
-<!--        <param name="cloud_in" type="str" value="cloud_segmentation/points"/>-->
-<!--        <param name="trav_obstacle_field" type="string" value="traversability_soft"/>-->
-<!--&lt;!&ndash;        <param name="trav_obstacle_field" type="string" value="traversability"/>&ndash;&gt;-->
-<!--        <param name="trav_frame" type="string" value="os_sensor"/>-->
-<!--    </node>-->
+    <!-- Imu to azimuth data -->
+    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>
+
+    <!-- Cloud distance filtering -->
+    <node pkg="gps_to_path" type="trav_to_obstacles" name="trav_to_obstacles" output="screen">
+        <param name="max_height" type="double" value="1."/>
+        <param name="min_height" type="double" value="0.05"/>
+        <param name="max_dist" type="double" value="7." />
+        <param name="min_dist" type="double" value="0.5"/>
+        <param name="max_age" type="double" value="0.2"/>
+        <param name="robot_base_frame" type="string" value="base_link"/>
+        <param name="cloud_in" type="str" value="cloud_segmentation/points"/>
+        <param name="trav_obstacle_field" type="string" value="traversability_soft"/>
+        <param name="trav_frame" type="string" value="os_sensor"/>
+    </node>
 
 <!--    &lt;!&ndash; PATH PLANNER &ndash;&gt;-->
 <!--    <node pkg="gps_to_path" type="path_planner_igraph" name="path_planner" output="screen">-->

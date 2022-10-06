@@ -4,9 +4,7 @@
   <!-- arguments -->
   <arg name="world_path" default="$(find husky_gazebo)/worlds/clearpath_playpen.world" />
   <arg name="headless" default="true"/>
-<!--  <arg name="description" default="'$(find cras_husky_description)/urdf/husky.urdf.xacro'"/>-->
   <arg name="description" default="$(find navigation_goals)/urdf/husky.urdf.xacro"/>
-<!--  <arg name="description" default="'$(find ctu_cras_norlab_husky_sensor_config_1)/urdf/robot_from_sdf.xacro'"/>-->
   <arg name="gui" default="false"/>
   <arg name="rviz" default="false"/>
   <arg name="enable_ekf" default="$(optenv ENABLE_EKF true)"/>
@@ -25,8 +23,6 @@
     <arg name="headless" value="$(arg headless)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
-
-<!--  <include file="$(find husky_gazebo)/launch/spawn_husky.launch"/>-->
 
   <!-- Load robot description -->
   <param name="robot_description" command="$(find xacro)/xacro '$(arg description)'"/>

@@ -15,7 +15,7 @@
 
     <!-- PATH PLANNER -->
     <node pkg="gps_to_path" type="path_planner_igraph" name="path_planner" output="screen">
-        <param name="gpx_assignment" type="string" value="$(find navigation_goals)/config/gpx/farm_world.gpx"/>
+        <param name="gpx_assignment" type="string" value="$(find navigation_goals)/config/gpx/unhost_easy.gpx"/>
         <param name="goal_reached_distance" type="double" value="1."/>
         <param name="publish_pcd" type="bool" value="true"/>
         <param name="trav_max_dist" type="double" value="5."/>

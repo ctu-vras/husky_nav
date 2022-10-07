@@ -5,6 +5,9 @@
     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
 <!--    <arg name="world" default="$(find husky_gazebo)/worlds/clearpath_playpen.world"/>-->
 <!--    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>-->
+    <arg name="sim_time" default="true"/>
+
+    <param name="use_sim_time" value="$(arg sim_time)"/>
 
     <!-- IMU and Magnetometer to azimuth data -->
 <!--    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>-->
@@ -19,7 +22,7 @@
     </node>
 
     <!-- Point cloud segemtnation for obstacles generation -->
-    <include file="$(dirname)/cloud_segmentation.launch">
+    <include file="$(dirname)/traversability.launch">
         <arg name="device" value="$(arg device)"/>
     </include>
 

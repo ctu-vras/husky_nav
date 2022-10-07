@@ -2,32 +2,52 @@
 <launch>
     <arg name="device" default="cuda" doc="Device to run tensor operations on: cpu or cuda"/>
     <arg name="rviz" default="false" doc="Launch RViz for data visualization or not"/>
-    <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
-<!--    <arg name="world" default="$(find husky_gazebo)/worlds/clearpath_playpen.world"/>-->
-<!--    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>-->
     <arg name="sim_time" default="true"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
 
+    <node pkg="tf" type="static_transform_publisher" name="gps_frame_broadcaster"
+          args="0 0 0   0 0 0 1 base_link gps 100" />
+    <node pkg="tf" type="static_transform_publisher" name="map_frame_broadcaster"
+          args="0 0 0   0 0 0 1 map odom 100" />
+    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"
+          args="0 0 0   0 0 0 1 map utm 100" />
+<!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
+<!--          args="-437998.7931613073 -5549045.722476885 0 0 0 0 1 map utm 100" />-->
+
     <!-- IMU and Magnetometer to azimuth data -->
-<!--    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>-->
-    <node pkg="gps_to_path" type="mag_field_to_azimuth" name="mag_field_to_azimuth" output="screen">
-        <rosparam subst_value="true">
-            imu_link: 'imu_link'
-            robot_link: 'base_link'
-            x_mean: 0.0
-            y_mean: 0.0
-            z_mean: 0.0
-        </rosparam>
-    </node>
+    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>
+<!--    <node pkg="gps_to_path" type="mag_field_to_azimuth" name="mag_field_to_azimuth" output="screen">-->
+<!--        <rosparam subst_value="true">-->
+<!--            imu_link: 'imu_link'-->
+<!--            robot_link: 'base_link'-->
+<!--            x_mean: 0.0-->
+<!--            y_mean: 0.0-->
+<!--            z_mean: 0.0-->
+<!--        </rosparam>-->
+<!--    </node>-->
 
     <!-- Point cloud segemtnation for obstacles generation -->
     <include file="$(dirname)/traversability.launch">
         <arg name="device" value="$(arg device)"/>
     </include>
 
-    <!-- Path planner and follower -->
+    <!-- Path planner -->
     <include file="$(dirname)/path_planner.launch"/>
+
+    <!-- Path follower -->
+    <include file="$(find gps_to_path)/launch/follower.launch">
+        <arg name="path" value="path"/>
+<!--        <arg name="cmd_vel" value="nav/cmd_vel"/>-->
+        <arg name="cmd_vel" value="/cmd_vel"/>
+    </include>
+
+    <!-- Local obstacle avoidance -->
+<!--    <node pkg="augmented_robot_trackers" type="virtual_bumper_marv_sys.py" name="virtual_bumper" output="screen">-->
+<!--        <rosparam command="load" file="$(find augmented_robot_trackers)/src/utilities/configs/virtual_bumper_husky_sys.yaml"/>-->
+<!--        <remap from="cmd_vel_in" to="nav/cmd_vel"/>-->
+<!--        <remap from="cmd_vel_out" to="/cmd_vel"/>-->
+<!--    </node>-->
 
     <!-- RVIZ -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"

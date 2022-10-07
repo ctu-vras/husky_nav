@@ -38,7 +38,7 @@
     <!-- PATH -->
     <node pkg="gps_to_path" type="waypoints_to_path" name="waypoints_to_path" output="screen">
         <param name="odom_frame" value="odom"/>
-        <param name="gps_frame" value="odom"/>
+        <param name="gps_frame" value="base_link"/>
         <param name="robot_frame" value="base_link"/>
     </node>
 

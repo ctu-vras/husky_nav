@@ -369,6 +369,23 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </plugin>
   </gazebo>
 
+  <gazebo>
+    <plugin name="magnetometer_controller" filename="libhector_gazebo_ros_magnetic.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>base_link</bodyName>
+      <topicName>imu/mag</topicName>
+      <offset>0 0 0</offset>
+      <drift>0.0 0.0 0.0</drift>
+      <gaussianNoise>0.0 0.0 0.0</gaussianNoise>
+      <declination>-9.3748</declination>
+      <inclination>-36.7067</inclination>
+      <magnitude>0.0000224340</magnitude>  <!-- 22434.0 nT -->
+      <referenceHeading>0</referenceHeading>
+      <useMagneticFieldMsgs>true</useMagneticFieldMsgs>
+    </plugin>
+  </gazebo>
+
   <xacro:if value="$(arg laser_3d_enabled)">
     <!-- Ouster sensor links and fixed joints -->
     <joint name="ouster_base_mount_joint" type="fixed">

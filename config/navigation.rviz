@@ -473,7 +473,7 @@ Visualization Manager:
       Enabled: true
       Head Diameter: 0.30000001192092896
       Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
+      Length: 0.6000000238418579
       Line Style: Billboards
       Line Width: 0.30000001192092896
       Name: Planned Path
@@ -482,9 +482,9 @@ Visualization Manager:
         Y: 0
         Z: 0
       Pose Color: 255; 85; 255
-      Pose Style: None
+      Pose Style: Axes
       Queue Size: 10
-      Radius: 0.029999999329447746
+      Radius: 0.05999999865889549
       Shaft Diameter: 0.10000000149011612
       Shaft Length: 0.10000000149011612
       Topic: /path

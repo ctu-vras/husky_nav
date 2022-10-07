@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <launch>
     <arg name="device" default="cuda" doc="Device to run tensor operations on: cpu or cuda"/>
-    <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
+    <arg name="rviz" default="false" doc="Launch RViz for data visualization or not"/>
     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
-<!--    <arg name="world" default="$(find husky_gazebo)/worlds/clearpath_playpen.world"/>-->
-<!--    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>-->
 
     <!-- Gazebo world and spawn Husky robot -->
     <include file="$(dirname)/husky_gazebo.launch">
         <arg name="world_path" value="$(arg world)"/>
     </include>
 
-    <!-- Imu to azimuth data -->
-    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>
-
-    <!-- Point cloud segemtnation for obstacles generation -->
-    <include file="$(dirname)/cloud_segmentation.launch">
-        <arg name="device" value="$(arg device)"/>
-    </include>
-
-    <!-- Path planner and follower -->
-    <include file="$(dirname)/path_planner.launch"/>
+    <!-- Navigation pipeline -->
+    <include file="$(dirname)/launch/navigation.launch" pass_all_args="true"/>
 
     <!-- RVIZ -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
-          args="-d $(find navigation_goals)/config/demo.rviz"/>
+          args="-d $(find navigation_goals)/config/navigation.rviz"/>
 </launch>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <arg name="device" default="cuda" doc="Device to run tensor operations on: cpu or cuda"/>
+    <arg name="rviz" default="false" doc="Launch RViz for data visualization or not"/>
+    <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
+<!--    <arg name="world" default="$(find husky_gazebo)/worlds/clearpath_playpen.world"/>-->
+<!--    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>-->
+
+    <!-- IMU and Magnetometer to azimuth data -->
+<!--    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>-->
+    <node pkg="gps_to_path" type="mag_field_to_azimuth" name="mag_field_to_azimuth" output="screen">
+        <rosparam subst_value="true">
+            imu_link: 'imu_link'
+            robot_link: 'base_link'
+            x_mean: 0.0
+            y_mean: 0.0
+            z_mean: 0.0
+        </rosparam>
+    </node>
+
+    <!-- Point cloud segemtnation for obstacles generation -->
+    <include file="$(dirname)/cloud_segmentation.launch">
+        <arg name="device" value="$(arg device)"/>
+    </include>
+
+    <!-- Path planner and follower -->
+    <include file="$(dirname)/path_planner.launch"/>
+
+    <!-- RVIZ -->
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
+          args="-d $(find navigation_goals)/config/navigation.rviz"/>
+</launch>

@@ -123,6 +123,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="urdf_extras"     default="$(optenv HUSKY_URDF_EXTRAS empty.urdf)" />
   <xacro:arg name="cpr_urdf_extras" default="$(optenv CPR_URDF_EXTRAS empty.urdf)" />
 
+<!--  <xacro:arg name="gpu" default="true"/>-->
+<!--  <xacro:property name="gpu" value="$(arg gpu)" />-->
+
   <!-- Included URDF/XACRO Files -->
   <xacro:include filename="$(find husky_description)/urdf/accessories/hokuyo_ust10.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/accessories/intel_realsense.urdf.xacro"/>
@@ -449,7 +452,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             <stddev>0.01</stddev>
           </noise>
         </ray>
-        <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ouster_laser.so">
+<!--        <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ouster_laser.so">-->
+        <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ouster_gpu_laser.so">
           <topicName>/points</topicName>
           <frameName>ouster_link</frameName>
           <min_range>0.9</min_range>

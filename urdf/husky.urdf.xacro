@@ -59,13 +59,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="laser_ust10_rear_xyz"      default="$(optenv HUSKY_UST10_SECONDARY_XYZ -0.2206 0.0 0.00635)" />
   <xacro:arg name="laser_ust10_rear_rpy"      default="$(optenv HUSKY_UST10_SECONDARY_RPY 0 0 3.14159)" />
 
-  <!-- Velodyne LiDAR Primary and Secondary -->
-  <xacro:arg name="laser_3d_enabled"              default="$(optenv HUSKY_LASER_3D_ENABLED 0)" />
+  <!-- LiDAR Primary and Secondary -->
+  <xacro:arg name="laser_3d_enabled"              default="$(optenv HUSKY_LASER_3D_ENABLED 1)" />
   <xacro:arg name="laser_3d_topic"                default="$(optenv HUSKY_LASER_3D_TOPIC points)"/>
   <xacro:arg name="laser_3d_tower"                default="$(optenv HUSKY_LASER_3D_TOWER 1)"/>
   <xacro:arg name="laser_3d_prefix"               default="$(optenv HUSKY_LASER_3D_PREFIX )"/>
   <xacro:arg name="laser_3d_parent"               default="$(optenv HUSKY_LASER_3D_PARENT top_plate_link)"/>
-  <xacro:arg name="laser_3d_xyz"                  default="$(optenv HUSKY_LASER_3D_XYZ 0 0 0)" />
+  <xacro:arg name="laser_3d_xyz"                  default="$(optenv HUSKY_LASER_3D_XYZ 0 0 0.3)" />
   <xacro:arg name="laser_3d_rpy"                  default="$(optenv HUSKY_LASER_3D_RPY 0 0 0)" />
 
   <xacro:arg name="laser_3d_secondary_enabled"    default="$(optenv HUSKY_LASER_3D_SECONDARY_ENABLED 0)" />
@@ -77,7 +77,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="laser_3d_secondary_rpy"        default="$(optenv HUSKY_LASER_3D_SECONDARY_RPY 0 0 -3.14159)" />
 
   <!-- Realsense Camera Primary and Secondary -->
-  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 0)" />
+  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 1)" />
   <xacro:arg name="realsense_topic"               default="$(optenv HUSKY_REALSENSE_TOPIC realsense)" />
   <xacro:arg name="realsense_prefix"              default="$(optenv HUSKY_REALSENSE_PREFIX camera)" />
   <xacro:arg name="realsense_parent"              default="$(optenv HUSKY_REALSENSE_PARENT top_plate_link)" />

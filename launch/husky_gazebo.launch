@@ -13,7 +13,7 @@
   <arg name="config_extras"
        default="$(eval optenv('HUSKY_CONFIG_EXTRAS', find('husky_control') + '/config/empty.yaml'))"/>
   <!-- Optionally disable teleop control -->
-  <arg name="joystick" default="true" />
+  <arg name="joystick" default="false" />
 
   <param name="use_sim_time" value="true" />
 

@@ -29,7 +29,7 @@
 <!--        </rosparam>-->
 <!--    </node>-->
 
-    <!-- Point cloud segemtnation for obstacles generation -->
+    <!-- Point cloud segmentation for obstacles perception -->
     <include file="$(dirname)/traversability.launch">
         <arg name="device" value="$(arg device)"/>
     </include>

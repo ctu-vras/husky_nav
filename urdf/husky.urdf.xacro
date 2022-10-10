@@ -356,6 +356,12 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </plugin>
   </gazebo>
 
+  <joint name="gps_base_mount_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="gps"/>
+  </joint>
+  <link name="gps"/>
   <gazebo>
     <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
       <robotNamespace>$(arg robot_namespace)</robotNamespace>
@@ -420,8 +426,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       </visual>
     </link>
     <!-- Gazebo requires the ouster_gazebo_plugins package -->
+    <!-- Run Ouster plugin with GPU: https://engcang.github.io/Ouster-Gazebo-Plugin-boosting-up-with-GPU-ray/ -->
     <gazebo reference="ouster_link">
-      <sensor type="ray" name="ouster-OS1-64">
+<!--      <sensor type="ray" name="ouster-OS1-64">-->
+      <sensor type="gpu_ray" name="ouster-OS1-64">
         <pose>0 0 0.035925 0 0 0</pose>
         <visualize>false</visualize>
         <update_rate>10</update_rate>

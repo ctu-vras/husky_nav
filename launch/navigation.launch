@@ -3,15 +3,17 @@
     <arg name="device" default="cuda" doc="Device to run tensor operations on: cpu or cuda"/>
     <arg name="rviz" default="false" doc="Launch RViz for data visualization or not"/>
     <arg name="sim_time" default="true"/>
+    <arg name="use_osm" default="false"/>
+    <arg name="follower" default="true"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
 
-    <node pkg="tf" type="static_transform_publisher" name="gps_frame_broadcaster"
-          args="0 0 0   0 0 0 1 base_link gps 100" />
-    <node pkg="tf" type="static_transform_publisher" name="map_frame_broadcaster"
-          args="0 0 0   0 0 0 1 map odom 100" />
-    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"
-          args="0 0 0   0 0 0 1 map utm 100" />
+<!--    <node pkg="tf" type="static_transform_publisher" name="gps_frame_broadcaster"-->
+<!--          args="0 0 0   0 0 0 1 base_link gps 100" />-->
+<!--    <node pkg="tf" type="static_transform_publisher" name="map_frame_broadcaster"-->
+<!--          args="0 0 0   0 0 0 1 map odom 100" />-->
+<!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
+<!--          args="0 0 0   0 0 0 1 map utm 100" />-->
 <!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
 <!--          args="-437998.7931613073 -5549045.722476885 0 0 0 0 1 map utm 100" />-->
 
@@ -34,11 +36,11 @@
 
     <!-- Path planner -->
     <include file="$(dirname)/path_planner.launch">
-        <arg name="use_osm" value="true"/>
+        <arg name="use_osm" value="$(arg use_osm)"/>
     </include>
 
     <!-- Path follower -->
-    <include file="$(find gps_to_path)/launch/follower.launch">
+    <include if="$(arg follower)" file="$(find gps_to_path)/launch/follower.launch">
         <arg name="path" value="path"/>
 <!--        <arg name="cmd_vel" value="nav/cmd_vel"/>-->
         <arg name="cmd_vel" value="/cmd_vel"/>

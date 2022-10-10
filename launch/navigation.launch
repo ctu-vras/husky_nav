@@ -33,7 +33,9 @@
     </include>
 
     <!-- Path planner -->
-    <include file="$(dirname)/path_planner.launch"/>
+    <include file="$(dirname)/path_planner.launch">
+        <arg name="use_osm" value="true"/>
+    </include>
 
     <!-- Path follower -->
     <include file="$(find gps_to_path)/launch/follower.launch">

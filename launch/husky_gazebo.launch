@@ -3,7 +3,8 @@
 <launch>
   <!-- arguments -->
 <!--  <arg name="world" default="$(dirname)/../worlds/clearpath_playpen.world"/>-->
-  <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
+<!--  <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>-->
+  <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>
   <arg name="headless" default="true"/>
   <arg name="description" default="$(dirname)/../urdf/husky.urdf.xacro"/>
   <arg name="gui" default="false"/>

@@ -5,6 +5,8 @@
     <arg name="sim_time" default="true"/>
     <arg name="use_osm" default="false"/>
     <arg name="follower" default="true"/>
+    <arg name="bumper" default="false"/>
+    <arg name="traversability" default="semantic" doc="Traversability estimation type: 'semantic or geometric'"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
 
@@ -29,29 +31,37 @@
 <!--        </rosparam>-->
 <!--    </node>-->
 
-    <!-- Point cloud segmentation for obstacles perception -->
-    <include file="$(dirname)/traversability.launch">
-        <arg name="device" value="$(arg device)"/>
+    <!-- Traversability estimation -->
+    <include file="$(find traversability_estimation)/launch/$(arg traversability)_traversability.launch">
+        <arg name="cloud" value="points"/>
     </include>
 
     <!-- Path planner -->
+    <node pkg="topic_tools" type="relay" name="semantic_trav_relay" args="cloud_segmentation/points traversability/points" />
+    <node pkg="topic_tools" type="relay" name="geometric_trav_relay" args="geometric_traversability_raw traversability/points" />
     <include file="$(dirname)/path_planner.launch">
         <arg name="use_osm" value="$(arg use_osm)"/>
+        <arg name="cloud" value="traversability/points"/>
     </include>
 
     <!-- Path follower -->
     <include if="$(arg follower)" file="$(find gps_to_path)/launch/follower.launch">
         <arg name="path" value="path"/>
-<!--        <arg name="cmd_vel" value="nav/cmd_vel"/>-->
-        <arg name="cmd_vel" value="/cmd_vel"/>
+        <arg if="$(arg bumper)" name="cmd_vel" value="nav/cmd_vel"/>
+        <arg unless="$(arg bumper)" name="cmd_vel" value="/cmd_vel"/>
+        <arg name="allow_backward" value="false"/>
     </include>
 
     <!-- Local obstacle avoidance -->
-<!--    <node pkg="augmented_robot_trackers" type="virtual_bumper_marv_sys.py" name="virtual_bumper" output="screen">-->
-<!--        <rosparam command="load" file="$(find augmented_robot_trackers)/src/utilities/configs/virtual_bumper_husky_sys.yaml"/>-->
-<!--        <remap from="cmd_vel_in" to="nav/cmd_vel"/>-->
-<!--        <remap from="cmd_vel_out" to="/cmd_vel"/>-->
-<!--    </node>-->
+    <node pkg="topic_tools" type="relay" name="semantic_bumper_relay" args="cloud_segmentation/points_10cm points_filtered" />
+    <node pkg="topic_tools" type="relay" name="geometric_bumper_relay" args="max_points_125mm points_filtered" />
+    <node if="$(arg bumper)"
+          name="virtual_bumper" pkg="augmented_robot_trackers" type="virtual_bumper_marv_sys.py"
+          respawn="true" respawn_delay="1.0" output="screen">
+        <rosparam command="load" file="$(find augmented_robot_trackers)/src/utilities/configs/virtual_bumper_husky_sys.yaml"/>
+        <remap from="cmd_vel_in" to="nav/cmd_vel"/>
+        <remap from="cmd_vel_out" to="/cmd_vel"/>
+    </node>
 
     <!-- RVIZ -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"

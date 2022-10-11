@@ -2,11 +2,12 @@
 <launch>
     <arg name="use_osm" default="false"/>
     <arg name="cloud" default="cloud_segmentation/points"/>
+    <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_easy.gpx"/>
 
     <!-- Cloud distance filtering -->
     <node pkg="gps_to_path" type="trav_to_obstacles" name="trav_to_obstacles" output="screen">
         <param name="max_height" type="double" value="1."/>
-        <param name="min_height" type="double" value="0.05"/>
+        <param name="min_height" type="double" value="-0.05"/>
         <param name="max_dist" type="double" value="10." />
         <param name="min_dist" type="double" value="0.5"/>
         <param name="max_age" type="double" value="0.2"/>
@@ -17,8 +18,8 @@
 
     <!-- PATH PLANNER -->
     <node pkg="gps_to_path" type="path_planner_igraph" name="path_planner" output="screen">
-        <param name="gpx_assignment" type="string" value="$(find navigation_goals)/config/gpx/unhost_easy.gpx"/>
-        <param name="goal_reached_distance" type="double" value="1."/>
+        <param name="gpx_assignment" type="string" value="$(arg gpx_assignment)"/>
+        <param name="goal_reached_distance" type="double" value="2."/>
         <param name="publish_pcd" type="bool" value="true"/>
         <param name="trav_max_dist" type="double" value="10."/>
         <param name="trav_radius" type="double" value="0.5"/>

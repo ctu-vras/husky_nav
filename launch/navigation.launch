@@ -5,8 +5,9 @@
     <arg name="sim_time" default="true"/>
     <arg name="use_osm" default="false"/>
     <arg name="follower" default="true"/>
-    <arg name="bumper" default="false"/>
+    <arg name="bumper" default="true"/>
     <arg name="traversability" default="semantic" doc="Traversability estimation type: 'semantic or geometric'"/>
+    <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_easy.gpx"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
 
@@ -42,6 +43,7 @@
     <include file="$(dirname)/path_planner.launch">
         <arg name="use_osm" value="$(arg use_osm)"/>
         <arg name="cloud" value="traversability/points"/>
+        <arg name="gpx_assignment" value="$(arg gpx_assignment)"/>
     </include>
 
     <!-- Path follower -->
@@ -49,12 +51,14 @@
         <arg name="path" value="path"/>
         <arg if="$(arg bumper)" name="cmd_vel" value="nav/cmd_vel"/>
         <arg unless="$(arg bumper)" name="cmd_vel" value="/cmd_vel"/>
-        <arg name="allow_backward" value="false"/>
+        <arg name="allow_backward" value="true"/>
+        <arg name="max_speed" value="0.5"/>
     </include>
 
     <!-- Local obstacle avoidance -->
-    <node pkg="topic_tools" type="relay" name="semantic_bumper_relay" args="cloud_segmentation/points_10cm points_filtered" />
+    <node pkg="topic_tools" type="relay" name="semantic_bumper_relay" args="cloud_segmentation/points_20cm points_filtered" />
     <node pkg="topic_tools" type="relay" name="geometric_bumper_relay" args="max_points_125mm points_filtered" />
+<!--     <node pkg="topic_tools" type="relay" name="bumper_relay" args="points points_filtered" />-->
     <node if="$(arg bumper)"
           name="virtual_bumper" pkg="augmented_robot_trackers" type="virtual_bumper_marv_sys.py"
           respawn="true" respawn_delay="1.0" output="screen">

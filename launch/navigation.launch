@@ -5,20 +5,12 @@
     <arg name="sim_time" default="true"/>
     <arg name="use_osm" default="false"/>
     <arg name="follower" default="true"/>
-    <arg name="bumper" default="true"/>
-    <arg name="traversability" default="semantic" doc="Traversability estimation type: 'semantic or geometric'"/>
+    <arg name="bumper" default="false"/>
+    <arg name="traversability" default="geometric" doc="Traversability estimation type: 'semantic or geometric'"/>
     <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_easy.gpx"/>
+    <arg name="max_speed" default="0.5"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
-
-<!--    <node pkg="tf" type="static_transform_publisher" name="gps_frame_broadcaster"-->
-<!--          args="0 0 0   0 0 0 1 base_link gps 100" />-->
-<!--    <node pkg="tf" type="static_transform_publisher" name="map_frame_broadcaster"-->
-<!--          args="0 0 0   0 0 0 1 map odom 100" />-->
-<!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
-<!--          args="0 0 0   0 0 0 1 map utm 100" />-->
-<!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
-<!--          args="-437998.7931613073 -5549045.722476885 0 0 0 0 1 map utm 100" />-->
 
     <!-- IMU and Magnetometer to azimuth data -->
     <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>

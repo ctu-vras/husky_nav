@@ -30,7 +30,7 @@
     </include>
 
     <!-- Path planner -->
-    <node pkg="topic_tools" type="relay" name="semantic_trav_relay" args="cloud_segmentation/points traversability/points" />
+    <node pkg="topic_tools" type="relay" name="semantic_trav_relay" args="cloud_segmentation/points_20cm traversability/points" />
     <node pkg="topic_tools" type="relay" name="geometric_trav_relay" args="geometric_traversability_raw traversability/points" />
     <include file="$(dirname)/path_planner.launch">
         <arg name="use_osm" value="$(arg use_osm)"/>
@@ -44,7 +44,7 @@
         <arg if="$(arg bumper)" name="cmd_vel" value="nav/cmd_vel"/>
         <arg unless="$(arg bumper)" name="cmd_vel" value="/cmd_vel"/>
         <arg name="allow_backward" value="true"/>
-        <arg name="max_speed" value="0.5"/>
+        <arg name="max_speed" value="$(arg max_speed)"/>
     </include>
 
     <!-- Local obstacle avoidance -->

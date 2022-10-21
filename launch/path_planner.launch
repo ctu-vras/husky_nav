@@ -6,11 +6,11 @@
 
     <!-- Cloud distance filtering -->
     <node pkg="gps_to_path" type="trav_to_obstacles" name="trav_to_obstacles" output="screen">
-        <param name="max_height" type="double" value="1."/>
+        <param name="max_height" type="double" value="1.0"/>
         <param name="min_height" type="double" value="-0.05"/>
         <param name="max_dist" type="double" value="10." />
         <param name="min_dist" type="double" value="0.5"/>
-        <param name="max_age" type="double" value="0.2"/>
+        <param name="max_age" type="double" value="0.5"/>
         <param name="robot_base_frame" type="string" value="base_link"/>
         <param name="trav_topic" type="str" value="$(arg cloud)"/>
         <param name="trav_obstacle_field" type="string" value="cost"/>

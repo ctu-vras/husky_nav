@@ -5,20 +5,12 @@
     <arg name="sim_time" default="true"/>
     <arg name="use_osm" default="false"/>
     <arg name="follower" default="true"/>
-    <arg name="bumper" default="true"/>
-    <arg name="traversability" default="semantic" doc="Traversability estimation type: 'semantic or geometric'"/>
+    <arg name="bumper" default="false"/>
+    <arg name="traversability" default="geometric" doc="Traversability estimation type: 'semantic, geometric, or fused'"/>
     <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_easy.gpx"/>
+    <arg name="max_speed" default="0.5"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
-
-<!--    <node pkg="tf" type="static_transform_publisher" name="gps_frame_broadcaster"-->
-<!--          args="0 0 0   0 0 0 1 base_link gps 100" />-->
-<!--    <node pkg="tf" type="static_transform_publisher" name="map_frame_broadcaster"-->
-<!--          args="0 0 0   0 0 0 1 map odom 100" />-->
-<!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
-<!--          args="0 0 0   0 0 0 1 map utm 100" />-->
-<!--    <node pkg="tf" type="static_transform_publisher" name="utm_frame_broadcaster"-->
-<!--          args="-437998.7931613073 -5549045.722476885 0 0 0 0 1 map utm 100" />-->
 
     <!-- IMU and Magnetometer to azimuth data -->
     <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>
@@ -35,10 +27,12 @@
     <!-- Traversability estimation -->
     <include file="$(find traversability_estimation)/launch/$(arg traversability)_traversability.launch">
         <arg name="cloud" value="points"/>
+        <arg if="$(eval traversability == 'fused')" name="geometric_weight" value="0.5"/>
+        <arg if="$(eval traversability == 'fused')" name="semantic_weight" value="0.5"/>
     </include>
 
     <!-- Path planner -->
-    <node pkg="topic_tools" type="relay" name="semantic_trav_relay" args="cloud_segmentation/points traversability/points" />
+    <node pkg="topic_tools" type="relay" name="semantic_trav_relay" args="cloud_segmentation/points_20cm traversability/points" />
     <node pkg="topic_tools" type="relay" name="geometric_trav_relay" args="geometric_traversability_raw traversability/points" />
     <include file="$(dirname)/path_planner.launch">
         <arg name="use_osm" value="$(arg use_osm)"/>
@@ -52,7 +46,7 @@
         <arg if="$(arg bumper)" name="cmd_vel" value="nav/cmd_vel"/>
         <arg unless="$(arg bumper)" name="cmd_vel" value="/cmd_vel"/>
         <arg name="allow_backward" value="true"/>
-        <arg name="max_speed" value="0.5"/>
+        <arg name="max_speed" value="$(arg max_speed)"/>
     </include>
 
     <!-- Local obstacle avoidance -->

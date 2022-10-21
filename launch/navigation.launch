@@ -25,7 +25,7 @@
     </include>
 
     <!-- Path planner -->
-    <include if="$(arg follower)" file="$(find gps_to_path)/launch/path_planner_igraph.launch">
+    <include file="$(find gps_to_path)/launch/path_planner_igraph.launch">
         <arg name="gpx_assignment" value="$(arg gpx_assignment)"/>
         <arg name="use_osm" value="$(arg use_osm)"/>
         <arg if="$(eval traversability == 'fused')" name="trav_topic" value="/traversability_fusion/points"/>
@@ -36,7 +36,7 @@
     <include file="$(find gps_to_path)/launch/visualization.launch"/>
 
     <!-- Path follower -->
-    <include file="$(find gps_to_path)/launch/follower.launch">
+    <include if="$(arg follower)" file="$(find gps_to_path)/launch/follower.launch">
         <arg if="$(arg bumper)" name="cmd_vel" value="nav/cmd_vel"/>
         <arg unless="$(arg bumper)" name="cmd_vel" value="/cmd_vel"/>
         <arg name="max_speed" value="$(arg max_speed)"/>

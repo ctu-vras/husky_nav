@@ -1,64 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <launch>
     <arg name="device" default="cuda" doc="Device to run tensor operations on: cpu or cuda"/>
-    <arg name="rviz" default="false" doc="Launch RViz for data visualization or not"/>
+    <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="sim_time" default="true"/>
     <arg name="use_osm" default="false"/>
     <arg name="follower" default="true"/>
     <arg name="bumper" default="false"/>
-    <arg name="traversability" default="geometric" doc="Traversability estimation type: 'semantic, geometric, or fused'"/>
-    <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_easy.gpx"/>
+    <arg name="traversability" default="fused" doc="Traversability estimation type: 'semantic, geometric, or fused'"/>
+    <arg name="gpx_assignment" default="$(find gps_to_path)/data/old/unhost_easy.gpx"/>
     <arg name="max_speed" default="0.5"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
 
-    <!-- IMU and Magnetometer to azimuth data -->
-    <node pkg="navigation_goals" type="imu_to_mag_azimuth" name="imu_to_mag_azimuth"/>
-<!--    <node pkg="gps_to_path" type="mag_field_to_azimuth" name="mag_field_to_azimuth" output="screen">-->
-<!--        <rosparam subst_value="true">-->
-<!--            imu_link: 'imu_link'-->
-<!--            robot_link: 'base_link'-->
-<!--            x_mean: 0.0-->
-<!--            y_mean: 0.0-->
-<!--            z_mean: 0.0-->
-<!--        </rosparam>-->
-<!--    </node>-->
+    <!-- Fused Localization -->
+    <include file="$(find cras_gps_odom)/launch/gps_odom.launch">
+        <arg name="fix_topic" value="/fix"/>
+        <arg name="odom_topic" value="/husky_velocity_controller/odom"/>
+    </include>
 
-    <!-- Traversability estimation -->
+    <!-- Traversability Estimation -->
     <include file="$(find traversability_estimation)/launch/$(arg traversability)_traversability.launch">
-        <arg name="cloud" value="points"/>
-        <arg if="$(eval traversability == 'fused')" name="geometric_weight" value="0.5"/>
-        <arg if="$(eval traversability == 'fused')" name="semantic_weight" value="0.5"/>
+        <arg name="cloud" value="/points"/>
+        <arg unless="$(eval traversability == 'geometric')" name="device" value="$(arg device)"/>
     </include>
 
     <!-- Path planner -->
-    <node pkg="topic_tools" type="relay" name="semantic_trav_relay" args="cloud_segmentation/points_20cm traversability/points" />
-    <node pkg="topic_tools" type="relay" name="geometric_trav_relay" args="geometric_traversability_raw traversability/points" />
-    <include file="$(dirname)/path_planner.launch">
-        <arg name="use_osm" value="$(arg use_osm)"/>
-        <arg name="cloud" value="traversability/points"/>
+    <include if="$(arg follower)" file="$(find gps_to_path)/launch/path_planner_igraph.launch">
         <arg name="gpx_assignment" value="$(arg gpx_assignment)"/>
+        <arg name="use_osm" value="$(arg use_osm)"/>
+        <arg if="$(eval traversability == 'fused')" name="trav_topic" value="/traversability_fusion/points"/>
+        <arg if="$(eval traversability == 'geometric')" name="trav_topic" value="/geometric_traversability_raw"/>
+        <arg if="$(eval traversability == 'semantic')" name="trav_topic" value="/cloud_segmentation/points"/>
     </include>
 
+    <include file="$(find gps_to_path)/launch/visualization.launch"/>
+
     <!-- Path follower -->
-    <include if="$(arg follower)" file="$(find gps_to_path)/launch/follower.launch">
-        <arg name="path" value="path"/>
+    <include file="$(find gps_to_path)/launch/follower.launch">
         <arg if="$(arg bumper)" name="cmd_vel" value="nav/cmd_vel"/>
         <arg unless="$(arg bumper)" name="cmd_vel" value="/cmd_vel"/>
-        <arg name="allow_backward" value="true"/>
         <arg name="max_speed" value="$(arg max_speed)"/>
     </include>
 
     <!-- Local obstacle avoidance -->
-    <node pkg="topic_tools" type="relay" name="semantic_bumper_relay" args="cloud_segmentation/points_20cm points_filtered" />
-    <node pkg="topic_tools" type="relay" name="geometric_bumper_relay" args="max_points_125mm points_filtered" />
-<!--     <node pkg="topic_tools" type="relay" name="bumper_relay" args="points points_filtered" />-->
     <node if="$(arg bumper)"
           name="virtual_bumper" pkg="augmented_robot_trackers" type="virtual_bumper_marv_sys.py"
           respawn="true" respawn_delay="1.0" output="screen">
         <rosparam command="load" file="$(find augmented_robot_trackers)/src/utilities/configs/virtual_bumper_husky_sys.yaml"/>
         <remap from="cmd_vel_in" to="nav/cmd_vel"/>
         <remap from="cmd_vel_out" to="/cmd_vel"/>
+        <remap from="points_filtered" to="/max_points_125mm"/>
     </node>
 
     <!-- RVIZ -->

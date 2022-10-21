@@ -477,10 +477,10 @@ Visualization Manager:
         Min Value: -10
         Value: true
       Axis: Z
-      Channel Name: type
+      Channel Name: trav
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color Transformer: RGBF32
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -492,8 +492,8 @@ Visualization Manager:
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.30000001192092896
-      Style: Spheres
-      Topic: /osm_pcd_utm
+      Style: Flat Squares
+      Topic: /osm_pcd
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

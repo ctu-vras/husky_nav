@@ -3,9 +3,9 @@
 <launch>
   <!-- arguments -->
 <!--<arg name="world" default="$(dirname)/../worlds/simcity.world"/>-->
-  <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/>
+<!--  <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/>-->
   <!--  <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>-->
-<!-- <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
+ <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>
   <arg name="headless" default="true"/>
   <arg name="description" default="$(dirname)/../urdf/husky.urdf.xacro"/>
   <arg name="gui" default="false"/>

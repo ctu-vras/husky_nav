@@ -188,8 +188,6 @@ Visualization Manager:
           Value: true
         gps:
           Value: true
-        gps_odom:
-          Value: true
         imu_link:
           Value: true
         inertial_link:
@@ -214,10 +212,6 @@ Visualization Manager:
           Value: true
         user_rail_link:
           Value: true
-        utm:
-          Value: true
-        utm_local:
-          Value: true
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -237,10 +231,6 @@ Visualization Manager:
               {}
             gps:
               {}
-            gps_odom:
-              utm_local:
-                utm:
-                  {}
             imu_link:
               {}
             inertial_link:
@@ -356,42 +346,12 @@ Visualization Manager:
         Min Value: -10
         Value: true
       Axis: Z
-      Channel Name: traversability_soft
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGBF32
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 239; 41; 41
-      Max Intensity: 1
-      Min Color: 138; 226; 52
-      Min Intensity: 0
-      Name: "Semantic Traversability: RGB"
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.029999999329447746
-      Style: Flat Squares
-      Topic: /cloud_segmentation/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: false
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: false
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
       Channel Name: cost
       Class: rviz/PointCloud2
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 239; 41; 41
       Max Intensity: 1
@@ -408,39 +368,62 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
-      Value: true
-    - Class: rviz/InteractiveMarkers
-      Enable Transparency: true
-      Enabled: false
-      Name: InteractiveMarkers
-      Show Axes: false
-      Show Descriptions: false
-      Show Visual Aids: false
-      Update Topic: /twist_marker_server/update
       Value: false
     - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 0; 118; 201
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.6000000238418579
-      Line Style: Billboards
-      Line Width: 0.30000001192092896
-      Name: Planned Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: Axes
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: cost
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 239; 41; 41
+      Min Color: 138; 226; 52
+      Name: Geometric Traversability
+      Position Transformer: XYZ
       Queue Size: 10
-      Radius: 0.05999999865889549
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /path
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.05000000074505806
+      Style: Spheres
+      Topic: /geometric_traversability_raw
       Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: cost
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 239; 41; 41
+      Min Color: 138; 226; 52
+      Name: Traversability
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.05000000074505806
+      Style: Spheres
+      Topic: /traversability
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -498,14 +481,6 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
-    - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /bumper_bbx
-      Name: Virtual bumper
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: true
     - Alpha: 0.5
       Buffer Length: 1
       Class: rviz/Path
@@ -555,32 +530,28 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: cost
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: Intensity
-      Decay Time: 0
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 0; 118; 201
       Enabled: true
-      Invert Rainbow: false
-      Max Color: 239; 41; 41
-      Min Color: 138; 226; 52
-      Name: Geometric Traversability
-      Position Transformer: XYZ
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.6000000238418579
+      Line Style: Billboards
+      Line Width: 0.30000001192092896
+      Name: Planned Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: Axes
       Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.05000000074505806
-      Style: Spheres
-      Topic: /geometric_traversability_raw
+      Radius: 0.05999999865889549
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /path
       Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: false
       Value: true
     - Class: rviz/Image
       Enabled: true
@@ -606,34 +577,6 @@ Visualization Manager:
       Transport Hint: raw
       Unreliable: false
       Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: cost
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: Intensity
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 239; 41; 41
-      Min Color: 138; 226; 52
-      Name: Fused Traversability
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.05000000074505806
-      Style: Spheres
-      Topic: /traversability_fusion/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: false
-      Value: true
     - Class: jsk_rviz_plugin/TFTrajectory
       Enabled: true
       Name: TFTrajectory
@@ -642,6 +585,23 @@ Visualization Manager:
       duration: 10
       frame: base_link
       line_width: 0.10000000149011612
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: false
+      Name: InteractiveMarkers
+      Show Axes: false
+      Show Descriptions: false
+      Show Visual Aids: false
+      Update Topic: /twist_marker_server/update
+      Value: false
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /bumper_bbx
+      Name: Virtual bumper
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 238; 238; 236

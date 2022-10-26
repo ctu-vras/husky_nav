@@ -391,7 +391,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 239; 41; 41
       Max Intensity: 1
@@ -404,11 +404,11 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.05000000074505806
       Style: Spheres
-      Topic: /cloud_segmentation/points
+      Topic: /semantic_traversability
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
-      Value: false
+      Value: true
     - Class: rviz/InteractiveMarkers
       Enable Transparency: true
       Enabled: false
@@ -566,7 +566,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 239; 41; 41
       Min Color: 138; 226; 52
@@ -581,7 +581,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: true
       Image Topic: /max_points_depth

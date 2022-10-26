@@ -20,8 +20,9 @@
 
     <!-- Traversability Estimation -->
     <include file="$(find traversability_estimation)/launch/$(arg traversability)_traversability.launch">
-        <arg name="cloud" value="/points"/>
+        <arg name="input" value="/points"/>
         <arg unless="$(eval traversability == 'geometric')" name="device" value="$(arg device)"/>
+        <arg unless="$(eval traversability == 'semantic')" name="robot" value="husky"/>
     </include>
 
     <!-- Path planner -->

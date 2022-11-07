@@ -1,7 +1,13 @@
-# Navigation goals
-ROS package for mobile robot navigation based on move_base.
+# RobinGas Mission Gazebo
 
-<img src="https://github.com/RuslanAgishev/navigation_goals/blob/master/figures/husky_example.png"/>
+RobinGas pipeline in Gazebo simulator, currently including:
+
+- Husky robot gazebo model with sensors (including [Ouster LiDAR Gazebo Plugin with GPU ray](https://engcang.github.io/Ouster-Gazebo-Plugin-boosting-up-with-GPU-ray)),
+- [Fused localization](https://gitlab.fel.cvut.cz/cras/subt/common/cras_gps_odom),
+- [Traversability estimation](https://github.com/ctu-vras/traversability_estimation),
+- [Path planner](https://github.com/ctu-vras/gps-navigation/tree/master/gps_to_path),
+- [Path follower](https://github.com/ctu-vras/naex/blob/master/launch/follower.launch),
+- Obstacle avoidance ([virtual bumper](https://gitlab.fel.cvut.cz/cras/subt/common/augmented_robot_trackers)).
 
 ## Installation
 
@@ -15,26 +21,33 @@ sudo apt-get install ros-<distro>-husky-*
 echo "export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro" >> ~/.bashrc
 source ~/.bashrc
 ```
-Husky simulation is tested on Gazebo 7 + ROS kinetic.
 
-In case you want to use a turtlebot3 simulation, [reference](https://hotblackrobotics.github.io/en/blog/2018/01/29/seq-goals-py/):
-```bash
-sudo apt-get install ros-<distro>-turtlebot3-*
-echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
-source ~/.bashrc
-```
-Turtlebot simulation is tested both on Gazebo 7 + ROS kinetic and Gazebo 9 + ROS melodic set-ups.
+Build individual packages listed above.
 
-## Waypoints following example
+## Minimum example
+
+Waypoints following example.
 Bringup simulated environment and spawn a husky robot in it.
+
 ```bash
-roslaunch navigation_goals husky_main.launch
+roslaunch robingas_mission_gazebo husky_main.launch
 ```
-Or in order to spwan a turtlebot in a simulated environment:
-```bash
-roslaunch navigation_goals turtlebot3_main.launch
-```
+
 Command a robot to visit a sequence of waypoints.
 ```bash
-roslaunch navigation_goals send_wp_sequence.launch
+roslaunch robingas_mission_gazebo send_wp_sequence.launch
+```
+
+## Navigation Pipeline
+
+Start Gazebo simulator with Husky robot spawned:
+
+```bash
+roslaunch robingas_mission_gazebo husky_gazebo.launch
+```
+
+Launch navigation pipeline:
+
+```bash
+roslaunch robingas_mission_gazebo navigation.launch rviz:=true
 ```

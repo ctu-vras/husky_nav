@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>navigation_goals</name>
+  <name>robingas_mission_gazebo</name>
   <version>0.0.0</version>
-  <description>The navigation_goals package</description>
+  <description>The robingas_mission_gazebo package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/navigation_goals</url> -->
+  <!-- <url type="website">http://wiki.ros.org/robingas_mission_gazebo</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->

@@ -1,5 +1,7 @@
 # RobinGas Mission Gazebo
 
+![](./docs/demo.png)
+
 RobinGas pipeline in Gazebo simulator, currently including:
 
 - Husky robot gazebo model with sensors (including [Ouster LiDAR Gazebo Plugin with GPU ray](https://engcang.github.io/Ouster-Gazebo-Plugin-boosting-up-with-GPU-ray)),

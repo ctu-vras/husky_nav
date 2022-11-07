@@ -7,23 +7,32 @@
     <arg name="follower" default="true"/>
     <arg name="bumper" default="false"/>
     <arg name="traversability" default="fused" doc="Traversability estimation type: 'semantic, geometric, or fused'"/>
-    <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_final_demo_husky_east"/>
+    <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_final_demo_husky_west.gpx"/>
     <arg name="max_speed" default="0.5"/>
 
     <param name="use_sim_time" value="$(arg sim_time)"/>
 
+    <!-- Odometry correction -->
+<!--    <node name="odom_correct" pkg="nodelet" type="nodelet"-->
+<!--          args="standalone nav_utils/odom_twist_to_child_frame">-->
+<!--        <remap from="odom" to="husky_velocity_controller/odom" />-->
+<!--        <remap from="odom_out" to="husky_velocity_controller/odom_corrected" />-->
+<!--    </node>-->
+
     <!-- Fused Localization -->
     <include file="$(find cras_gps_odom)/launch/gps_odom.launch">
-        <arg name="fix_topic" value="/fix"/>
+        <arg name="fix_topic" value="gps/fix"/>
         <arg name="magnetic_declination" value="0.0"/>
-<!--        <arg name="odom_topic" value="/husky_velocity_controller/odom"/>-->
+<!--        <arg name="odom_topic" value="husky_velocity_controller/odom_corrected"/>-->
+        <arg name="odom_topic" value="husky_velocity_controller/odom"/>
     </include>
 
     <!-- Traversability Estimation -->
     <include file="$(find traversability_estimation)/launch/$(arg traversability)_traversability.launch">
         <arg name="input" value="/points"/>
         <arg unless="$(eval traversability == 'geometric')" name="device" value="$(arg device)"/>
-        <arg unless="$(eval traversability == 'semantic')" name="robot" value="husky"/>
+        <arg unless="$(eval traversability == 'semantic')" name="robot" value="husky-robot"/>
+        <arg unless="$(eval traversability == 'semantic')" name="azimuth_only" value="false"/>
     </include>
 
     <!-- Path planner -->

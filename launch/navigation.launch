@@ -32,7 +32,7 @@
         <arg name="input" value="/points"/>
         <arg unless="$(eval traversability == 'geometric')" name="device" value="$(arg device)"/>
         <arg unless="$(eval traversability == 'semantic')" name="robot" value="husky-robot"/>
-        <arg unless="$(eval traversability == 'semantic')" name="azimuth_only" value="false"/>
+        <arg unless="$(eval traversability == 'semantic')" name="azimuth_only" value="false"/> <!-- TODO: should be true, publish 2D point cloud in gazebo simulator from Ouster LiDAR points.shape=(H, W) -->
     </include>
 
     <!-- Path planner -->

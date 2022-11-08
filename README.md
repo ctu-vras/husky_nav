@@ -2,7 +2,9 @@
 
 ![](./docs/demo.png)
 
-RobinGas pipeline in Gazebo simulator, currently including:
+RobinGas pipeline in Gazebo simulator,
+[video](https://drive.google.com/file/d/1n_Ba2h8XUM64c3eQR-tHYTJO4hkhtB8i/view?usp=share_link),
+currently including:
 
 - Husky robot gazebo model with sensors (including [Ouster LiDAR Gazebo Plugin with GPU ray](https://engcang.github.io/Ouster-Gazebo-Plugin-boosting-up-with-GPU-ray)),
 - [Fused localization](https://gitlab.fel.cvut.cz/cras/subt/common/cras_gps_odom),

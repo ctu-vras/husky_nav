@@ -15,18 +15,25 @@ currently including:
 
 ## Installation
 
-```bash
-sudo apt-get install ros-<distro>-navigation
-```
+The navigation pipeline is currently tested in simulator with Husky robot only.
 
-Install husky simulation, [reference](http://wiki.ros.org/husky_navigation/Tutorials):
-```bash
-sudo apt-get install ros-<distro>-husky-*
-echo "export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro" >> ~/.bashrc
-source ~/.bashrc
-```
+- Install ROS navigation stack and Husky related packages:
 
-Build individual packages listed above.
+  ```bash
+  sudo apt-get install ros-<distro>-navigation
+  ```
+
+  Install husky simulation, [reference](http://wiki.ros.org/husky_navigation/Tutorials):
+  ```bash
+  sudo apt-get install ros-<distro>-husky-*
+  echo "export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro" >> ~/.bashrc
+  source ~/.bashrc
+  ```
+
+- Build individual packages listed above.
+
+- Download relevant Gazebo [models](http://subtdata.felk.cvut.cz/robingas/data/gazebo/models/)
+used in the virtual worlds and place them to '$HOME/.gazebo/models/` folder.
 
 ## Minimum example
 

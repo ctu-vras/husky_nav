@@ -33,7 +33,7 @@ The navigation pipeline is currently tested in simulator with Husky robot only.
 - Build individual packages listed above.
 
 - Download relevant Gazebo [models](http://subtdata.felk.cvut.cz/robingas/data/gazebo/models/)
-used in the virtual worlds and place them to '$HOME/.gazebo/models/` folder.
+used in the virtual worlds and place them to `$HOME/.gazebo/models/` folder.
 
 ## Minimum example
 

@@ -18,31 +18,15 @@ currently including:
 ```bash
 sudo apt-get install ros-<distro>-navigation
 ```
-
 Install husky simulation, [reference](http://wiki.ros.org/husky_navigation/Tutorials):
 ```bash
 sudo apt-get install ros-<distro>-husky-*
 echo "export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro" >> ~/.bashrc
 source ~/.bashrc
 ```
-
 Build individual packages listed above.
 
-## Minimum example
-
-Waypoints following example.
-Bringup simulated environment and spawn a husky robot in it.
-
-```bash
-roslaunch robingas_mission_gazebo husky_main.launch
-```
-
-Command a robot to visit a sequence of waypoints.
-```bash
-roslaunch robingas_mission_gazebo send_wp_sequence.launch
-```
-
-## Navigation Pipeline
+## RobinGas Navigation Pipeline
 
 Start Gazebo simulator with Husky robot spawned:
 
@@ -54,4 +38,20 @@ Launch navigation pipeline:
 
 ```bash
 roslaunch robingas_mission_gazebo navigation.launch rviz:=true
+```
+
+## 2D-navigation Stack
+
+Waypoints following example with
+laser scan SLAM ([AMCL](http://wiki.ros.org/amcl)) and
+[move_base](http://wiki.ros.org/move_base) navigation stack.
+Bringup simulated environment and spawn a husky robot in it.
+
+```bash
+roslaunch robingas_mission_gazebo husky_amcl_move_base.launch
+```
+
+Command a robot to visit a sequence of waypoints.
+```bash
+roslaunch robingas_mission_gazebo send_wp_sequence.launch
 ```

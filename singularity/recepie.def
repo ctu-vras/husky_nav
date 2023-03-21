@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: ros:melodic-perception
+From: ros:noetic-perception
 
 %post
     export XDG_CACHE_HOME=/tmp/singularity-cache # pip cache
@@ -19,13 +19,29 @@ From: ros:melodic-perception
         wget
         curl
         git
-        python-pip
-        python-catkin-tools
-        ros-melodic-ros-numpy
-        ros-melodic-jsk-rviz-plugins
-        ros-melodic-rviz
-        ros-melodic-navigation
-        ros-melodic-husky-*"
+        python3-pip
+        python3-catkin-tools
+        ros-noetic-ros-numpy
+        ros-noetic-jsk-rviz-plugins
+        ros-noetic-rviz
+        ros-noetic-navigation
+        ros-noetic-husky-*"
 
     apt update
     apt install -y ${packages}
+
+    dir=$(pwd)
+    echo "Current directory: ${dir}"
+
+    # Setup ROS workspace
+    ws=${dir}/ws/
+    mkdir -p "${ws}/src"
+    cd "${ws}/src"
+    wstool init
+    wstool merge robingas_mission_gazebo/dependencies.rosinstall
+    wstool up -j 4
+    cd "${ws}"
+    catkin init
+    catkin config --extend /opt/ros/noetic/
+    catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
+    catkin build -c

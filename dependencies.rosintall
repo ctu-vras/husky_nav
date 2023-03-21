@@ -1,0 +1,40 @@
+- git:
+    local-name: cras_gps_odom
+    uri: https://gitlab.fel.cvut.cz/cras/subt/common/cras_gps_odom.git
+    version: master
+- git:
+    local-name: traversability_estimation
+    uri: https://github.com/ctu-vras/traversability_estimation
+    version: main
+- git:
+    local-name: gps-navigation
+    uri: https://github.com/ctu-vras/gps-navigation
+    version: final_demo
+- git:
+    local-name: naex
+    uri: https://github.com/ctu-vras/naex
+    version: master
+- git:
+    local-name: cloud_proc
+    uri: https://github.com/ctu-vras/cloud_proc
+    version: master
+- git:
+    local-name: nav_utils
+    uri: https://github.com/tpet/nav_utils
+    version: master
+- git:
+    local-name: tf2_client
+    uri: https://github.com/tpet/tf2_client
+    version: master
+- git:
+    local-name: augmented_robot_trackers
+    uri: https://gitlab.fel.cvut.cz/cras/subt/common/augmented_robot_trackers.git
+    version: master
+- git:
+    local-name: ros-utils
+    uri: https://github.com/ctu-vras/ros-utils
+    version: master
+- git:
+    local-name: cras_imu_tools
+    uri: https://gitlab.fel.cvut.cz/cras/subt/common/cras_imu_tools.git
+    version: master

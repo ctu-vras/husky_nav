@@ -38,7 +38,7 @@ The navigation pipeline is currently tested in simulator with Husky robot only.
   git clone https://github.com/ctu-vras/robingas_mission_gazebo
 
   wstool init
-  wstool merge aro_slam/dependencies.rosinstall
+  wstool merge robingas_mission_gazebo/dependencies.rosinstall
   wstool up -j 4
 
   cd "${ws}"

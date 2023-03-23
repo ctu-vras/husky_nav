@@ -25,7 +25,8 @@ From: ros:noetic-perception
         ros-noetic-jsk-rviz-plugins
         ros-noetic-rviz
         ros-noetic-navigation
-        ros-noetic-husky-*"
+        ros-noetic-husky-*
+        ros-noetic-image-transport-codecs"
 
     apt update
     apt install -y ${packages}
@@ -37,6 +38,7 @@ From: ros:noetic-perception
     ws=${dir}/ws/
     mkdir -p "${ws}/src"
     cd "${ws}/src"
+    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git
     wstool init
     wstool merge robingas_mission_gazebo/dependencies.rosinstall
     wstool up -j 4

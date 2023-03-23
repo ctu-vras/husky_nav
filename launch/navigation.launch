@@ -6,7 +6,7 @@
     <arg name="use_osm" default="false"/>
     <arg name="follower" default="true"/>
     <arg name="bumper" default="false"/>
-    <arg name="traversability" default="fused" doc="Traversability estimation type: 'semantic, geometric, or fused'"/>
+    <arg name="traversability" default="geometric" doc="Traversability estimation type: 'semantic, geometric, or fused'"/>
 <!--    <arg name="gpx_assignment" default="$(find gps_to_path)/data/unhost_final_demo_husky_west.gpx"/>-->
     <arg name="gpx_assignment" default="$(find gps_to_path)/data/old/unhost_easy.gpx"/>
     <arg name="max_speed" default="0.5"/>

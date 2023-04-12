@@ -1,6 +1,6 @@
 - git:
     local-name: cras_gps_odom
-    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_imu_tools.git
+    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_gps_odom.git
     version: master
 - git:
     local-name: traversability_estimation

@@ -81,11 +81,11 @@ Visualization Manager:
           Value: true
         base_link:
           Value: true
-        camera_realsense_bottom_screw_frame:
+        blackfly:
           Value: true
-        camera_realsense_link:
+        blackfly_lens:
           Value: true
-        camera_realsense_link_gazebo:
+        blackfly_optical:
           Value: true
         front_bumper_link:
           Value: true
@@ -151,9 +151,9 @@ Visualization Manager:
             top_chassis_link:
               {}
             top_plate_link:
-              camera_realsense_bottom_screw_frame:
-                camera_realsense_link:
-                  camera_realsense_link_gazebo:
+              blackfly:
+                blackfly_lens:
+                  blackfly_optical:
                     {}
               ouster_link:
                 {}
@@ -184,16 +184,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_realsense_bottom_screw_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_realsense_link:
+        blackfly:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_realsense_link_gazebo:
+        blackfly_lens:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        blackfly_optical:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -337,7 +338,7 @@ Visualization Manager:
           Value: false
         - Class: rviz/Image
           Enabled: true
-          Image Topic: /realsense/color/image_raw
+          Image Topic: /camera/image_raw
           Max Value: 1
           Median window: 5
           Min Value: 0

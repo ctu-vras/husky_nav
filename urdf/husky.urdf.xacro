@@ -77,7 +77,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="laser_3d_secondary_rpy"        default="$(optenv HUSKY_LASER_3D_SECONDARY_RPY 0 0 -3.14159)" />
 
   <!-- Realsense Camera Primary and Secondary -->
-  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 1)" />
+  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 0)" />
   <xacro:arg name="realsense_model"               default="$(optenv HUSKY_REALSENSE_MODEL d435)"/>
   <xacro:arg name="realsense_topic"               default="$(optenv HUSKY_REALSENSE_TOPIC realsense)" />
   <xacro:arg name="realsense_prefix"              default="$(optenv HUSKY_REALSENSE_PREFIX camera)" />
@@ -96,8 +96,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:property name="realsense_secondary_model" value="$(arg realsense_secondary_model)"/>
 
   <!-- BlackflyS Camera Primary and Secondary -->
-  <xacro:arg name="blackfly_enabled"                  default="$(optenv HUSKY_BLACKFLY 0)"/>
-  <xacro:arg name="blackfly_mount_enabled"            default="$(optenv HUSKY_BLACKFLY_MOUNT_ENABLED 1)"/>
+  <xacro:arg name="blackfly_enabled"                  default="$(optenv HUSKY_BLACKFLY 1)"/>
+  <xacro:arg name="blackfly_mount_enabled"            default="$(optenv HUSKY_BLACKFLY_MOUNT_ENABLED 0)"/>
   <xacro:arg name="blackfly_mount_angle"              default="$(optenv HUSKY_BLACKFLY_MOUNT_ANGLE 0)"/>
   <xacro:arg name="blackfly_prefix"                   default="$(optenv HUSKY_BLACKFLY_PREFIX blackfly)"/>
   <xacro:arg name="blackfly_parent"                   default="$(optenv HUSKY_BLACKFLY_PARENT top_plate_link)"/>
@@ -105,7 +105,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="blackfly_rpy"                      default="$(optenv HUSKY_BLACKFLY_RPY 0 0 0)"/>
 
   <xacro:arg name="blackfly_secondary_enabled"        default="$(optenv HUSKY_BLACKFLY_SECONDARY 0)"/>
-  <xacro:arg name="blackfly_secondary_mount_enabled"  default="$(optenv HUSKY_BLACKFLY_SECONDARY_MOUNT_ENABLED 1)"/>
+  <xacro:arg name="blackfly_secondary_mount_enabled"  default="$(optenv HUSKY_BLACKFLY_SECONDARY_MOUNT_ENABLED 0)"/>
   <xacro:arg name="blackfly_secondary_mount_angle"    default="$(optenv HUSKY_BLACKFLY_SECONDARY_MOUNT_ANGLE 0)"/>
   <xacro:arg name="blackfly_secondary_prefix"         default="$(optenv HUSKY_BLACKFLY_SECONDARY_PREFIX blackfly_secondary)"/>
   <xacro:arg name="blackfly_secondary_parent"         default="$(optenv HUSKY_BLACKFLY_SECONDARY_PARENT top_plate_link)"/>
@@ -338,18 +338,18 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!--
     Velodyne 3D LiDAR Primary and Secondary
   -->
-<!--  <xacro:if value="$(arg laser_3d_enabled)">-->
-<!--    <xacro:if value="$(arg laser_3d_tower)">-->
-<!--      <xacro:vlp16_mount prefix="$(arg laser_3d_prefix)" parent_link="$(arg laser_3d_parent)" topic="$(arg laser_3d_topic)">-->
-<!--        <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />-->
-<!--      </xacro:vlp16_mount>-->
-<!--    </xacro:if>-->
-<!--    <xacro:unless value="$(arg laser_3d_tower)">-->
-<!--      <xacro:VLP-16 parent="$(arg laser_3d_parent)" topic="$(arg laser_3d_topic)" name="$(arg laser_3d_prefix)velodyne">-->
-<!--        <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />-->
-<!--      </xacro:VLP-16>-->
-<!--    </xacro:unless>-->
-<!--  </xacro:if>-->
+  <xacro:if value="$(arg laser_3d_secondary_enabled)">
+    <xacro:if value="$(arg laser_3d_tower)">
+      <xacro:vlp16_mount prefix="$(arg laser_3d_prefix)" parent_link="$(arg laser_3d_parent)" topic="$(arg laser_3d_topic)">
+        <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
+      </xacro:vlp16_mount>
+    </xacro:if>
+    <xacro:unless value="$(arg laser_3d_tower)">
+      <xacro:VLP-16 parent="$(arg laser_3d_parent)" topic="$(arg laser_3d_topic)" name="$(arg laser_3d_prefix)velodyne">
+        <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
+      </xacro:VLP-16>
+    </xacro:unless>
+  </xacro:if>
 
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
@@ -387,8 +387,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       <frameId>gps</frameId>
       <topicName>gps/fix</topicName>
       <velocityTopicName>/vel</velocityTopicName>
-<!--      <referenceLatitude>49.9</referenceLatitude>-->
-<!--      <referenceLongitude>8.9</referenceLongitude>-->
       <referenceLatitude>50.090337</referenceLatitude>
       <referenceLongitude>14.133275</referenceLongitude>
       <referenceHeading>0</referenceHeading>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <arg name="device" default="cuda" doc="Device to run tensor operations on: cpu or cuda"/>
+    <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
+    <arg name="teleop" default="true" doc="Launch keyboard teleoperation or not"/>
+    <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
+<!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/>-->
+<!--    <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/>-->
+<!--    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>--> -->
+<!--     <arg name="world" default="$(dirname)/../worlds/rubicon.world"/> -->
+
+    <!-- Gazebo world and spawn Husky robot -->
+    <include file="$(dirname)/husky_gazebo.launch">
+        <arg name="world" value="$(arg world)"/>
+    </include>
+
+    <!-- MonoForce pipeline -->
+    <include file="$(find monoforce)/launch/hm_estimator.launch">
+        <arg name="pts_topic" value="/points"/>
+    </include>
+
+    <!-- Keyboard teleoperation -->
+    <include if="$(arg teleop)" file="$(dirname)/keyboard_teleop.launch"/>
+
+    <!-- RViz -->
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find monoforce)/config/rviz/height_map.rviz"/>
+</launch>

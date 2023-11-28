@@ -99,8 +99,6 @@ Visualization Manager:
           Value: true
         inertial_link:
           Value: true
-        odom:
-          Value: false
         ouster_link:
           Value: true
         rear_bumper_link:
@@ -126,43 +124,42 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            base_footprint:
+        base_link:
+          base_footprint:
+            {}
+          front_bumper_link:
+            {}
+          front_left_wheel_link:
+            {}
+          front_right_wheel_link:
+            {}
+          gps:
+            {}
+          imu_link:
+            {}
+          inertial_link:
+            {}
+          rear_bumper_link:
+            {}
+          rear_left_wheel_link:
+            {}
+          rear_right_wheel_link:
+            {}
+          top_chassis_link:
+            {}
+          top_plate_link:
+            blackfly:
+              blackfly_lens:
+                blackfly_optical:
+                  {}
+            ouster_link:
               {}
-            front_bumper_link:
+            top_plate_front_link:
               {}
-            front_left_wheel_link:
+            top_plate_rear_link:
               {}
-            front_right_wheel_link:
-              {}
-            gps:
-              {}
-            imu_link:
-              {}
-            inertial_link:
-              {}
-            rear_bumper_link:
-              {}
-            rear_left_wheel_link:
-              {}
-            rear_right_wheel_link:
-              {}
-            top_chassis_link:
-              {}
-            top_plate_link:
-              blackfly:
-                blackfly_lens:
-                  blackfly_optical:
-                    {}
-              ouster_link:
-                {}
-              top_plate_front_link:
-                {}
-              top_plate_rear_link:
-                {}
-            user_rail_link:
-              {}
+          user_rail_link:
+            {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -466,6 +463,15 @@ Visualization Manager:
           Value: false
       Enabled: true
       Name: MonoForce
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: false
+      Enabled: true
+      Name: InteractiveMarkers
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Update Topic: /twist_marker_server/update
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 255; 255; 255

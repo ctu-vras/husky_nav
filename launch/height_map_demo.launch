@@ -11,19 +11,15 @@
 <!--     <arg name="world" default="$(find gazebo_cave_world)/worlds/cave_world.world"/> -->
 
     <!-- Gazebo world and spawn Husky robot -->
-<!--     <include file="$(dirname)/husky_gazebo.launch"> -->
-<!--         <arg name="world" value="$(arg world)"/> -->
-<!--         <arg name="gui" value="$(arg gui)"/> -->
-<!--         <arg name="robot_x" value="0.0"/> -->
-<!--         <arg name="robot_y" value="0.0"/> -->
-<!--         <arg name="robot_z" value="0.3"/> -->
-<!--         <arg name="robot_yaw" value="0.0"/> -->
-<!--     </include> -->
-
-    <!-- Inspection world and spawn Husky robot -->
-    <include file="$(dirname)/husky_inspection_world.launch">
+    <include file="$(dirname)/husky_gazebo.launch">
+        <arg name="world" value="$(arg world)"/>
         <arg name="gui" value="$(arg gui)"/>
     </include>
+
+    <!-- Inspection world and spawn Husky robot -->
+<!--     <include file="$(dirname)/husky_inspection_world.launch"> -->
+<!--         <arg name="gui" value="$(arg gui)"/> -->
+<!--     </include> -->
 
     <!-- Height map estimation -->
     <include file="$(find monoforce)/launch/hm_estimator.launch">

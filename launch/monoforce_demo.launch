@@ -21,7 +21,7 @@
 
     <!-- MonoForce pipeline -->
     <include file="$(find monoforce)/launch/monoforce.launch">
-        <arg name="img_topic" value="/camera/image_raw/compressed"/>
+        <arg name="img_topic" value="/realsense_front/color/image_raw/compressed"/>
         <arg name="linear_vels" value="[1.]"/>
         <arg name="angular_vels" value="[0.]"/>
         <arg name="total_sim_time" value="8."/>

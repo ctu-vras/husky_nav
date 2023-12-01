@@ -77,26 +77,44 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="laser_3d_secondary_rpy"        default="$(optenv HUSKY_LASER_3D_SECONDARY_RPY 0 0 -3.14159)" />
 
   <!-- Realsense Camera Primary and Secondary -->
-  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 0)" />
+  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 1)" />
   <xacro:arg name="realsense_model"               default="$(optenv HUSKY_REALSENSE_MODEL d435)"/>
-  <xacro:arg name="realsense_topic"               default="$(optenv HUSKY_REALSENSE_TOPIC realsense)" />
-  <xacro:arg name="realsense_prefix"              default="$(optenv HUSKY_REALSENSE_PREFIX camera)" />
+  <xacro:arg name="realsense_topic"               default="$(optenv HUSKY_REALSENSE_TOPIC realsense_front)" />
+  <xacro:arg name="realsense_prefix"              default="$(optenv HUSKY_REALSENSE_PREFIX camera_front)" />
   <xacro:arg name="realsense_parent"              default="$(optenv HUSKY_REALSENSE_PARENT top_plate_link)" />
-  <xacro:arg name="realsense_xyz"                 default="$(optenv HUSKY_REALSENSE_XYZ 0 0 0)" />
+  <xacro:arg name="realsense_xyz"                 default="$(optenv HUSKY_REALSENSE_XYZ 0.3 0 0.1)" />
   <xacro:arg name="realsense_rpy"                 default="$(optenv HUSKY_REALSENSE_RPY 0 0 0)" />
   <xacro:property name="realsense_model"          value="$(arg realsense_model)"/>
 
-  <xacro:arg name="realsense_secondary_enabled"   default="$(optenv HUSKY_REALSENSE_SECONDARY_ENABLED 0)" />
-  <xacro:arg name="realsense_secondary_model"     default="$(optenv HUSKY_REALSENSE_SECONDARY_MODEL d435)"/>
-  <xacro:arg name="realsense_secondary_topic"     default="$(optenv HUSKY_REALSENSE_SECONDARY_TOPIC realsense_secondary)" />
-  <xacro:arg name="realsense_secondary_prefix"    default="$(optenv HUSKY_REALSENSE_SECONDARY_PREFIX camera_secondary)" />
-  <xacro:arg name="realsense_secondary_parent"    default="$(optenv HUSKY_REALSENSE_SECONDARY_PARENT top_plate_link)" />
-  <xacro:arg name="realsense_secondary_xyz"       default="$(optenv HUSKY_REALSENSE_SECONDARY_XYZ 0 0 0)" />
-  <xacro:arg name="realsense_secondary_rpy"       default="$(optenv HUSKY_REALSENSE_SECONDARY_RPY 0 0 0)" />
-  <xacro:property name="realsense_secondary_model" value="$(arg realsense_secondary_model)"/>
+  <xacro:arg name="realsense_left_enabled"   default="$(optenv HUSKY_REALSENSE_LEFT_ENABLED 1)" />
+  <xacro:arg name="realsense_left_model"     default="$(optenv HUSKY_REALSENSE_LEFT_MODEL d435)"/>
+  <xacro:arg name="realsense_left_topic"     default="$(optenv HUSKY_REALSENSE_LEFT_TOPIC realsense_left)" />
+  <xacro:arg name="realsense_left_prefix"    default="$(optenv HUSKY_REALSENSE_LEFT_PREFIX camera_left)" />
+  <xacro:arg name="realsense_left_parent"    default="$(optenv HUSKY_REALSENSE_LEFT_PARENT top_plate_link)" />
+  <xacro:arg name="realsense_left_xyz"       default="$(optenv HUSKY_REALSENSE_LEFT_XYZ 0 0.2 0.1)" />
+  <xacro:arg name="realsense_left_rpy"       default="$(optenv HUSKY_REALSENSE_LEFT_RPY 0 0 1.57)" />
+  <xacro:property name="realsense_left_model" value="$(arg realsense_left_model)"/>
+
+  <xacro:arg name="realsense_right_enabled"   default="$(optenv HUSKY_REALSENSE_RIGHT_ENABLED 1)" />
+  <xacro:arg name="realsense_right_model"     default="$(optenv HUSKY_REALSENSE_RIGHT_MODEL d435)"/>
+  <xacro:arg name="realsense_right_topic"     default="$(optenv HUSKY_REALSENSE_RIGHT_TOPIC realsense_right)" />
+  <xacro:arg name="realsense_right_prefix"    default="$(optenv HUSKY_REALSENSE_RIGHT_PREFIX camera_right)" />
+  <xacro:arg name="realsense_right_parent"    default="$(optenv HUSKY_REALSENSE_RIGHT_PARENT top_plate_link)" />
+  <xacro:arg name="realsense_right_xyz"       default="$(optenv HUSKY_REALSENSE_RIGHT_XYZ 0 -0.2 0.1)" />
+  <xacro:arg name="realsense_right_rpy"       default="$(optenv HUSKY_REALSENSE_RIGHT_RPY 0 0 -1.57)" />
+  <xacro:property name="realsense_right_model" value="$(arg realsense_right_model)"/>
+
+  <xacro:arg name="realsense_rear_enabled"   default="$(optenv HUSKY_REALSENSE_REAR_ENABLED 1)" />
+  <xacro:arg name="realsense_rear_model"     default="$(optenv HUSKY_REALSENSE_REAR_MODEL d435)"/>
+  <xacro:arg name="realsense_rear_topic"     default="$(optenv HUSKY_REALSENSE_REAR_TOPIC realsense_rear)" />
+  <xacro:arg name="realsense_rear_prefix"    default="$(optenv HUSKY_REALSENSE_REAR_PREFIX camera_rear)" />
+  <xacro:arg name="realsense_rear_parent"    default="$(optenv HUSKY_REALSENSE_REAR_PARENT top_plate_link)" />
+  <xacro:arg name="realsense_rear_xyz"       default="$(optenv HUSKY_REALSENSE_REAR_XYZ -0.3 0 0.1)" />
+  <xacro:arg name="realsense_rear_rpy"       default="$(optenv HUSKY_REALSENSE_REAR_RPY 0 0 -3.14)" />
+  <xacro:property name="realsense_rear_model" value="$(arg realsense_rear_model)"/>
 
   <!-- BlackflyS Camera Primary and Secondary -->
-  <xacro:arg name="blackfly_enabled"                  default="$(optenv HUSKY_BLACKFLY 1)"/>
+  <xacro:arg name="blackfly_enabled"                  default="$(optenv HUSKY_BLACKFLY 0)"/>
   <xacro:arg name="blackfly_mount_enabled"            default="$(optenv HUSKY_BLACKFLY_MOUNT_ENABLED 0)"/>
   <xacro:arg name="blackfly_mount_angle"              default="$(optenv HUSKY_BLACKFLY_MOUNT_ANGLE 0)"/>
   <xacro:arg name="blackfly_prefix"                   default="$(optenv HUSKY_BLACKFLY_PREFIX blackfly)"/>
@@ -136,7 +154,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:include filename="$(find husky_description)/urdf/accessories/flir_blackfly_mount.urdf.xacro"/>
   <xacro:include filename="$(find husky_description)/urdf/accessories/sensor_arch.urdf.xacro"/>
   <xacro:include filename="$(find husky_description)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/>
-<!--  <xacro:include filename="$(find husky_description)/urdf/accessories/vlp16_mount.urdf.xacro"/>-->
+  <xacro:include filename="$(find husky_description)/urdf/accessories/vlp16_mount.urdf.xacro"/>
   <xacro:include filename="$(find husky_description)/urdf/decorations.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/wheel.urdf.xacro" />
   <xacro:include filename="$(find ouster_description)/urdf/OS1-64.urdf.xacro"/>
@@ -282,7 +300,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       </xacro:hokuyo_ust10_mount>
   </xacro:if>
 
-  <!-- Intel Realsense Primary and Secondary -->
+  <!-- Intel Realsense Models -->
   <xacro:if value="${realsense_model == 'd435'}">
     <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" />
   </xacro:if>
@@ -306,13 +324,33 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </xacro:realsense_sensor>
   </xacro:if>
 
-  <xacro:if value="$(arg realsense_secondary_enabled)">
-    <xacro:realsense_sensor rs_model="$(arg realsense_secondary_model)"
-                            prefix="$(arg realsense_secondary_prefix)"
-                            parent="$(arg realsense_secondary_parent)"
-                            topic="$(arg realsense_secondary_topic)"
+  <xacro:if value="$(arg realsense_left_enabled)">
+    <xacro:realsense_sensor rs_model="$(arg realsense_left_model)"
+                            prefix="$(arg realsense_left_prefix)"
+                            parent="$(arg realsense_left_parent)"
+                            topic="$(arg realsense_left_topic)"
                             include="0">
-      <origin xyz="$(arg realsense_secondary_xyz)" rpy="$(arg realsense_secondary_rpy)"/>
+      <origin xyz="$(arg realsense_left_xyz)" rpy="$(arg realsense_left_rpy)"/>
+    </xacro:realsense_sensor>
+  </xacro:if>
+
+  <xacro:if value="$(arg realsense_right_enabled)">
+    <xacro:realsense_sensor rs_model="$(arg realsense_right_model)"
+                            prefix="$(arg realsense_right_prefix)"
+                            parent="$(arg realsense_right_parent)"
+                            topic="$(arg realsense_right_topic)"
+                            include="0">
+      <origin xyz="$(arg realsense_right_xyz)" rpy="$(arg realsense_right_rpy)"/>
+    </xacro:realsense_sensor>
+  </xacro:if>
+
+  <xacro:if value="$(arg realsense_rear_enabled)">
+    <xacro:realsense_sensor rs_model="$(arg realsense_rear_model)"
+                            prefix="$(arg realsense_rear_prefix)"
+                            parent="$(arg realsense_rear_parent)"
+                            topic="$(arg realsense_rear_topic)"
+                            include="0">
+      <origin xyz="$(arg realsense_rear_xyz)" rpy="$(arg realsense_rear_rpy)"/>
     </xacro:realsense_sensor>
   </xacro:if>
 

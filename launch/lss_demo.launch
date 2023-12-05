@@ -21,9 +21,15 @@
 
     <!-- LSS pipeline -->
     <include file="$(find monoforce)/launch/lss.launch">
-        <arg name="linear_vels" value="[1.]"/>
-        <arg name="angular_vels" value="[0.]"/>
-        <arg name="total_sim_time" value="8."/>
+        <arg name="img_topics" value="['/realsense_front/color/image_raw/compressed',
+                                       '/realsense_left/color/image_raw/compressed',
+                                       '/realsense_right/color/image_raw/compressed',
+                                       '/realsense_rear/color/image_raw/compressed']"/>
+        <arg name="camera_info_topics" value="['/realsense_front/color/camera_info',
+                                               '/realsense_left/color/camera_info',
+                                               '/realsense_right/color/camera_info',
+                                               '/realsense_rear/color/camera_info']"/>
+        <arg name="hm_frame" value="base_link"/>
     </include>
 
     <!-- RViz -->

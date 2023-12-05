@@ -23,8 +23,8 @@
     <include file="$(find monoforce)/launch/monoforce.launch">
         <arg name="img_topic" value="/realsense_front/color/image_raw/compressed"/>
         <arg name="linear_vels" value="[1.]"/>
-        <arg name="angular_vels" value="[0.]"/>
-        <arg name="total_sim_time" value="8."/>
+        <arg name="angular_vels" value="[-0.3, 0., 0.2]"/>
+        <arg name="total_sim_time" value="5."/>
     </include>
 
     <!-- RViz -->

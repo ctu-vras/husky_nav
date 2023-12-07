@@ -3,7 +3,7 @@
 
     <arg name="robot_x" default="6.0"/>
     <arg name="robot_y" default="-18.0"/>
-    <arg name="robot_z" default="2.0"/>
+    <arg name="robot_z" default="1.0"/>
     <arg name="robot_yaw" default="0"/>
 
     <arg name="world_x" default="0.0"/>

@@ -113,7 +113,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="realsense_rear_rpy"       default="$(optenv HUSKY_REALSENSE_REAR_RPY 0 0 -3.14)" />
   <xacro:property name="realsense_rear_model" value="$(arg realsense_rear_model)"/>
 
-  <!-- BlackflyS Camera Primary and Secondary -->
+  <!-- BlackflyS Cameras -->
   <xacro:arg name="blackfly_enabled"                  default="$(optenv HUSKY_BLACKFLY 0)"/>
   <xacro:arg name="blackfly_mount_enabled"            default="$(optenv HUSKY_BLACKFLY_MOUNT_ENABLED 0)"/>
   <xacro:arg name="blackfly_mount_angle"              default="$(optenv HUSKY_BLACKFLY_MOUNT_ANGLE 0)"/>

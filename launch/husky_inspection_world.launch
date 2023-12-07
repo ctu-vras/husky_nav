@@ -15,6 +15,7 @@
     <arg name="gui" default="false"/>
     <arg name="headless" default="false"/>
     <arg name="world_name" default="$(find cpr_inspection_gazebo)/worlds/inspection_world.world"/>
+    <arg name="rviz" default="false"/>
 
     <!-- Load inspection world -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -34,4 +35,8 @@
       <arg name="z" value="$(arg robot_z)"/>
       <arg name="yaw" value="$(arg robot_yaw)"/>
     </include>
+
+    <!-- RVIZ -->
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
+        args="-d $(dirname)/../config/husky.rviz"/>
 </launch>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Bag file recoder -->
+<launch>
+    <arg name="path" default="$(dirname)/recorded.bag"/>
+    <arg name="topics" default="--all" doc="Topics to record"/>
+
+    <node name="rosbag_record" pkg="rosbag" type="record"
+          args="$(arg topics) -o $(arg path)">
+    </node>
+</launch>

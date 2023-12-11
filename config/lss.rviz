@@ -246,8 +246,6 @@ Visualization Manager:
           Value: true
         inertial_link:
           Value: true
-        odom:
-          Value: true
         ouster_link:
           Value: true
         rear_bumper_link:
@@ -273,55 +271,54 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        odom:
-          base_link:
-            base_footprint:
+        base_link:
+          base_footprint:
+            {}
+          front_bumper_link:
+            {}
+          front_left_wheel_link:
+            {}
+          front_right_wheel_link:
+            {}
+          gps:
+            {}
+          imu_link:
+            {}
+          inertial_link:
+            {}
+          rear_bumper_link:
+            {}
+          rear_left_wheel_link:
+            {}
+          rear_right_wheel_link:
+            {}
+          top_chassis_link:
+            {}
+          top_plate_link:
+            camera_front_realsense_bottom_screw_frame:
+              camera_front_realsense_link:
+                camera_front_realsense_link_gazebo:
+                  {}
+            camera_left_realsense_bottom_screw_frame:
+              camera_left_realsense_link:
+                camera_left_realsense_link_gazebo:
+                  {}
+            camera_rear_realsense_bottom_screw_frame:
+              camera_rear_realsense_link:
+                camera_rear_realsense_link_gazebo:
+                  {}
+            camera_right_realsense_bottom_screw_frame:
+              camera_right_realsense_link:
+                camera_right_realsense_link_gazebo:
+                  {}
+            ouster_link:
               {}
-            front_bumper_link:
+            top_plate_front_link:
               {}
-            front_left_wheel_link:
+            top_plate_rear_link:
               {}
-            front_right_wheel_link:
-              {}
-            gps:
-              {}
-            imu_link:
-              {}
-            inertial_link:
-              {}
-            rear_bumper_link:
-              {}
-            rear_left_wheel_link:
-              {}
-            rear_right_wheel_link:
-              {}
-            top_chassis_link:
-              {}
-            top_plate_link:
-              camera_front_realsense_bottom_screw_frame:
-                camera_front_realsense_link:
-                  camera_front_realsense_link_gazebo:
-                    {}
-              camera_left_realsense_bottom_screw_frame:
-                camera_left_realsense_link:
-                  camera_left_realsense_link_gazebo:
-                    {}
-              camera_rear_realsense_bottom_screw_frame:
-                camera_rear_realsense_link:
-                  camera_rear_realsense_link_gazebo:
-                    {}
-              camera_right_realsense_bottom_screw_frame:
-                camera_right_realsense_link:
-                  camera_right_realsense_link_gazebo:
-                    {}
-              ouster_link:
-                {}
-              top_plate_front_link:
-                {}
-              top_plate_rear_link:
-                {}
-            user_rail_link:
-              {}
+          user_rail_link:
+            {}
       Update Interval: 0
       Value: true
     - Class: rviz/Group
@@ -515,8 +512,8 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 10
+      Class: rviz/ThirdPersonFollower
+      Distance: 8.333333015441895
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -527,15 +524,35 @@ Visualization Manager:
         X: 0
         Y: 0
         Z: 0
-      Focal Shape Fixed Size: false
+      Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7853981852531433
+      Near Clip Distance: 1
+      Pitch: 0.30000001192092896
       Target Frame: <Fixed Frame>
-      Yaw: 0.7853981852531433
-    Saved: ~
+      Yaw: 3.1414999961853027
+    Saved:
+      - Class: rviz/ThirdPersonFollower
+        Distance: 8.333333015441895
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.05999999865889549
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Field of View: 0.7853981852531433
+        Focal Point:
+          X: 0
+          Y: 0
+          Z: 0
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.05000000074505806
+        Invert Z Axis: false
+        Name: ThirdPersonFollower
+        Near Clip Distance: 1
+        Pitch: 0.30000001192092896
+        Target Frame: <Fixed Frame>
+        Yaw: 3.1414999961853027
 Window Geometry:
   Camera Front:
     collapsed: false

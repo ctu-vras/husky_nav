@@ -8,20 +8,21 @@
    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>-->
 <!--     <arg name="world" default="$(dirname)/../worlds/rubicon.world"/> -->
    <arg name="lss_debug" default="false"/>
+   <arg name="record" default="true"/>
 
     <!-- Gazebo world and spawn Husky robot -->
-<!--     <include file="$(dirname)/husky_gazebo.launch"> -->
-<!--         <arg name="world" value="$(arg world)"/> -->
-<!--         <arg name="gui" value="$(arg gui)"/> -->
-<!--     </include> -->
-
-    <!-- Inspection world and spawn Husky robot -->
-    <include file="$(dirname)/husky_inspection_world.launch">
+    <include file="$(dirname)/husky_gazebo.launch">
+        <arg name="world" value="$(arg world)"/>
         <arg name="gui" value="$(arg gui)"/>
     </include>
 
+    <!-- Inspection world and spawn Husky robot -->
+<!--     <include file="$(dirname)/husky_inspection_world.launch"> -->
+<!--         <arg name="gui" value="$(arg gui)"/> -->
+<!--     </include> -->
+
     <!-- LSS input data recording -->
-    <include file="$(dirname)/record.launch">
+    <include if="$(arg record)" file="$(dirname)/record.launch">
         <arg name="topics" value="'/realsense_front/color/image_raw/compressed'
                                   '/realsense_left/color/image_raw/compressed'
                                   '/realsense_right/color/image_raw/compressed'

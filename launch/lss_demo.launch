@@ -10,15 +10,15 @@
    <arg name="lss_debug" default="false"/>
 
     <!-- Gazebo world and spawn Husky robot -->
-<!--     <include file="$(dirname)/husky_gazebo.launch"> -->
-<!--         <arg name="world" value="$(arg world)"/> -->
-<!--         <arg name="gui" value="$(arg gui)"/> -->
-<!--     </include> -->
-
-    <!-- Inspection world and spawn Husky robot -->
-    <include file="$(dirname)/husky_inspection_world.launch">
+    <include file="$(dirname)/husky_gazebo.launch">
+        <arg name="world" value="$(arg world)"/>
         <arg name="gui" value="$(arg gui)"/>
     </include>
+
+    <!-- Inspection world and spawn Husky robot -->
+<!--     <include file="$(dirname)/husky_inspection_world.launch"> -->
+<!--         <arg name="gui" value="$(arg gui)"/> -->
+<!--     </include> -->
 
     <!-- LSS pipeline -->
     <include file="$(find monoforce)/launch/lss.launch">
@@ -32,7 +32,9 @@
                                                '/realsense_rear/color/camera_info']"/>
         <arg name="hm_frame" value="base_link"/>
         <arg name="max_msgs_delay" value="0.2"/>
-        <arg name="model_weights" value="$(find monoforce)/config/weights/lss/train_lss.pt"/>
+        <arg name="config_path" value="$(dirname)/../config/lss/cfg.yaml"/>
+        <arg name="lss_config_path" value="$(dirname)/../config/lss/lss.yaml"/>
+        <arg name="model_weights" value="$(dirname)/../config/lss/weights/train_lss.pt"/>
         <arg name="debug" value="$(arg lss_debug)"/>
     </include>
 

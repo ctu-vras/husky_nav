@@ -64,17 +64,3 @@ Launch navigation pipeline:
 ```bash
 roslaunch robingas_mission_gazebo navigation.launch rviz:=true
 ```
-
-## 2D-navigation Stack
-
-Waypoints following example with
-laser scan SLAM ([AMCL](http://wiki.ros.org/amcl)) and
-[move_base](http://wiki.ros.org/move_base) navigation stack.
-Bringup simulated environment and spawn a husky robot in it.
-```bash
-roslaunch robingas_mission_gazebo husky_amcl_move_base.launch
-```
-Command a robot to visit a sequence of waypoints.
-```bash
-roslaunch robingas_mission_gazebo send_wp_sequence.launch
-```

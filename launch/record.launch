@@ -3,8 +3,9 @@
 <launch>
     <arg name="path" default="$(dirname)/recorded.bag"/>
     <arg name="topics" default="--all" doc="Topics to record"/>
+    <arg name="delay" default="0" doc="Delay in seconds before recording starts"/>
 
     <node name="rosbag_record" pkg="rosbag" type="record"
-          args="$(arg topics) -o $(arg path)">
+          args="$(arg topics) -o $(arg path)" launch-prefix="bash -c 'sleep $(arg delay); $0 $@' ">
     </node>
 </launch>

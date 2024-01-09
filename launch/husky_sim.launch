@@ -4,13 +4,13 @@
     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
 
     <!-- Gazebo world and spawn Husky robot -->
-    <include file="$(dirname)/husky_gazebo.launch">
+    <include unless="$(eval 'inspection' in world)" file="$(dirname)/husky_gazebo.launch">
         <arg name="world" value="$(arg world)"/>
         <arg name="gui" value="$(arg gui)"/>
     </include>
 
     <!-- Inspection world and spawn Husky robot -->
-<!--     <include file="$(dirname)/husky_inspection_world.launch"> -->
-<!--         <arg name="gui" value="$(arg gui)"/> -->
-<!--     </include> -->
+    <include if="$(eval 'inspection' in world)" file="$(dirname)/husky_inspection_world.launch">
+        <arg name="gui" value="$(arg gui)"/>
+    </include>
 </launch>

@@ -5,11 +5,11 @@
     <arg name="planning_freq" default="0.5"/>
     <arg name="path_planned" default="path"/>
     <arg name="max_cloud_age" default="2.0"/>
-    <arg name="node_start_delay" default="0.0"/>
+    <arg name="delay" default="0.0"/>
 
     <node name="naex_planner" pkg="naex" type="planner"
           respawn="true" respawn_delay="1.0" output="screen"
-          launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+          launch-prefix="bash -c 'sleep $(arg delay); $0 $@' ">
 
         <!--
              5 0.087

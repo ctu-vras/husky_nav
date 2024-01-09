@@ -3,10 +3,10 @@
     <arg name="cloud" default="cloud"/>
     <arg name="odom_frame" default="odom"/>
     <arg name="map_frame" default="map"/>
-    <arg name="node_start_delay" default="0.0"/>
+    <arg name="delay" default="0.0"/>
 
     <node name="mapper_node" type="mapper_node" pkg="norlab_icp_mapper_ros"
-    launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+        launch-prefix="bash -c 'sleep $(arg delay); $0 $@' ">
         <rosparam subst_value="true">
             odom_frame: $(arg odom_frame)
             map_frame: $(arg map_frame)

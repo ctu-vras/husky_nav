@@ -7,6 +7,8 @@
 <!--     <arg name="world" default="$(dirname)/../../worlds/simcity_dynamic.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../../worlds/emptyfarm.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../../worlds/rubicon.world"/> -->
+    <arg unless="$(eval 'simcity' in world)" name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
+    <arg if="$(eval 'simcity' in world)" name="delay" default="20.0" doc="Delay before starting nodes in seconds"/>
 
     <!-- Husky Simulation -->
     <include file="$(dirname)/../husky_sim.launch">
@@ -26,7 +28,7 @@
         <include file="$(dirname)/../slam.launch">
             <arg name="cloud" value="points_filtered"/>
             <arg name="odom_frame" value="odom"/>
-            <arg name="node_start_delay" value="10.0"/>
+            <arg name="delay" value="$(arg delay)"/>
         </include>
     </group>
 
@@ -35,7 +37,7 @@
         <arg name="points" value="points_filtered"/>
         <arg name="planning_freq" value="1.0"/>
         <arg name="path_planned" value="path"/>
-        <arg name="node_start_delay" value="10.0"/>
+        <arg name="delay" value="$(arg delay)"/>
     </include>
 
     <!-- Path follower -->
@@ -59,6 +61,7 @@
                                   '/points'
                                   '/tf' '/tf_static'"/>
         <arg name="path" value="$(dirname)/lss_input.bag"/>
+        <arg name="delay" value="$(arg delay)"/>
     </include>
 
     <!-- RViz -->

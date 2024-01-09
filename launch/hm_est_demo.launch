@@ -25,6 +25,8 @@
     <include file="$(find monoforce)/launch/hm_estimator.launch">
         <arg name="pts_topics" value="[/points]"/>
 <!--         <arg name="pts_topics" value="[/realsense_front/depth/color/points, -->
+<!--                                        /realsense_left/depth/color/points, -->
+<!--                                        /realsense_rear/depth/color/points, -->
 <!--                                        /realsense_right/depth/color/points]"/> -->
     </include>
 

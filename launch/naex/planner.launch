@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <arg name="points" default="points_slow"/>
+    <arg name="points_min_dist" default="0.125"/>
+    <arg name="planning_freq" default="0.5"/>
+    <arg name="path_planned" default="path"/>
+    <arg name="max_cloud_age" default="2.0"/>
+    <arg name="node_start_delay" default="0.0"/>
+
+    <node name="naex_planner" pkg="naex" type="planner"
+          respawn="true" respawn_delay="1.0" output="screen"
+          launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+
+        <!--
+             5 0.087
+            10 0.175
+            15 0.262
+            20 0.349
+            25 0.436
+            30 0.524
+            35 0.611
+            40 0.698
+            45 0.785
+        -->
+        <rosparam subst_value="true">
+            position_name: x
+            normal_name: normal_x
+            map_frame: map
+            robot_frame: base_footprint
+            max_cloud_age: $(arg max_cloud_age)
+            input_range: 15.0
+            max_pitch: 0.611
+            max_roll: 0.524
+            neighborhood_knn: 32
+            neighborhood_radius: 0.6
+            normal_radius: 0.5
+
+            max_nn_height_diff: 0.15
+            min_points_obstacle: 1
+            max_ground_diff_std: 0.06
+            max_ground_abs_diff_mean: 0.06
+            edge_min_centroid_offset: 0.4
+            min_dist_to_obstacle: 0.0
+
+            viewpoints_update_freq: 1.
+            min_vp_distance: 2.0
+            max_vp_distance: 6.0
+            collect_rewards: true
+            full_coverage_dist: 3.0
+            coverage_dist_spread: 1.5
+            self_factor: 0.5
+            suppress_base_reward: true
+            path_cost_pow: 0.75
+            min_path_cost: 2.0
+            planning_freq: $(arg planning_freq)
+            random_start: false
+            plan_from_goal_dist: 1.5
+            bootstrap_z: .nan
+
+            min_num_empty: 4
+            min_empty_ratio: 2.0
+            max_occ_counter: 7
+            min_empty_cos: 0.216
+
+            points_min_dist: $(arg points_min_dist)
+            filter_robots: true
+
+            <!-- Have some clearance defaults. -->
+            clearance_radius: 0.6
+            clearance_low: 0.1
+            clearance_high: 0.7
+
+            num_input_clouds: 1
+            input_queue_size: 15
+        </rosparam>
+
+        <!-- Services -->
+        <remap from="get_plan" to="get_plan"/>
+
+        <!-- Inputs -->
+        <remap from="input_map" to="~input_map"/>  <!-- Don't use map input. -->
+
+        <remap from="input_cloud_0" to="$(arg points)"/>
+
+        <!-- Outputs -->
+        <!-- Collected robot viewpoints -->
+        <remap from="viewpoints" to="viewpoints"/>
+        <remap from="other_viewpoints" to="other_viewpoints"/>
+
+        <!--
+            Global and local maps: don't subscribe global if not needed,
+            use local map for visualization.
+        -->
+        <remap from="map" to="map"/>
+        <remap from="local_map" to="local_map"/>
+        <!-- Points to update (graph, features, labels) -->
+        <remap from="dirty_map" to="dirty_map"/>
+        <!-- Added / removed points -->
+        <remap from="map_diff" to="map_diff"/>
+
+        <!-- Planned path -->
+        <remap from="path" to="$(arg path_planned)"/>
+    </node>
+</launch>

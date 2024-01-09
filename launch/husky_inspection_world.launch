@@ -38,5 +38,5 @@
 
     <!-- RVIZ -->
   <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
-        args="-d $(dirname)/../config/husky.rviz"/>
+        args="-d $(dirname)/../config/rviz/husky.rviz"/>
 </launch>

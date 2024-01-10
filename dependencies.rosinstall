@@ -40,9 +40,21 @@
 #    version: master
 - git:
     local-name: ouster_example
-    uri: https://github.com/wilselby/ouster_example
-    version: master
+    uri: https://github.com/ouster-lidar/ouster_example
+    version: 47f25ed29ab0b4b6d32c3209fa1b53ea46751d0c
 - git:
     local-name: stamped_msgs
     uri: https://github.com/ctu-vras/stamped_msgs
+    version: master
+- git:
+    local-name: libpointmatcher_ros
+    uri: https://github.com/norlab-ulaval/libpointmatcher_ros.git
+    version: melodic
+- git:
+    local-name: norlab_icp_mapper
+    uri: https://github.com/tpet/norlab_icp_mapper.git
+    version: master
+- git:
+    local-name: norlab_icp_mapper_ros
+    uri: https://github.com/tpet/norlab_icp_mapper_ros.git
     version: master

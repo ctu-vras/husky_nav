@@ -41,7 +41,23 @@ From: ros:noetic-perception
     ws=${dir}/ws/
     mkdir -p "${ws}/src"
     cd "${ws}/src"
-    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git
+    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git -b monoforce
+
+    # build libnabo
+    cd "${ws}/src/"
+    git clone https://github.com/ethz-asl/libnabo
+    nabo_build=$ws/src/libnabo/build/
+    mkdir -p $nabo_build && cd $nabo_build && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo $ws/src/libnabo/
+    cd $nabo_build && make && make install
+
+    # build libpointmatcher
+    cd "${ws}/src/"
+    git clone https://github.com/ethz-asl/libpointmatcher
+    lpm_build=$ws/src/libpointmacher/build/
+    mkdir -p $lpm_build && cd $lpm_build && cmake $ws/src/libpointmatcher/
+    cd $lpm_build && make && make install
+
+    # download and build dependencies
     wstool init
     wstool merge robingas_mission_gazebo/dependencies.rosinstall
     wstool up -j 4
@@ -52,7 +68,6 @@ From: ros:noetic-perception
     catkin build -c
 
     # Install Python packages
-    # pip install torch==1.10.0+cu113 torchvision==0.11.1+cu113 -f https://download.pytorch.org/whl/torch_stable.html
     pip install torch torchvision torchaudio torchmetrics tensorboard --extra-index-url https://download.pytorch.org/whl/cu113
     pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
     pip install -r ${SINGULARITY_ROOTFS}/requirements.txt

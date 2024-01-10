@@ -11,15 +11,9 @@
     <arg name="weights" default="$(find monoforce)/config/weights/lss/lss_sim.pt"/>
 
     <!-- Gazebo world and spawn Husky robot -->
-    <include file="$(dirname)/husky_gazebo.launch">
+    <include file="$(dirname)/husky_sim.launch">
         <arg name="world" value="$(arg world)"/>
-        <arg name="gui" value="$(arg gui)"/>
     </include>
-
-    <!-- Inspection world and spawn Husky robot -->
-<!--     <include file="$(dirname)/husky_inspection_world.launch"> -->
-<!--         <arg name="gui" value="$(arg gui)"/> -->
-<!--     </include> -->
 
     <!-- LSS pipeline -->
     <include file="$(find monoforce)/launch/lss.launch">

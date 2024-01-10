@@ -1,6 +1,9 @@
 Bootstrap: docker
 From: ros:noetic-perception
 
+%files
+    requirements.txt
+
 %post
     export XDG_CACHE_HOME=/tmp/singularity-cache # pip cache
 
@@ -47,3 +50,11 @@ From: ros:noetic-perception
     catkin config --extend /opt/ros/noetic/
     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
     catkin build -c
+
+    # Install Python packages
+    # pip install torch==1.10.0+cu113 torchvision==0.11.1+cu113 -f https://download.pytorch.org/whl/torch_stable.html
+    pip install torch torchvision torchaudio torchmetrics tensorboard --extra-index-url https://download.pytorch.org/whl/cu113
+    pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
+    pip install -r ${SINGULARITY_ROOTFS}/requirements.txt
+
+    ln -s /usr/bin/python3 /usr/bin/python

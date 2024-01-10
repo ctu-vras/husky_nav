@@ -1,7 +1,7 @@
-- git:
-    local-name: cras_gps_odom
-    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_gps_odom.git
-    version: master
+#- git:
+#    local-name: cras_gps_odom
+#    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_gps_odom.git
+#    version: master
 - git:
     local-name: traversability_estimation
     uri: https://github.com/ctu-vras/traversability_estimation
@@ -26,18 +26,18 @@
     local-name: tf2_client
     uri: https://github.com/tpet/tf2_client
     version: master
-- git:
-    local-name: augmented_robot_trackers
-    uri: git@gitlab.fel.cvut.cz:cras/subt/common/augmented_robot_trackers.git
-    version: master
+#- git:
+#    local-name: augmented_robot_trackers
+#    uri: git@gitlab.fel.cvut.cz:cras/subt/common/augmented_robot_trackers.git
+#    version: master
 - git:
     local-name: ros-utils
     uri: https://github.com/ctu-vras/ros-utils
     version: master
-- git:
-    local-name: cras_imu_tools
-    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_imu_tools.git
-    version: master
+#- git:
+#    local-name: cras_imu_tools
+#    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_imu_tools.git
+#    version: master
 - git:
     local-name: ouster_example
     uri: https://github.com/wilselby/ouster_example

@@ -29,35 +29,38 @@ From: ros:noetic-perception
         ros-noetic-rviz
         ros-noetic-navigation
         ros-noetic-husky-*
-        ros-noetic-image-transport-codecs"
+        ros-noetic-image-transport-codecs
+        ros-noetic-imu-transformer
+        ros-noetic-roslint
+        "
 
     apt update
     apt install -y ${packages}
 
-    dir=$(pwd)
-    echo "Current directory: ${dir}"
+    ws=/opt/ros/navigation_ws
+    echo "WS directory: ${ws}"
 
     # Setup ROS workspace
-    ws=${dir}/ws/
-    mkdir -p "${ws}/src"
-    cd "${ws}/src"
-    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git -b monoforce
+    mkdir -p "${ws}/src/thirdparty"
 
+    # Norlab SLAM dependencies
     # build libnabo
-    cd "${ws}/src/"
+    cd "${ws}/src/thirdparty/"
     git clone https://github.com/ethz-asl/libnabo
-    nabo_build=$ws/src/libnabo/build/
-    mkdir -p $nabo_build && cd $nabo_build && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo $ws/src/libnabo/
+    nabo_build=$ws/src/thirdparty/libnabo/build/
+    mkdir -p $nabo_build && cd $nabo_build && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo $ws/src/thirdparty/libnabo/
     cd $nabo_build && make && make install
 
     # build libpointmatcher
-    cd "${ws}/src/"
+    cd "${ws}/src/thirdparty/"
     git clone https://github.com/ethz-asl/libpointmatcher
-    lpm_build=$ws/src/libpointmacher/build/
-    mkdir -p $lpm_build && cd $lpm_build && cmake $ws/src/libpointmatcher/
+    lpm_build=$ws/src/thirdparty/libpointmacher/build/
+    mkdir -p $lpm_build && cd $lpm_build && cmake $ws/src/thirdparty/libpointmatcher/
     cd $lpm_build && make && make install
 
     # download and build dependencies
+    cd "${ws}/src"
+    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git -b monoforce
     wstool init
     wstool merge robingas_mission_gazebo/dependencies.rosinstall
     wstool up -j 4

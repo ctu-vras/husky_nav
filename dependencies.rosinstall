@@ -42,6 +42,10 @@
     local-name: ouster_example
     uri: https://github.com/ouster-lidar/ouster_example
     version: 47f25ed29ab0b4b6d32c3209fa1b53ea46751d0c
+-git:
+    local-name: ouster_description
+    uri: https://github.com/clearpathrobotics/ouster_description
+    version: master
 - git:
     local-name: stamped_msgs
     uri: https://github.com/ctu-vras/stamped_msgs

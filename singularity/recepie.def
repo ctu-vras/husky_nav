@@ -43,6 +43,14 @@ From: ros:noetic-perception
     # Setup ROS workspace
     mkdir -p "${ws}/src/thirdparty"
 
+    # download dependencies
+    cd "${ws}/src"
+    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git -b monoforce
+    wstool init
+    wstool merge robingas_mission_gazebo/dependencies.rosinstall
+    # wstool merge ${SINGULARITY_ROOTFS}/../dependencies.rosinstall
+    wstool up -j 4
+
     # Norlab SLAM dependencies
     # build libnabo
     cd "${ws}/src/thirdparty/"
@@ -58,12 +66,7 @@ From: ros:noetic-perception
     mkdir -p $lpm_build && cd $lpm_build && cmake $ws/src/thirdparty/libpointmatcher/
     cd $lpm_build && make && make install
 
-    # download and build dependencies
-    cd "${ws}/src"
-    git clone https://github.com/ctu-vras/robingas_mission_gazebo.git -b monoforce
-    wstool init
-    wstool merge robingas_mission_gazebo/dependencies.rosinstall
-    wstool up -j 4
+    # build workspace
     cd "${ws}"
     catkin init
     catkin config --extend /opt/ros/noetic/

@@ -7,8 +7,8 @@ From: ros:noetic-perception
 %post
     export XDG_CACHE_HOME=/tmp/singularity-cache # pip cache
 
-    # Install Apt packages
-    packages="
+    # APT packages
+    APT_PKGS="
         gcc
         g++
         bridge-utils
@@ -24,19 +24,24 @@ From: ros:noetic-perception
         git
         python3-pip
         python3-catkin-tools
-        ros-noetic-ros-numpy
-        ros-noetic-jsk-rviz-plugins
-        ros-noetic-rviz
-        ros-noetic-navigation
-        ros-noetic-husky-*
-        ros-noetic-image-transport-codecs
-        ros-noetic-imu-transformer
-        ros-noetic-roslint
-        ros-noetic-grid-map
+        "
+
+    # ROS packages
+    ROS_PKGS="\
+        ros-noetic-ros-numpy \
+        ros-noetic-jsk-rviz-plugins \
+        ros-noetic-rviz \
+        ros-noetic-navigation \
+        ros-noetic-husky-* \
+        ros-noetic-image-transport-codecs \
+        ros-noetic-imu-transformer \
+        ros-noetic-roslint \
+        ros-noetic-grid-map \
+        ros-noetic-rviz-imu-plugin \
         "
 
     apt update
-    apt install -y ${packages}
+    apt install -y ${APT_PKGS} ${ROS_PKGS}
 
     ws=/opt/ros/navigation_ws
     echo "WS directory: ${ws}"

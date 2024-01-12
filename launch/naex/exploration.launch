@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <launch>
-    <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
-    <arg name="record" default="false" doc="Record input data or not"/>
-    <arg name="world" default="$(dirname)/../../worlds/farmWith1CropRow.world"/>
-<!--    <arg name="world" default="$(dirname)/../../worlds/simcity.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../../worlds/simcity_dynamic.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../../worlds/emptyfarm.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../../worlds/rubicon.world"/> -->
+    <arg name="world" default="$(dirname)/../../worlds/emptyfarm.world"/>
     <arg unless="$(eval 'simcity' in world)" name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
-    <arg if="$(eval 'simcity' in world)" name="delay" default="20.0" doc="Delay before starting nodes in seconds"/>
+    <arg if="$(eval 'simcity' in world)" name="delay" default="30.0" doc="Delay before starting nodes in seconds"/>
 
     <!-- Husky Simulation -->
     <include file="$(dirname)/../husky_sim.launch">
@@ -47,23 +41,4 @@
         <arg name="points" value="points_filtered"/>
         <arg name="keep_path" value="1.0"/>
     </include>
-
-    <!-- LSS input data recording -->
-    <include if="$(arg record)" file="$(dirname)/../record.launch">
-        <arg name="topics" value="'/realsense_front/color/image_raw/compressed'
-                                  '/realsense_left/color/image_raw/compressed'
-                                  '/realsense_right/color/image_raw/compressed'
-                                  '/realsense_rear/color/image_raw/compressed'
-                                  '/realsense_front/color/camera_info'
-                                  '/realsense_left/color/camera_info'
-                                  '/realsense_right/color/camera_info'
-                                  '/realsense_rear/color/camera_info'
-                                  '/points'
-                                  '/tf' '/tf_static'"/>
-        <arg name="path" value="$(dirname)/lss_input.bag"/>
-        <arg name="delay" value="$(arg delay)"/>
-    </include>
-
-    <!-- RViz -->
-    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../../config/rviz/explore.rviz"/>
 </launch>

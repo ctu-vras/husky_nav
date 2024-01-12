@@ -32,6 +32,7 @@ From: ros:noetic-perception
         ros-noetic-image-transport-codecs
         ros-noetic-imu-transformer
         ros-noetic-roslint
+        ros-noetic-grid-map
         "
 
     apt update

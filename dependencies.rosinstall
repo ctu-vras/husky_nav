@@ -62,3 +62,7 @@
     local-name: norlab_icp_mapper_ros
     uri: https://github.com/tpet/norlab_icp_mapper_ros.git
     version: master
+- git:
+    local-name: monoforce
+    uri: https://github.com/ctu-vras/monoforce
+    version: master

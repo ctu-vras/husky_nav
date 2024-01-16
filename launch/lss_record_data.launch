@@ -3,36 +3,52 @@
     <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
-<!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/>-->
+    <arg name="world" default="$(dirname)/../worlds/simcity.world"/>
 <!--    <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/>-->
-   <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>-->
+<!--    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>--> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/rubicon.world"/> -->
-   <arg name="lss_debug" default="false"/>
-   <arg name="record" default="true"/>
+    <arg name="lss_debug" default="false"/>
+    <arg name="record" default="true"/>
+    <arg name="delay" default="5.0"/>
+    <arg name="rgb_topics" default="'/realsense_front/color/image_raw/compressed'
+                                    '/realsense_left/color/image_raw/compressed'
+                                    '/realsense_right/color/image_raw/compressed'
+                                    '/realsense_rear/color/image_raw/compressed'"/>
+    <arg name="rgb_info_topics" default="'/realsense_front/color/camera_info'
+                                         '/realsense_left/color/camera_info'
+                                         '/realsense_right/color/camera_info'
+                                         '/realsense_rear/color/camera_info'"/>
+    <arg name="depth_topics" default="'/realsense_front/depth/image_rect_raw'
+                                      '/realsense_left/depth/image_rect_raw'
+                                      '/realsense_right/depth/image_rect_raw'
+                                      '/realsense_rear/depth/image_rect_raw'"/>
+    <arg name="depth_info_topics" default="'/realsense_front/depth/camera_info'
+                                           '/realsense_left/depth/camera_info'
+                                           '/realsense_right/depth/camera_info'
+                                           '/realsense_rear/depth/camera_info'"/>
+    <arg name="depth_cloud_topics" default="'/realsense_front/depth/color/points'
+                                            '/realsense_left/depth/color/points'
+                                            '/realsense_right/depth/color/points'
+                                            '/realsense_rear/depth/color/points'"/>
+    <arg name="lidar_topics" default="'/points'"/>
+    <arg name="tf_topics" default="'/tf' '/tf_static'"/>
 
     <!-- Gazebo world and spawn Husky robot -->
-    <include file="$(dirname)/husky_gazebo.launch">
+    <include file="$(dirname)/husky_sim.launch">
         <arg name="world" value="$(arg world)"/>
         <arg name="gui" value="$(arg gui)"/>
     </include>
 
-    <!-- Inspection world and spawn Husky robot -->
-<!--     <include file="$(dirname)/husky_inspection_world.launch"> -->
-<!--         <arg name="gui" value="$(arg gui)"/> -->
-<!--     </include> -->
-
     <!-- LSS input data recording -->
     <include if="$(arg record)" file="$(dirname)/record.launch">
-        <arg name="topics" value="'/realsense_front/color/image_raw/compressed'
-                                  '/realsense_left/color/image_raw/compressed'
-                                  '/realsense_right/color/image_raw/compressed'
-                                  '/realsense_rear/color/image_raw/compressed'
-                                  '/realsense_front/color/camera_info'
-                                  '/realsense_left/color/camera_info'
-                                  '/realsense_right/color/camera_info'
-                                  '/realsense_rear/color/camera_info'
-                                  '/points'
-                                  '/tf' '/tf_static'"/>
+        <arg name="delay" value="$(arg delay)"/>
+        <arg name="topics" value="$(arg rgb_topics)
+                                  $(arg rgb_info_topics)
+                                  $(arg depth_topics)
+                                  $(arg depth_info_topics)
+                                  $(arg depth_cloud_topics)
+                                  $(arg lidar_topics)
+                                  $(arg tf_topics)"/>
         <arg name="path" value="$(dirname)/husky_sim.bag"/>
     </include>
 

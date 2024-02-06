@@ -2,38 +2,43 @@
 <launch>
     <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="record" default="false" doc="Record input data or not"/>
-    <arg name="trav" default="false" doc="Launch LSS node or not"/>
+    <arg name="trav" default="false" doc="Launch HM estimation node or not"/>
+    <arg name="lss" default="false" doc="Launch LSS node or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
-<!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
+   <arg name="world" default="$(dirname)/../worlds/simcity.world"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
-    <arg name="world" default="$(dirname)/../worlds/emptyfarm_vegetation.world"/>
+<!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm_vegetation.world"/> -->
 <!--     <arg name="world" default="inspection"/> -->
     <arg unless="$(eval 'simcity' in world)" name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
     <arg if="$(eval 'simcity' in world)" name="delay" default="3.0" doc="Delay before starting nodes in seconds"/>
     <arg name="lss_weights" default="$(find monoforce)/config/weights/lss/lss_sim.pt" doc="Path to LSS weights file"/>
 
-    <!-- Husky Exploration -->
-    <include file="$(dirname)/naex/exploration.launch">
+    <!-- Husky spawned in Gazebo world -->
+    <include file="$(dirname)/husky_sim.launch">
         <arg name="world" value="$(arg world)"/>
+        <arg name="gui" value="true"/>
     </include>
 
+    <!-- Husky Exploration -->
+    <include file="$(dirname)/naex/exploration.launch"/>
+
     <!-- LSS node -->
-<!--     <include if="$(arg trav)" file="$(find monoforce)/launch/lss.launch"> -->
-<!--         <arg name="img_topics" value="['/realsense_front/color/image_raw/compressed', -->
-<!--                                        '/realsense_left/color/image_raw/compressed', -->
-<!--                                        '/realsense_rear/color/image_raw/compressed', -->
-<!--                                        '/realsense_right/color/image_raw/compressed']"/> -->
-<!--         <arg name="camera_info_topics" value="['/realsense_front/color/camera_info', -->
-<!--                                                '/realsense_left/color/camera_info', -->
-<!--                                                '/realsense_rear/color/camera_info', -->
-<!--                                                '/realsense_right/color/camera_info']"/> -->
-<!--         <arg name="hm_frame" value="base_link"/> -->
-<!--         <arg name="max_msgs_delay" value="0.5"/> -->
-<!--         <arg name="max_stale_msg_delay" value="2.0"/> -->
-<!--         <arg name="model_weights" value="$(arg lss_weights)"/> -->
-<!--         <arg name="calib_path" value="$(dirname)/../config/calibration"/> -->
-<!--     </include> -->
+    <include if="$(arg lss)" file="$(find monoforce)/launch/lss.launch">
+        <arg name="img_topics" value="['/realsense_front/color/image_raw/compressed',
+                                       '/realsense_left/color/image_raw/compressed',
+                                       '/realsense_rear/color/image_raw/compressed',
+                                       '/realsense_right/color/image_raw/compressed']"/>
+        <arg name="camera_info_topics" value="['/realsense_front/color/camera_info',
+                                               '/realsense_left/color/camera_info',
+                                               '/realsense_rear/color/camera_info',
+                                               '/realsense_right/color/camera_info']"/>
+        <arg name="hm_frame" value="base_link"/>
+        <arg name="max_msgs_delay" value="0.5"/>
+        <arg name="max_stale_msg_delay" value="2.0"/>
+        <arg name="model_weights" value="$(arg lss_weights)"/>
+        <arg name="calib_path" value="$(dirname)/../config/calibration"/>
+    </include>
 
     <!-- Height map estimation -->
     <include if="$(arg trav)" file="$(find monoforce)/launch/hm_estimator.launch">

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <launch>
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
-    <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/>
+    <arg name="rviz" default="false" doc="Launch RViz or not"/>
+    <arg name="world" default=""/>
 
     <!-- Gazebo world and spawn Husky robot -->
     <include unless="$(eval 'inspection' in world)" file="$(dirname)/husky_gazebo.launch">
@@ -13,4 +14,7 @@
     <include if="$(eval 'inspection' in world)" file="$(dirname)/husky_inspection_world.launch">
         <arg name="gui" value="$(arg gui)"/>
     </include>
+
+    <!-- RViz -->
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/husky.rviz"/>
 </launch>

@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <launch>
-    <arg name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
-
     <!-- SLAM -->
     <group>
         <!-- Cloud filterring -->
-        <include file="$(dirname)/../cloud_filter.launch">
+        <include file="$(dirname)/cloud_filter.launch">
             <arg name="input" value="points"/>
             <arg name="output" value="points_filtered"/>
             <arg name="min_depth" value="1.0"/>
             <arg name="max_depth" value="15.0"/>
             <arg name="grid_res" value="0.1"/>
         </include>
-        <include file="$(dirname)/../slam.launch">
+        <include file="$(dirname)/slam.launch">
             <arg name="cloud" value="points_filtered"/>
             <arg name="odom_frame" value="odom"/>
-            <arg name="delay" value="$(arg delay)"/>
         </include>
     </group>
 
-    <!-- Path planner -->
-    <include file="$(dirname)/planner.launch">
-        <arg name="points" value="points_filtered"/>
-        <arg name="planning_freq" value="0.2"/>
-        <arg name="path_planned" value="path"/>
-        <arg name="delay" value="$(arg delay)"/>
-    </include>
+    <!-- Random path planner -->
+    <node name="random_path_planner" pkg="robingas_mission_gazebo" type="random_path_planner" output="screen">
+        <rosparam subst_value="true">
+            plan_freq: 0.3
+            robot_frame: base_footprint
+            path_topic: path
+        </rosparam>
+    </node>
 
     <!-- Path follower -->
-    <include file="$(dirname)/follower.launch">
+    <include file="$(dirname)/naex/follower.launch">
         <arg name="path_to_follow" value="path"/>
+        <arg name="robot_frame" value="base_footprint"/>
         <arg name="odom_frame" value="odom"/>
+        <arg name="map_frame" value="map"/>
         <arg name="points" value="points_filtered"/>
-        <arg name="keep_path" value="1.0"/>
+        <arg name="keep_path" value="3.0"/>
+        <arg name="obstacle_avoidance" value="false"/>
     </include>
 </launch>

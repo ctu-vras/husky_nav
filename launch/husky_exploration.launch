@@ -9,7 +9,7 @@
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
 <!--     <arg name="world" default="inspection"/> -->
-    <arg name="world" value="$(dirname)/../worlds/terrain.world"/>
+    <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
 
     <arg unless="$(eval 'simcity' in world)" name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
     <arg if="$(eval 'simcity' in world)" name="delay" default="3.0" doc="Delay before starting nodes in seconds"/>

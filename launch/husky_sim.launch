@@ -4,6 +4,8 @@
     <arg name="rviz" default="false" doc="Launch RViz or not"/>
     <arg name="world" default=""/>
 
+    <param name="use_sim_time" value="true"/>
+
     <!-- Gazebo world and spawn Husky robot -->
     <include unless="$(eval 'inspection' in world)" file="$(dirname)/husky_gazebo.launch">
         <arg name="world" value="$(arg world)"/>

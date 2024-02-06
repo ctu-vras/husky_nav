@@ -1,0 +1,150 @@
+#!/usr/bin/env python
+
+import rospy
+from nav_msgs.msg import Path
+from geometry_msgs.msg import PoseStamped, TransformStamped, Pose, Transform
+import numpy as np
+import tf2_ros
+from tf2_geometry_msgs import do_transform_pose
+from tf.transformations import quaternion_from_euler
+from ros_numpy import msgify, numpify
+
+
+def sample_trajectory(v, w, times):
+    """
+    Sample a trajectory given velocities and times
+    :param v: constant linear velocity
+    :param w: constant angular velocity
+    :param times: monotonically increasing time moments
+    :return: poses, N x 3 array of x, y, theta
+    """
+    # Initialize poses
+    poses = np.zeros((len(times), 3))
+    x, y, theta = 0., 0., 0.
+
+    # Compute time intervals
+    dts = np.diff(times)
+
+    # Iterate over time intervals
+    for i in range(len(dts)):
+        dt = dts[i]
+        x += v * np.cos(theta) * dt
+        y += v * np.sin(theta) * dt
+        theta += w * dt
+        poses[i+1] = [x, y, theta]
+    return poses
+
+
+def poses_to_path(poses, frame_id=None, stamp=None):
+    """
+    Convert poses to a nav_msgs/Path message
+    :param poses: N x 3 array of x, y, theta
+    :param frame_id: frame id of the path
+    :param stamp: time stamp of the path
+    :return: nav_msgs/Path message
+    """
+    path = Path()
+    if frame_id is not None:
+        path.header.frame_id = frame_id
+    if stamp is not None:
+        path.header.stamp = stamp
+    for i in range(len(poses)):
+        pose = PoseStamped()
+        if frame_id is not None:
+            pose.header.frame_id = frame_id
+        if stamp is not None:
+            pose.header.stamp = stamp
+        pose.pose.position.x = poses[i, 0]
+        pose.pose.position.y = poses[i, 1]
+        pose.pose.position.z = 0.
+        q = quaternion_from_euler(0., 0., poses[i, 2])
+        pose.pose.orientation.x = q[0]
+        pose.pose.orientation.y = q[1]
+        pose.pose.orientation.z = q[2]
+        pose.pose.orientation.w = q[3]
+        path.poses.append(pose)
+    return path
+
+
+class Planner(object):
+    def __init__(self):
+        self.path_topic = rospy.get_param('~path_topic', 'path')
+        self.map_frame = rospy.get_param('~map_frame', 'map')
+        self.odom_frame = rospy.get_param('~odom_frame', 'odom')
+        self.robot_frame = rospy.get_param('~robot_frame', 'base_link')
+        self.plan_freq = rospy.get_param('~plan_freq', 1)
+        self.path_pub = rospy.Publisher(name=self.path_topic, data_class=Path, queue_size=2)
+        self.tf = tf2_ros.Buffer()
+        self.tf_sub = tf2_ros.TransformListener(self.tf)
+        self.timer = rospy.Timer(rospy.Duration(1. / self.plan_freq), self.plan)
+
+    def lookup_transform(self, target_frame, source_frame, time,
+                         no_wait_frame=None, timeout=0.0):
+        timeout = rospy.Duration.from_sec(timeout)
+        if no_wait_frame is None or no_wait_frame == target_frame:
+            tf_s2t = self.tf.lookup_transform(target_frame, source_frame, time, timeout=timeout)
+            return tf_s2t
+
+        # Try to get exact transform from no-wait frame to target if available.
+        # If not, use most recent transform.
+        dont_wait = rospy.Duration.from_sec(0.0)
+        try:
+            tf_n2t = self.tf.lookup_transform(target_frame, self.odom_frame, time, timeout=dont_wait)
+        except tf2_ros.TransformException as ex:
+            tf_n2t = self.tf.lookup_transform(target_frame, self.odom_frame, rospy.Time(0))
+
+        # Get the exact transform from source to no-wait frame.
+        tf_s2n = self.tf.lookup_transform(self.odom_frame, source_frame, time, timeout=timeout)
+
+        tf_s2t = TransformStamped()
+        tf_s2t.header.frame_id = target_frame
+        tf_s2t.header.stamp = time
+        tf_s2t.child_frame_id = source_frame
+        tf_s2t.transform = msgify(Transform,
+                                  np.matmul(numpify(tf_n2t.transform),
+                                            numpify(tf_s2n.transform)))
+        return tf_s2t
+
+    def get_robot_pose(self, target_frame):
+        tf = self.lookup_transform(target_frame, self.robot_frame, rospy.Time.now(),
+                                   timeout=0.5, no_wait_frame=self.odom_frame)
+        return tf
+
+    @staticmethod
+    def transform_path(path, transform):
+        for i in range(len(path.poses)):
+            path.poses[i] = do_transform_pose(path.poses[i], transform)
+        return path
+
+    @staticmethod
+    def construct_path(v, w, times=np.linspace(0., 10., 10)):
+        poses = sample_trajectory(v, w, times)
+        path = poses_to_path(poses)
+        return path
+
+    def plan(self, event):
+        v, w = 0.5, np.random.random() - 0.5
+        if np.random.random() < 0.5:
+            v = -v
+        path = self.construct_path(v, w)
+        # transform path to map frame
+        try:
+            transform = self.get_robot_pose(self.map_frame)
+        except tf2_ros.LookupException:
+            rospy.logwarn('No transform from %s to %s', self.robot_frame, self.map_frame)
+            return
+        rospy.loginfo('Publishing path')
+        path = self.transform_path(path, transform)
+        path.header.stamp = rospy.Time.now()
+        path.header.frame_id = self.map_frame
+        self.path_pub.publish(path)
+
+
+def main():
+    rospy.init_node('random_planner', anonymous=True, log_level=rospy.INFO)
+    node = Planner()
+    rospy.spin()
+
+
+if __name__ == "__main__":
+    main()

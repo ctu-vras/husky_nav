@@ -5,8 +5,8 @@
     </include>
 
     <include>
-      <name>terrain_1</name>
-      <uri>model://terrain_1</uri>
+      <name>terrain</name>
+      <uri>model://terrain</uri>
       <pose>0 0 0 0 0 0</pose>
     </include>
 

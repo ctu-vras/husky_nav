@@ -2,22 +2,23 @@
 <launch>
     <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="record" default="false" doc="Record input data or not"/>
-    <arg name="trav" default="false" doc="Launch HM estimation node or not"/>
+    <arg name="trav" default="false" doc="Launch height map estimator or not"/>
     <arg name="lss" default="false" doc="Launch LSS node or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
-   <arg name="world" default="$(dirname)/../worlds/simcity.world"/>
+<!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm_vegetation.world"/> -->
 <!--     <arg name="world" default="inspection"/> -->
+    <arg name="world" value="$(dirname)/../worlds/terrain.world"/>
+
     <arg unless="$(eval 'simcity' in world)" name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
     <arg if="$(eval 'simcity' in world)" name="delay" default="3.0" doc="Delay before starting nodes in seconds"/>
     <arg name="lss_weights" default="$(find monoforce)/config/weights/lss/lss_sim.pt" doc="Path to LSS weights file"/>
 
-    <!-- Husky spawned in Gazebo world -->
+    <!-- Husky Simulation -->
     <include file="$(dirname)/husky_sim.launch">
         <arg name="world" value="$(arg world)"/>
-        <arg name="gui" value="true"/>
+        <arg name="gui" value="false"/>
     </include>
 
     <!-- Husky Exploration -->

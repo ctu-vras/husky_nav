@@ -2,22 +2,21 @@
 <launch>
     <arg name="delay" default="0.0" doc="Delay before starting nodes in seconds"/>
 
+    <!-- Cloud filterring -->
+    <include file="$(dirname)/../cloud_filter.launch">
+        <arg name="input" value="points"/>
+        <arg name="output" value="points_filtered"/>
+        <arg name="min_depth" value="1.0"/>
+        <arg name="max_depth" value="15.0"/>
+        <arg name="grid_res" value="0.1"/>
+    </include>
+
     <!-- SLAM -->
-    <group>
-        <!-- Cloud filterring -->
-        <include file="$(dirname)/../cloud_filter.launch">
-            <arg name="input" value="points"/>
-            <arg name="output" value="points_filtered"/>
-            <arg name="min_depth" value="1.0"/>
-            <arg name="max_depth" value="15.0"/>
-            <arg name="grid_res" value="0.1"/>
-        </include>
-        <include file="$(dirname)/../slam.launch">
-            <arg name="cloud" value="points_filtered"/>
-            <arg name="odom_frame" value="odom"/>
-            <arg name="delay" value="$(arg delay)"/>
-        </include>
-    </group>
+    <include file="$(dirname)/../slam.launch">
+        <arg name="cloud" value="points"/>
+        <arg name="odom_frame" value="odom"/>
+        <arg name="delay" value="$(arg delay)"/>
+    </include>
 
     <!-- Path planner -->
     <include file="$(dirname)/planner.launch">

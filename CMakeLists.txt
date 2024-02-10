@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(robingas_mission_gazebo)
+project(husky_sim)
 
 find_package(catkin REQUIRED COMPONENTS
   gazebo_ros

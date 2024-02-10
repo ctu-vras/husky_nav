@@ -149,14 +149,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 <!--  <xacro:property name="gpu" value="$(arg gpu)" />-->
 
   <!-- Included URDF/XACRO Files -->
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/accessories/hokuyo_ust10.urdf.xacro" />
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/accessories/intel_realsense.urdf.xacro"/>
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/accessories/flir_blackfly_mount.urdf.xacro"/>
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/accessories/sensor_arch.urdf.xacro"/>
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/>
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/accessories/vlp16_mount.urdf.xacro"/>
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/decorations.urdf.xacro" />
-  <xacro:include filename="$(find robingas_mission_gazebo)/urdf/wheel.urdf.xacro" />
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/hokuyo_ust10.urdf.xacro" />
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/intel_realsense.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/flir_blackfly_mount.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/sensor_arch.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/vlp16_mount.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/decorations.urdf.xacro" />
+  <xacro:include filename="$(find husky_sim)/urdf/wheel.urdf.xacro" />
   <xacro:include filename="$(find ouster_description)/urdf/OS1-64.urdf.xacro"/>
 
   <xacro:property name="M_PI" value="3.14159"/>

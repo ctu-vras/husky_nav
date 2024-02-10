@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>robingas_mission_gazebo</name>
+  <name>husky_sim</name>
   <version>0.0.0</version>
   <description>GPS-IMU navigation pipeline with Traversability Estimation and OSM data usage for Path Planning tested in Gazebo simulator</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="agishrus@felk.cvut.cz">Ruslan Agishev</maintainer>
   <license>BSD</license>
-  <url type="website">https://github.com/ctu-vras/robingas_mission_gazebo</url>
+  <url type="website">https://github.com/ctu-vras/husky_sim</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 

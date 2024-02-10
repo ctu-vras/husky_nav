@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>husky_sim</name>
-  <version>0.0.0</version>
-  <description>GPS-IMU navigation pipeline with Traversability Estimation and OSM data usage for Path Planning tested in Gazebo simulator</description>
+  <version>0.0.1</version>
+  <description>Navigation pipeline with Traversability Estimation tested in Gazebo simulator</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="agishrus@felk.cvut.cz">Ruslan Agishev</maintainer>

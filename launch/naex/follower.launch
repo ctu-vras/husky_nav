@@ -15,7 +15,7 @@
     <arg name="goal_reached_dist" default="0.3"/>
     <arg name="look_ahead" default="0.8"/>
 
-    <node name="path_follower" pkg="naex" type="path_follower"
+    <node name="path_follower" pkg="husky_sim" type="path_follower"
           respawn="true" respawn_delay="1.0" output="screen">
 
         <rosparam subst_value="true">

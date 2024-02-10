@@ -1,2 +1,2 @@
 # Building singularity image from the def file
-sudo singularity build --nv robingas_mission_gazebo.simg recepie.def
+sudo singularity build --nv husky_sim.simg recepie.def

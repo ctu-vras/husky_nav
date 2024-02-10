@@ -64,5 +64,5 @@
 
     <!-- RVIZ -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
-          args="-d $(find robingas_mission_gazebo)/config/navigation.rviz"/>
+          args="-d $(dirname)/../config/navigation.rviz"/>
 </launch>

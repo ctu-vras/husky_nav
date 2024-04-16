@@ -3,16 +3,17 @@
     <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
-   <arg name="world" default="$(dirname)/../worlds/simcity.world"/>
+<!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../worlds/rubicon.world"/> -->
+    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>
+<!--     <arg name="world" default="$(dirname)/../worlds/cubes.world"/> -->
     <arg name="lss_debug" default="false"/>
     <arg name="weights" default="$(find monoforce)/config/weights/lss/lss_sim.pt"/>
 
     <!-- Gazebo world and spawn Husky robot -->
     <include file="$(dirname)/husky_sim.launch">
         <arg name="world" value="$(arg world)"/>
+        <arg name="gui" value="$(arg gui)"/>
     </include>
 
     <!-- LSS pipeline -->

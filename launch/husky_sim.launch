@@ -18,5 +18,5 @@
     </include>
 
     <!-- RViz -->
-    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/husky.rviz"/>
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/exploration.rviz"/>
 </launch>

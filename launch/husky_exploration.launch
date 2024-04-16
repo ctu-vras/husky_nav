@@ -4,6 +4,7 @@
     <arg name="record" default="false" doc="Record input data or not"/>
     <arg name="trav" default="false" doc="Launch height map estimator or not"/>
     <arg name="lss" default="false" doc="Launch LSS node or not"/>
+    <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
 <!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
@@ -18,7 +19,7 @@
     <!-- Husky Simulation -->
     <include file="$(dirname)/husky_sim.launch">
         <arg name="world" value="$(arg world)"/>
-        <arg name="gui" value="false"/>
+        <arg name="gui" value="$(arg gui)"/>
     </include>
 
     <!-- Husky Exploration -->

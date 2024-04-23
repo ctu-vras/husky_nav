@@ -22,7 +22,7 @@
 <!--     </include> -->
 
     <!-- Height map estimation -->
-    <include file="$(find monoforce)/launch/hm_estimator.launch">
+    <include file="$(find monoforce)/launch/geom_hm_estimator.launch">
         <arg name="pts_topics" value="[/points]"/>
 <!--         <arg name="pts_topics" value="[/realsense_front/depth/color/points, -->
 <!--                                        /realsense_left/depth/color/points, -->

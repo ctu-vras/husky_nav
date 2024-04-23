@@ -4,7 +4,9 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
         - /Status1
+        - /RobotModel1
         - /Sensors1
         - /Traversability1
         - /Diff Physics1
@@ -231,11 +233,11 @@ Visualization Manager:
           Color: 46; 52; 54
           Color Transformer: FlatColor
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: PointCloud2
+          Name: Points
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
@@ -246,7 +248,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz_plugin_tutorials/Imu
           Color: 204; 51; 204
@@ -284,9 +286,10 @@ Visualization Manager:
               Image Rear: true
               Image Right: true
               Imu: true
-              PointCloud2: true
+              Points: true
               Value: true
             TF: true
+            TFTrajectory: true
             Traversability:
               GridMap: true
               Value: true
@@ -319,9 +322,10 @@ Visualization Manager:
               Image Rear: true
               Image Right: true
               Imu: true
-              PointCloud2: true
+              Points: true
               Value: true
             TF: true
+            TFTrajectory: true
             Traversability:
               GridMap: true
               Value: true
@@ -354,9 +358,10 @@ Visualization Manager:
               Image Rear: true
               Image Right: true
               Imu: true
-              PointCloud2: true
+              Points: true
               Value: true
             TF: true
+            TFTrajectory: true
             Traversability:
               GridMap: true
               Value: true
@@ -389,9 +394,10 @@ Visualization Manager:
               Image Rear: true
               Image Right: true
               Imu: true
-              PointCloud2: true
+              Points: true
               Value: true
             TF: true
+            TFTrajectory: true
             Traversability:
               GridMap: true
               Value: true
@@ -474,23 +480,23 @@ Visualization Manager:
       Name: Traversability
     - Class: rviz/InteractiveMarkers
       Enable Transparency: true
-      Enabled: true
+      Enabled: false
       Name: Robot Control Markers
       Show Axes: false
       Show Descriptions: true
       Show Visual Aids: false
       Update Topic: /twist_marker_server/update
-      Value: true
+      Value: false
     - Class: rviz/Group
       Displays:
         - Class: rviz/MarkerArray
-          Enabled: true
+          Enabled: false
           Marker Topic: /sampled_paths
           Name: Sampled Paths
           Namespaces:
-            paths: true
+            {}
           Queue Size: 100
-          Value: true
+          Value: false
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -507,21 +513,29 @@ Visualization Manager:
             Y: 0
             Z: 0
           Pose Color: 255; 85; 255
-          Pose Style: None
+          Pose Style: Axes
           Queue Size: 10
           Radius: 0.029999999329447746
           Shaft Diameter: 0.10000000149011612
           Shaft Length: 0.10000000149011612
-          Topic: /lower_cost_path
+          Topic: /lower_cost_path_map
           Unreliable: false
           Value: true
       Enabled: true
       Name: Diff Physics
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: TFTrajectory
+      Value: true
+      color: 25; 255; 240
+      duration: 100
+      frame: base_footprint
+      line_width: 0.05000000074505806
   Enabled: true
   Global Options:
     Background Color: 255; 255; 255
     Default Light: true
-    Fixed Frame: base_footprint
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -545,7 +559,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 5.885440349578857
+      Distance: 10
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -561,9 +575,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 1
-      Pitch: 0.5
-      Target Frame: <Fixed Frame>
-      Yaw: 3.1414999961853027
+      Pitch: 0.7853981852531433
+      Target Frame: base_link
+      Yaw: 0.7853981852531433
     Saved:
       - Class: rviz/ThirdPersonFollower
         Distance: 8.333333015441895

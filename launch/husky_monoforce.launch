@@ -2,7 +2,6 @@
 <launch>
     <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
-    <arg name="diffphys" default="false" doc="Launch Diff Physics node or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
 <!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
@@ -33,7 +32,7 @@
     </include>
 
     <!-- Diff Physics node -->
-    <node if="$(arg diffphys)" name="diff_physics" pkg="monoforce" type="diff_physics" output="screen">
+    <node name="diff_physics" pkg="monoforce" type="diff_physics">
         <rosparam subst_value="true">
             robot: husky
             hm_topic: /height_map
@@ -44,6 +43,35 @@
             max_stale_msg_delay: 0.5
         </rosparam>
     </node>
+
+    <!-- SLAM -->
+    <include file="$(dirname)/slam.launch">
+        <arg name="cloud" value="points"/>
+        <arg name="odom_frame" value="odom"/>
+    </include>
+
+    <!-- Path follower -->
+    <node name="path_to_map" pkg="husky_sim" type="path_to_map">
+        <rosparam subst_value="true">
+            robot_frame: base_link
+            odom_frame: odom
+            map_frame: map
+            input: lower_cost_path
+            output: lower_cost_path_map
+        </rosparam>
+    </node>
+    <include file="$(dirname)/naex/follower.launch">
+        <arg name="path_to_follow" value="lower_cost_path_map"/>
+        <arg name="robot_frame" value="base_footprint"/>
+        <arg name="odom_frame" value="odom"/>
+        <arg name="map_frame" value="map"/>
+        <arg name="points" value="points"/>
+        <arg name="keep_path" value="1.0"/>
+        <arg name="obstacle_avoidance" value="false"/>
+        <arg name="max_age" value="1.0"/>
+        <arg name="goal_reached_dist" value="0.2"/>
+        <arg name="local_goal_dims" default="'xy'"/>
+    </include>
 
     <!-- RViz -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/lss.rviz"/>

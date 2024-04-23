@@ -65,6 +65,10 @@ def poses_to_path(poses, frame_id=None, stamp=None):
         path.poses.append(pose)
     return path
 
+def transform_path(path, transform):
+    for i in range(len(path.poses)):
+        path.poses[i] = do_transform_pose(path.poses[i], transform)
+    return path
 
 class Planner(object):
     def __init__(self):
@@ -111,12 +115,6 @@ class Planner(object):
         return tf
 
     @staticmethod
-    def transform_path(path, transform):
-        for i in range(len(path.poses)):
-            path.poses[i] = do_transform_pose(path.poses[i], transform)
-        return path
-
-    @staticmethod
     def construct_path(v, w, times=np.linspace(0., 10., 10)):
         poses = sample_trajectory(v, w, times)
         path = poses_to_path(poses)
@@ -134,7 +132,7 @@ class Planner(object):
             rospy.logwarn('No transform from %s to %s', self.robot_frame, self.map_frame)
             return
         rospy.loginfo('Publishing path')
-        path = self.transform_path(path, transform)
+        path = transform_path(path, transform)
         path.header.stamp = rospy.Time.now()
         path.header.frame_id = self.map_frame
         self.path_pub.publish(path)

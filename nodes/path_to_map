@@ -70,7 +70,7 @@ class Path2Map(object):
             return
         rospy.loginfo('Publishing path')
         path_output = transform_path(path_input, transform)
-        path_output.header.stamp = rospy.Time.now()
+        path_output.header.stamp = path_input.header.stamp
         path_output.header.frame_id = self.map_frame
         self.path_pub.publish(path_output)
 

@@ -5,8 +5,9 @@
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
 <!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
-    <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/>
-<!--     <arg name="world" default="$(dirname)/../worlds/rubicon.world"/> -->
+<!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
+    <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
+<!--     <arg name="world" default="$(dirname)/../worlds/terrain.world"/> -->
 
     <!-- Gazebo world and spawn Husky robot -->
     <include file="$(dirname)/husky_sim.launch">
@@ -37,9 +38,9 @@
             robot: husky
             hm_topic: /height_map
             hm_frame: base_link
-            linear_vels: [0.5, 0.5, 0.5]
-            angular_vels: [0., 0.3, -0.3]
-            total_sim_time: 4.
+            linear_vels: [0.5, 0.5, 0.5, -0.4]
+            angular_vels: [0.0, 0.3, -0.3, 0.0]
+            total_sim_time: 6.
             max_stale_msg_delay: 0.5
         </rosparam>
     </node>

@@ -6,7 +6,7 @@
     <link name="body">
       <visual name="visual">
         <geometry>
-          <mesh><uri>model://oru_forest/media/global_map.obj</uri></mesh>
+          <mesh><uri>model://oru_forest/media/ground_mesh.obj</uri></mesh>
         </geometry>
 	<material>
           <script>
@@ -18,7 +18,7 @@
       </visual>
       <collision name="collision">
         <geometry>
-          <mesh><uri>model://oru_forest/media/global_map.obj</uri></mesh>
+          <mesh><uri>model://oru_forest/media/ground_mesh.obj</uri></mesh>
         </geometry>
       </collision>
     </link>

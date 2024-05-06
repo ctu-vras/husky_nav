@@ -7,7 +7,7 @@ from monoforce.datasets.robingas import robingas_seq_paths
 def cloud_to_mesh_open3d():
     path = robingas_seq_paths['husky_oru'][0]
     cloud_path = os.path.join(path, 'global_map.pcd')
-    mesh_path = os.path.join(path, 'global_map.obj')
+    mesh_path = os.path.join(path, 'map.obj')
     assert os.path.exists(cloud_path)
     pcd = o3d.io.read_point_cloud(cloud_path)
     # o3d.visualization.draw_geometries([pcd])

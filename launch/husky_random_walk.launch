@@ -7,7 +7,8 @@
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
 <!--     <arg name="world" default="inspection"/> -->
-    <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
+<!--     <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/> -->
+    <arg name="world" default="$(dirname)/../worlds/oru_forest.world"/>
     <arg name="record" default="false" doc="Record input data or not"/>
     <arg name="bag_path" default="$(dirname)/husky_sim.bag"/>
 

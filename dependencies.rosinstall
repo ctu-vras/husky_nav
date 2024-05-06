@@ -1,15 +1,3 @@
-#- git:
-#    local-name: cras_gps_odom
-#    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_gps_odom.git
-#    version: master
-- git:
-    local-name: traversability_estimation
-    uri: https://github.com/ctu-vras/traversability_estimation
-    version: main
-- git:
-    local-name: gps-navigation
-    uri: https://github.com/ctu-vras/gps-navigation
-    version: final_demo
 - git:
     local-name: naex
     uri: https://github.com/ctu-vras/naex
@@ -26,22 +14,14 @@
     local-name: tf2_client
     uri: https://github.com/tpet/tf2_client
     version: master
-#- git:
-#    local-name: augmented_robot_trackers
-#    uri: git@gitlab.fel.cvut.cz:cras/subt/common/augmented_robot_trackers.git
-#    version: master
 - git:
     local-name: ros-utils
     uri: https://github.com/ctu-vras/ros-utils
     version: master
-#- git:
-#    local-name: cras_imu_tools
-#    uri: git@gitlab.fel.cvut.cz:cras/subt/common/cras_imu_tools.git
-#    version: master
 - git:
-    local-name: ouster_example
-    uri: https://github.com/ouster-lidar/ouster_example
-    version: 47f25ed29ab0b4b6d32c3209fa1b53ea46751d0c
+    local-name: ouster-ros
+    uri: https://github.com/ouster-lidar/ouster-ros.git
+    version: master
 - git:
     local-name: ouster_description
     uri: https://github.com/clearpathrobotics/ouster_description
@@ -61,8 +41,4 @@
 - git:
     local-name: norlab_icp_mapper_ros
     uri: https://github.com/tpet/norlab_icp_mapper_ros.git
-    version: master
-- git:
-    local-name: monoforce
-    uri: https://github.com/ctu-vras/monoforce
     version: master

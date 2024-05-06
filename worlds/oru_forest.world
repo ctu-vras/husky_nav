@@ -12,11 +12,29 @@
 
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>0.0 0.0 30.0 0.0 0.0 0.0</pose>
+        <pose frame=''>9.0 -12.0 6.0 0.0 0.3 2.2</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+
+    <!-- Testing the automatic population of trees -->
+    <population name="trees_population">
+      <model name="tree_1">
+        <include>
+          <static>true</static>
+          <uri>model://tree_1</uri>
+        </include>
+      </model>
+      <pose>0 0 0 0 0 0</pose>
+      <box>
+        <size>10 40 0.01</size>
+      </box>
+      <model_count>5</model_count>
+      <distribution>
+        <type>random</type>
+      </distribution>
+    </population>
 
   </world>
 </sdf>

@@ -20,7 +20,7 @@ The navigation pipeline is currently tested in simulator with Husky robot only.
   mkdir -p "${ws}/src"
   cd "${ws}/src"
 
-  git clone https://github.com/ctu-vras/husky_sim
+  git clone https://github.com/ctu-vras/husky_sim -b monoforce
 
   wstool init
   wstool merge husky_sim/dependencies.rosinstall
@@ -35,4 +35,3 @@ The navigation pipeline is currently tested in simulator with Husky robot only.
 
 - Download relevant Gazebo [models](http://subtdata.felk.cvut.cz/robingas/data/gazebo/models/)
 used in the virtual worlds and place them to `$HOME/.gazebo/models/` folder.
-

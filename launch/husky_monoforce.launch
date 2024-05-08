@@ -50,6 +50,14 @@
             max_stale_msg_delay: 1.0
         </rosparam>
     </node>
+<!--     <node name="diff_physics" pkg="monoforce" type="diff_physics_warp" output="screen"> -->
+<!--         <rosparam subst_value="true"> -->
+<!--             robot: $(arg robot) -->
+<!--             hm_topic: /height_map -->
+<!--             hm_frame: base_link -->
+<!--             max_stale_msg_delay: 1.0 -->
+<!--         </rosparam> -->
+<!--     </node> -->
 
     <!-- SLAM -->
     <include file="$(dirname)/slam.launch">

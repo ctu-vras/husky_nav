@@ -5,6 +5,7 @@
     <arg name="robot" default="husky" doc="Robot name"/>
     <arg name="n_cams" default="''" doc="Number of cameras to use for terrain encoding.
                                          Using all cameras if no specified"/>
+    <arg name="warp_dphys" default="false" doc="Using NVIDIA Warp-based differentiable physics or not"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
 <!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
 <!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
@@ -38,26 +39,14 @@
     </include>
 
     <!-- Diff Physics node -->
-    <node name="diff_physics" pkg="monoforce" type="diff_physics">
-        <rosparam subst_value="true">
-            robot: $(arg robot)
-            robot_clearance: 0.132
-            hm_topic: /height_map
-            hm_frame: base_link
-            linear_vels: [0.5, 0.5, 0.5, -0.4]
-            angular_vels: [0.0, 0.3, -0.3, 0.0]
-            total_sim_time: 6.
-            max_stale_msg_delay: 1.0
-        </rosparam>
-    </node>
-<!--     <node name="diff_physics" pkg="monoforce" type="diff_physics_warp" output="screen"> -->
-<!--         <rosparam subst_value="true"> -->
-<!--             robot: $(arg robot) -->
-<!--             hm_topic: /height_map -->
-<!--             hm_frame: base_link -->
-<!--             max_stale_msg_delay: 1.0 -->
-<!--         </rosparam> -->
-<!--     </node> -->
+    <include file="$(find monoforce)/launch/dphysics.launch">
+        <arg name="warp_dphys" value="$(arg warp_dphys)"/>
+        <arg name="robot" value="husky"/>
+        <arg name="hm_topic" value="/height_map"/>
+        <arg name="hm_frame" value="base_link"/>
+        <arg name="max_stale_msg_delay" value="2.0"/>
+        <arg name="total_sim_time" value="5.0"/>
+    </include>
 
     <!-- SLAM -->
     <include file="$(dirname)/slam.launch">

@@ -3,6 +3,10 @@
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
     <arg name="rviz" default="false" doc="Launch RViz or not"/>
     <arg name="world" default=""/>
+    <!-- Robot pose -->
+    <arg name="robot_x" default="0.0"/>
+    <arg name="robot_y" default="0.0"/>
+    <arg name="robot_z" default="0.0"/>
 
     <param name="use_sim_time" value="true"/>
 
@@ -10,6 +14,9 @@
     <include unless="$(eval 'inspection' in world)" file="$(dirname)/husky_gazebo.launch">
         <arg name="world" value="$(arg world)"/>
         <arg name="gui" value="$(arg gui)"/>
+        <arg name="robot_x" value="$(arg robot_x)"/>
+        <arg name="robot_y" value="$(arg robot_y)"/>
+        <arg name="robot_z" value="$(arg robot_z)"/>
     </include>
 
     <!-- Inspection world and spawn Husky robot -->

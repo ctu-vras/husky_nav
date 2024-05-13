@@ -1,0 +1,80 @@
+#! /usr/bin/env python
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def select_model_by_height(h):
+    # switch case for selecting model based on height
+    if h < 12.0:
+        model = 'oak_tree'
+        return model
+    elif h > 22.0:
+        model = 'pine_tree'
+        return model
+    else:
+        model = 'tree_1'
+        return model
+
+def randomly_perturb_roll_pitch_yaw(roll, pitch, yaw, min_val, max_val):
+    droll = np.random.uniform(min_val, max_val)
+    dpitch = np.random.uniform(min_val, max_val)
+    dyaw = np.random.uniform(min_val, max_val)
+    roll += droll
+    pitch += dpitch
+    yaw += dyaw
+    return roll, pitch, yaw
+
+
+def main():
+    trees_data = '../config/treedata.csv'
+    xyzh = np.genfromtxt(trees_data, delimiter=',')
+    N = xyzh.shape[1]
+    assert xyzh.shape == (4, N)
+
+    # # plot height distribution
+    # plt.figure()
+    # plt.hist(xyzh[3, :], bins=20)
+    # plt.xlabel('Height')
+    # plt.ylabel('Frequency')
+    # plt.title('Height distribution of trees')
+    # plt.show()
+
+    output_file = '../worlds/oru_forest.world'
+
+    with open(output_file, 'w') as f:
+        f.write('<sdf version="1.6">\n\t<world name="default">\n')
+        f.write('\t\t<include>\n\t\t\t<uri>model://oru_ground</uri>\n\t\t</include>\n')
+        f.write('\t\t<include>\n\t\t\t<uri>model://sun</uri>\n\t\t</include>\n')
+
+    tree_xml = ('\t\t<include>\n\t\t\t<name>{name}</name>\n'
+                '\t\t\t<uri>model://{model}</uri>\n'
+                '\t\t\t<pose>{x} {y} {z} {roll} {pitch} {yaw}</pose>\n'
+                '\t\t</include>')
+    for i in range(N):
+        x, y, z, h = xyzh[:, i]
+
+        model = select_model_by_height(h)
+        roll, pitch, yaw = 0, 0, 0
+        if model == 'tree_1':
+            roll = np.pi/2.
+        roll, pitch, yaw = randomly_perturb_roll_pitch_yaw(roll, pitch, yaw, -0.1, 0.1)
+        name = f'{model}_{i}'
+
+        # print(tree_xml.format(name=name, model=model, x=x, y=y, z=z, roll=roll, pitch=pitch, yaw=yaw))
+        with open(output_file, 'a') as f:
+            f.write(tree_xml.format(name=name, model=model, x=x, y=y, z=z, roll=roll, pitch=pitch, yaw=yaw) + '\n')
+
+    with open(output_file, 'a') as f:
+        f.write('\t</world>\n</sdf>')
+
+    print(f'Generated {N} trees in {output_file}')
+
+    # plt.figure()
+    # plt.plot(xyzh[0, :], xyzh[1, :], 'k.')
+    # plt.axis('equal')
+    # plt.show()
+
+
+if __name__ == '__main__':
+    main()

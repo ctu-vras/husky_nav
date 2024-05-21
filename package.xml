@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>husky_sim</name>
-  <version>0.0.0</version>
-  <description>GPS-IMU navigation pipeline with Traversability Estimation and OSM data usage for Path Planning tested in Gazebo simulator</description>
+  <version>0.0.1</version>
+  <description>Navigation pipeline with Traversability Estimation tested in Gazebo simulator</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="agishrus@felk.cvut.cz">Ruslan Agishev</maintainer>
@@ -12,6 +12,20 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>gazebo_ros</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>grid_map_msgs</depend>
+  <depend>ros_numpy</depend>
+  <depend>jsk_rviz_plugins</depend>
+  <depend>grid_map_rviz_plugin</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>husky_description</depend>
+  <depend>navigation</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

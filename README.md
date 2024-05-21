@@ -65,16 +65,19 @@ Launch navigation pipeline:
 roslaunch husky_sim navigation.launch rviz:=true
 ```
 
-## 2D-navigation Stack
+## Citation
 
-Waypoints following example with
-laser scan SLAM ([AMCL](http://wiki.ros.org/amcl)) and
-[move_base](http://wiki.ros.org/move_base) navigation stack.
-Bringup simulated environment and spawn a husky robot in it.
-```bash
-roslaunch husky_sim husky_amcl_move_base.launch
-```
-Command a robot to visit a sequence of waypoints.
-```bash
-roslaunch husky_sim send_wp_sequence.launch
+The traversability estimation method is described in the following paper:
+
+```bibtex
+@ARTICLE{9699042,
+  author={Agishev, Ruslan and Petříček, Tomáš and Zimmermann, Karel},
+  journal={IEEE Robotics and Automation Letters},
+  title={Trajectory Optimization Using Learned Robot-Terrain Interaction Model in Exploration of Large Subterranean Environments},
+  year={2022},
+  volume={7},
+  number={2},
+  pages={3365-3371},
+  doi={10.1109/LRA.2022.3147332}
+}
 ```

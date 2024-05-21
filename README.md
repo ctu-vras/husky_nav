@@ -27,3 +27,18 @@ Please, refer to [INSTALL.md](docs/INSTALL.md) for installation instructions.
 ```bash
 roslaunch husky_sim husky_monoforce.launch warp_dphys:=true
 ```
+
+## Citation
+
+Consider citing the paper if you find the package relevant to your research:
+
+```bibtex
+@article{agishev2023monoforce,
+    title={MonoForce: Self-supervised Learning of Physics-aware Model for Predicting Robot-terrain Interaction},
+    author={Ruslan Agishev and Karel Zimmermann and Vladimír Kubelka and Martin Pecka and Tomáš Svoboda},
+    year={2023},
+    eprint={2309.09007},
+    archivePrefix={arXiv},
+    primaryClass={cs.RO}
+}
+```

@@ -1,5 +1,7 @@
 # RobinGas Mission Gazebo
 
+GPS-IMU navigation pipeline with Traversability Estimation and OSM data usage for Path Planning tested in Gazebo simulator.
+
 ![](./docs/demo.png)
 
 RobinGas pipeline in Gazebo simulator,

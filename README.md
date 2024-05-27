@@ -11,7 +11,7 @@ Trajectories prediction is based on the
 [ParallelTrackSimulator](https://github.com/tichyt11/ParallelTrackSimulator)
 packages.
 
-Navigation consists of the following stages:
+Navigation consists of the following stages, [video](https://drive.google.com/file/d/1OLnTtedNLX23HjNnXV7Sct_3xSFGxe2H/view?usp=sharing):
 - **Image acquisition**: RGB images are acquired from the Gazebo simulator.
 - **Height map prediction**: The Terrain Encoder part of the MonoForce is used to estimate terrain properties.
 - **Trajectories prediction**: The Diff Physics part of the MonoForce is used to shoot the robot trajectories.

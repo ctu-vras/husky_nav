@@ -45,9 +45,7 @@
             show_clearance_pos: [-2, 2]
             min_points_obstacle: 3
             local_goal_dims: $(arg local_goal_dims)
-
             force_through_after: 10.
-            backtrack_after: 20.
         </rosparam>
 
         <!-- Inputs -->

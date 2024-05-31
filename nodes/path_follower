@@ -108,7 +108,7 @@ class PathFollower(object):
         self.min_points_obstacle = rospy.get_param('~min_points_obstacle', 1)
         self.force_through_after = rospy.get_param('~force_through_after', 15.)
         self.allow_backward = rospy.get_param('~allow_backward', True)
-        self.backtrack_after = rospy.get_param('~backtrack_after', 30.)
+        self.backtrack_after = rospy.get_param('~backtrack_after', np.inf)
 
         self.path_lock = RLock()
         self.path_msg = None  # Path message

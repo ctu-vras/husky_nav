@@ -40,7 +40,7 @@
         <arg name="n_cams" default="$(arg n_cams)"/>
     </include>
 
-    <!-- Diff Physics node -->
+    <!-- Diff Physics: paths sampling -->
     <include file="$(find monoforce)/launch/dphysics.launch">
         <arg name="warp_dphys" value="$(arg warp_dphys)"/>
         <arg name="robot" value="husky"/>
@@ -57,18 +57,20 @@
         <arg name="odom_frame" value="odom"/>
     </include>
 
-    <!-- Path follower -->
-    <node name="path_to_map" pkg="husky_sim" type="path_to_map">
+    <!-- Path selector -->
+    <node name="path_selector" pkg="husky_sim" type="path_selector" output="screen">
         <rosparam subst_value="true">
             robot_frame: base_link
-            odom_frame: odom
             map_frame: map
-            input: lower_cost_path
-            output: lower_cost_path_map
+            paths_topic: sampled_paths
+            path_costs_topic: path_costs
+            selected_path_topic: selected_path
         </rosparam>
     </node>
+
+    <!-- Path follower -->
     <include file="$(dirname)/naex/follower.launch">
-        <arg name="path_to_follow" value="lower_cost_path_map"/>
+        <arg name="path_to_follow" value="selected_path"/>
         <arg name="robot_frame" value="base_footprint"/>
         <arg name="odom_frame" value="odom"/>
         <arg name="map_frame" value="map"/>

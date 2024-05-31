@@ -26,6 +26,7 @@ install(
     PROGRAMS
         path_follower
         path_to_map
+        path_selector
         random_path_planner
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/nodes
 )

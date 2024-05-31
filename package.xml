@@ -22,6 +22,7 @@
   <depend>ros_numpy</depend>
   <depend>jsk_rviz_plugins</depend>
   <depend>grid_map_rviz_plugin</depend>
+  <depend>visualization_msgs</depend>
   <depend>robot_state_publisher</depend>
   <depend>joint_state_publisher</depend>
   <depend>husky_description</depend>

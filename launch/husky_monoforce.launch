@@ -8,10 +8,6 @@
     <arg name="warp_dphys" default="true" doc="Using NVIDIA Warp-based differentiable physics or not"/>
     <arg name="traj_sim_time" default="8.0" doc="Simulation time horizon of the trajectories"/>
     <arg name="device" default="cpu" doc="Device to run the warp-based differentiable physics on"/>
-<!--     <arg name="world" default="$(dirname)/../worlds/farmWith1CropRow.world"/> -->
-<!--    <arg name="world" default="$(dirname)/../worlds/simcity.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../worlds/simcity_dynamic.world"/> -->
-<!--     <arg name="world" default="$(dirname)/../worlds/emptyfarm.world"/> -->
     <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/terrain.world"/> -->
 
@@ -21,7 +17,7 @@
         <arg name="gui" value="$(arg gui)"/>
     </include>
 
-    <!-- Terrain Encoder -->
+    <!-- RGB Terrain Encoder -->
     <include file="$(find monoforce)/launch/terrain_encoder.launch">
         <arg name="img_topics" value="['/ids_camera_front/image_raw/compressed',
                                        '/ids_camera_left/image_raw/compressed',
@@ -31,6 +27,7 @@
                                                '/ids_camera_left/camera_info',
                                                '/ids_camera_rear/camera_info',
                                                '/ids_camera_right/camera_info']"/>
+        <arg name="output_topic" value="height_map"/>
         <arg name="hm_frame" value="base_link"/>
         <arg name="max_msgs_delay" value="0.2"/>
         <arg name="max_age" value="0.5"/>
@@ -38,6 +35,12 @@
         <arg name="dphys_config_path" value="$(find monoforce)/config/dphys_cfg.yaml"/>
         <arg name="lss_config_path" value="$(find monoforce)/config/lss_cfg_$(arg robot).yaml"/>
         <arg name="n_cams" default="$(arg n_cams)"/>
+    </include>
+
+    <!-- Lidar Terrain Encoder -->
+    <include if="0" file="$(find monoforce)/launch/geom_hm_estimator.launch">
+        <arg name="pts_topics" value="[/points]"/>
+        <arg name="output_topic" value="height_map"/>
     </include>
 
     <!-- Diff Physics: paths sampling -->
@@ -83,5 +86,5 @@
     </include>
 
     <!-- RViz -->
-    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/lss.rviz"/>
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/monoforce.rviz"/>
 </launch>

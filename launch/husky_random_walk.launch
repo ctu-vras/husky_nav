@@ -25,14 +25,14 @@
 
     <!-- LSS input data recording -->
     <include if="$(arg record)" file="$(dirname)/record.launch">
-        <arg name="topics" value="'/realsense_front/color/image_raw/compressed'
-                                  '/realsense_left/color/image_raw/compressed'
-                                  '/realsense_right/color/image_raw/compressed'
-                                  '/realsense_rear/color/image_raw/compressed'
-                                  '/realsense_front/color/camera_info'
-                                  '/realsense_left/color/camera_info'
-                                  '/realsense_right/color/camera_info'
-                                  '/realsense_rear/color/camera_info'
+        <arg name="topics" value="'/ids_camera_front/image_raw/compressed'
+                                  '/ids_camera_left/image_raw/compressed'
+                                  '/ids_camera_right/image_raw/compressed'
+                                  '/ids_camera_rear/image_raw/compressed'
+                                  '/ids_camera_front/camera_info'
+                                  '/ids_camera_left/camera_info'
+                                  '/ids_camera_right/camera_info'
+                                  '/ids_camera_rear/camera_info'
                                   '/points'
                                   '/tf' '/tf_static'"/>
         <arg name="path" value="$(arg bag_path)"/>

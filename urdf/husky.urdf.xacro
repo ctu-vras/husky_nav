@@ -29,135 +29,63 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="imu_rpy"     default="$(optenv HUSKY_IMU_RPY 0 -1.5708 3.1416)"/>
   <xacro:arg name="imu_parent"  default="$(optenv HUSKY_IMU_PARENT base_link)"/>
 
-  <!-- LMS1XX Laser Primary and Secondary -->
-  <xacro:arg name="laser_enabled"           default="$(optenv HUSKY_LMS1XX_ENABLED 0)" />
-  <xacro:arg name="laser_topic"             default="$(optenv HUSKY_LMS1XX_TOPIC front/scan)"/>
-  <xacro:arg name="laser_prefix"            default="$(optenv HUSKY_LMS1XX_PREFIX front)"/>
-  <xacro:arg name="laser_parent"            default="$(optenv HUSKY_LMS1XX_PARENT top_plate_link)"/>
-  <xacro:arg name="laser_xyz"               default="$(optenv HUSKY_LMS1XX_XYZ 0.2206 0.0 0.00635)" />
-  <xacro:arg name="laser_rpy"               default="$(optenv HUSKY_LMS1XX_RPY 0.0 0.0 0.0)" />
+  <!-- FRONT IDS Camera -->
+  <xacro:arg name="ids_front_enabled"             default="$(optenv HUSKY_IDS_FRONT_ENABLED 1)" />
+  <xacro:arg name="ids_front_xyz"                 default="$(optenv HUSKY_IDS_FRONT_XYZ 0.4 0 0.1)"/>
+  <xacro:arg name="ids_front_rpy"                 default="$(optenv HUSKY_IDS_FRONT_RPY 0 0 0)"/>
+  <xacro:arg name="ids_front_parent"              default="$(optenv HUSKY_IDS_FRONT_PARENT top_plate_link)"/>
+  <xacro:arg name="ids_front_topic"               default="$(optenv HUSKY_IDS_FRONT_TOPIC ids_camera)"/>
+  <xacro:arg name="ids_front_label"               default="$(optenv HUSKY_IDS_FRONT_LABEL front)"/>
+  <!-- Left IDS Camera -->
+  <xacro:arg name="ids_left_enabled"               default="$(optenv HUSKY_IDS_LEFT_ENABLED 1)" />
+  <xacro:arg name="ids_left_xyz"                   default="$(optenv HUSKY_IDS_LEFT_XYZ 0 0.2 0.1)"/>
+  <xacro:arg name="ids_left_rpy"                   default="$(optenv HUSKY_IDS_LEFT_RPY 0 0 1.57)"/>
+  <xacro:arg name="ids_left_parent"                default="$(optenv HUSKY_IDS_LEFT_PARENT top_plate_link)"/>
+  <xacro:arg name="ids_left_topic"                 default="$(optenv HUSKY_IDS_LEFT_TOPIC ids_camera)"/>
+  <xacro:arg name="ids_left_label"                 default="$(optenv HUSKY_IDS_LEFT_LABEL left)"/>
+  <!-- Right IDS Camera -->
+  <xacro:arg name="ids_right_enabled"              default="$(optenv HUSKY_IDS_RIGHT_ENABLED 1)" />
+  <xacro:arg name="ids_right_xyz"                  default="$(optenv HUSKY_IDS_RIGHT_XYZ 0 -0.2 0.1)"/>
+  <xacro:arg name="ids_right_rpy"                  default="$(optenv HUSKY_IDS_RIGHT_RPY 0 0 -1.57)"/>
+  <xacro:arg name="ids_right_parent"               default="$(optenv HUSKY_IDS_RIGHT_PARENT top_plate_link)"/>
+  <xacro:arg name="ids_right_topic"                default="$(optenv HUSKY_IDS_RIGHT_TOPIC ids_camera)"/>
+  <xacro:arg name="ids_right_label"                default="$(optenv HUSKY_IDS_RIGHT_LABEL right)"/>
+  <!-- Rear IDS Camera -->
+  <xacro:arg name="ids_rear_enabled"               default="$(optenv HUSKY_IDS_REAR_ENABLED 1)" />
+  <xacro:arg name="ids_rear_xyz"                   default="$(optenv HUSKY_IDS_REAR_XYZ -0.4 0 0.1)"/>
+  <xacro:arg name="ids_rear_rpy"                   default="$(optenv HUSKY_IDS_REAR_RPY 0 0 3.14)"/>
+  <xacro:arg name="ids_rear_parent"                default="$(optenv HUSKY_IDS_REAR_PARENT top_plate_link)"/>
+  <xacro:arg name="ids_rear_topic"                 default="$(optenv HUSKY_IDS_REAR_TOPIC ids_camera)"/>
+  <xacro:arg name="ids_rear_label"                 default="$(optenv HUSKY_IDS_REAR_LABEL rear)"/>
 
-  <xacro:arg name="laser_secondary_enabled" default="$(optenv HUSKY_LMS1XX_SECONDARY_ENABLED 0)" />
-  <xacro:arg name="laser_secondary_topic"   default="$(optenv HUSKY_LMS1XX_SECONDARY_TOPIC rear/scan)"/>
-  <xacro:arg name="laser_secondary_prefix"  default="$(optenv HUSKY_LMS1XX_SECONDARY_PREFIX rear)"/>
-  <xacro:arg name="laser_secondary_parent"  default="$(optenv HUSKY_LMS1XX_SECONDARY_PARENT top_plate_link)"/>
-  <xacro:arg name="laser_secondary_xyz"     default="$(optenv HUSKY_LMS1XX_SECONDARY_XYZ -0.2206 0.0 0.00635)" />
-  <xacro:arg name="laser_secondary_rpy"     default="$(optenv HUSKY_LMS1XX_SECONDARY_RPY 0.0 0.0 3.14159)" />
-
-  <!-- UST10 Laser Primary  and Secondary -->
-  <xacro:arg name="laser_ust10_front_enabled" default="$(optenv HUSKY_UST10_ENABLED 0)" />
-  <xacro:arg name="laser_ust10_front_topic"   default="$(optenv HUSKY_UST10_TOPIC front/scan)" />
-  <xacro:arg name="laser_ust10_front_prefix"  default="$(optenv HUSKY_UST10_PREFIX front)" />
-  <xacro:arg name="laser_ust10_front_parent"  default="$(optenv HUSKY_UST10_PARENT top_plate_link)" />
-  <xacro:arg name="laser_ust10_front_xyz"     default="$(optenv HUSKY_UST10_XYZ 0.2206 0.0 0.00635)" />
-  <xacro:arg name="laser_ust10_front_rpy"     default="$(optenv HUSKY_UST10_RPY 0 0 0)" />
-
-  <xacro:arg name="laser_ust10_rear_enabled"  default="$(optenv HUSKY_UST10_SECONDARY_ENABLED 0)" />
-  <xacro:arg name="laser_ust10_rear_topic"    default="$(optenv HUSKY_UST10_SECONDARY_TOPIC rear/scan)" />
-  <xacro:arg name="laser_ust10_rear_prefix"   default="$(optenv HUSKY_UST10_SECONDARY_PREFIX rear)" />
-  <xacro:arg name="laser_ust10_rear_parent"   default="$(optenv HUSKY_UST10_SECONDARY_PARENT top_plate_link)" />
-  <xacro:arg name="laser_ust10_rear_xyz"      default="$(optenv HUSKY_UST10_SECONDARY_XYZ -0.2206 0.0 0.00635)" />
-  <xacro:arg name="laser_ust10_rear_rpy"      default="$(optenv HUSKY_UST10_SECONDARY_RPY 0 0 3.14159)" />
-
-  <!-- LiDAR Primary and Secondary -->
-  <xacro:arg name="laser_3d_enabled"              default="$(optenv HUSKY_LASER_3D_ENABLED 1)" />
-  <xacro:arg name="laser_3d_topic"                default="$(optenv HUSKY_LASER_3D_TOPIC points)"/>
-  <xacro:arg name="laser_3d_tower"                default="$(optenv HUSKY_LASER_3D_TOWER 1)"/>
-  <xacro:arg name="laser_3d_prefix"               default="$(optenv HUSKY_LASER_3D_PREFIX )"/>
-  <xacro:arg name="laser_3d_parent"               default="$(optenv HUSKY_LASER_3D_PARENT top_plate_link)"/>
-  <xacro:arg name="laser_3d_xyz"                  default="$(optenv HUSKY_LASER_3D_XYZ 0 0 0.3)" />
-  <xacro:arg name="laser_3d_rpy"                  default="$(optenv HUSKY_LASER_3D_RPY 0 0 0)" />
-
-  <xacro:arg name="laser_3d_secondary_enabled"    default="$(optenv HUSKY_LASER_3D_SECONDARY_ENABLED 0)" />
-  <xacro:arg name="laser_3d_secondary_topic"      default="$(optenv HUSKY_LASER_3D_SECONDARY_TOPIC secondary_points)"/>
-  <xacro:arg name="laser_3d_secondary_tower"      default="$(optenv HUSKY_LASER_3D_SECONDARY_TOWER 1)"/>
-  <xacro:arg name="laser_3d_secondary_prefix"     default="$(optenv HUSKY_LASER_3D_SECONDARY_PREFIX secondary_)"/>
-  <xacro:arg name="laser_3d_secondary_parent"     default="$(optenv HUSKY_LASER_3D_SECONDARY_PARENT top_plate_link)"/>
-  <xacro:arg name="laser_3d_secondary_xyz"        default="$(optenv HUSKY_LASER_3D_SECONDARY_XYZ 0 0 0)" />
-  <xacro:arg name="laser_3d_secondary_rpy"        default="$(optenv HUSKY_LASER_3D_SECONDARY_RPY 0 0 -3.14159)" />
-
-  <!-- Realsense Camera Primary and Secondary -->
-  <xacro:arg name="realsense_enabled"             default="$(optenv HUSKY_REALSENSE_ENABLED 1)" />
-  <xacro:arg name="realsense_model"               default="$(optenv HUSKY_REALSENSE_MODEL d435)"/>
-  <xacro:arg name="realsense_topic"               default="$(optenv HUSKY_REALSENSE_TOPIC realsense_front)" />
-  <xacro:arg name="realsense_prefix"              default="$(optenv HUSKY_REALSENSE_PREFIX camera_front)" />
-  <xacro:arg name="realsense_parent"              default="$(optenv HUSKY_REALSENSE_PARENT top_plate_link)" />
-  <xacro:arg name="realsense_xyz"                 default="$(optenv HUSKY_REALSENSE_XYZ 0.3 0 0.1)" />
-  <xacro:arg name="realsense_rpy"                 default="$(optenv HUSKY_REALSENSE_RPY 0 0 0)" />
-  <xacro:property name="realsense_model"          value="$(arg realsense_model)"/>
-
-  <xacro:arg name="realsense_left_enabled"   default="$(optenv HUSKY_REALSENSE_LEFT_ENABLED 1)" />
-  <xacro:arg name="realsense_left_model"     default="$(optenv HUSKY_REALSENSE_LEFT_MODEL d435)"/>
-  <xacro:arg name="realsense_left_topic"     default="$(optenv HUSKY_REALSENSE_LEFT_TOPIC realsense_left)" />
-  <xacro:arg name="realsense_left_prefix"    default="$(optenv HUSKY_REALSENSE_LEFT_PREFIX camera_left)" />
-  <xacro:arg name="realsense_left_parent"    default="$(optenv HUSKY_REALSENSE_LEFT_PARENT top_plate_link)" />
-  <xacro:arg name="realsense_left_xyz"       default="$(optenv HUSKY_REALSENSE_LEFT_XYZ 0 0.2 0.1)" />
-  <xacro:arg name="realsense_left_rpy"       default="$(optenv HUSKY_REALSENSE_LEFT_RPY 0 0 1.57)" />
-  <xacro:property name="realsense_left_model" value="$(arg realsense_left_model)"/>
-
-  <xacro:arg name="realsense_right_enabled"   default="$(optenv HUSKY_REALSENSE_RIGHT_ENABLED 1)" />
-  <xacro:arg name="realsense_right_model"     default="$(optenv HUSKY_REALSENSE_RIGHT_MODEL d435)"/>
-  <xacro:arg name="realsense_right_topic"     default="$(optenv HUSKY_REALSENSE_RIGHT_TOPIC realsense_right)" />
-  <xacro:arg name="realsense_right_prefix"    default="$(optenv HUSKY_REALSENSE_RIGHT_PREFIX camera_right)" />
-  <xacro:arg name="realsense_right_parent"    default="$(optenv HUSKY_REALSENSE_RIGHT_PARENT top_plate_link)" />
-  <xacro:arg name="realsense_right_xyz"       default="$(optenv HUSKY_REALSENSE_RIGHT_XYZ 0 -0.2 0.1)" />
-  <xacro:arg name="realsense_right_rpy"       default="$(optenv HUSKY_REALSENSE_RIGHT_RPY 0 0 -1.57)" />
-  <xacro:property name="realsense_right_model" value="$(arg realsense_right_model)"/>
-
-  <xacro:arg name="realsense_rear_enabled"   default="$(optenv HUSKY_REALSENSE_REAR_ENABLED 1)" />
-  <xacro:arg name="realsense_rear_model"     default="$(optenv HUSKY_REALSENSE_REAR_MODEL d435)"/>
-  <xacro:arg name="realsense_rear_topic"     default="$(optenv HUSKY_REALSENSE_REAR_TOPIC realsense_rear)" />
-  <xacro:arg name="realsense_rear_prefix"    default="$(optenv HUSKY_REALSENSE_REAR_PREFIX camera_rear)" />
-  <xacro:arg name="realsense_rear_parent"    default="$(optenv HUSKY_REALSENSE_REAR_PARENT top_plate_link)" />
-  <xacro:arg name="realsense_rear_xyz"       default="$(optenv HUSKY_REALSENSE_REAR_XYZ -0.3 0 0.1)" />
-  <xacro:arg name="realsense_rear_rpy"       default="$(optenv HUSKY_REALSENSE_REAR_RPY 0 0 -3.14)" />
-  <xacro:property name="realsense_rear_model" value="$(arg realsense_rear_model)"/>
-
-  <!-- BlackflyS Cameras -->
-  <xacro:arg name="blackfly_enabled"                  default="$(optenv HUSKY_BLACKFLY 0)"/>
-  <xacro:arg name="blackfly_mount_enabled"            default="$(optenv HUSKY_BLACKFLY_MOUNT_ENABLED 0)"/>
-  <xacro:arg name="blackfly_mount_angle"              default="$(optenv HUSKY_BLACKFLY_MOUNT_ANGLE 0)"/>
-  <xacro:arg name="blackfly_prefix"                   default="$(optenv HUSKY_BLACKFLY_PREFIX blackfly)"/>
-  <xacro:arg name="blackfly_parent"                   default="$(optenv HUSKY_BLACKFLY_PARENT top_plate_link)"/>
-  <xacro:arg name="blackfly_xyz"                      default="$(optenv HUSKY_BLACKFLY_XYZ 0 0 0)"/>
-  <xacro:arg name="blackfly_rpy"                      default="$(optenv HUSKY_BLACKFLY_RPY 0 0 0)"/>
-
-  <xacro:arg name="blackfly_secondary_enabled"        default="$(optenv HUSKY_BLACKFLY_SECONDARY 0)"/>
-  <xacro:arg name="blackfly_secondary_mount_enabled"  default="$(optenv HUSKY_BLACKFLY_SECONDARY_MOUNT_ENABLED 0)"/>
-  <xacro:arg name="blackfly_secondary_mount_angle"    default="$(optenv HUSKY_BLACKFLY_SECONDARY_MOUNT_ANGLE 0)"/>
-  <xacro:arg name="blackfly_secondary_prefix"         default="$(optenv HUSKY_BLACKFLY_SECONDARY_PREFIX blackfly_secondary)"/>
-  <xacro:arg name="blackfly_secondary_parent"         default="$(optenv HUSKY_BLACKFLY_SECONDARY_PARENT top_plate_link)"/>
-  <xacro:arg name="blackfly_secondary_xyz"            default="$(optenv HUSKY_BLACKFLY_SECONDARY_XYZ 0 0 0)"/>
-  <xacro:arg name="blackfly_secondary_rpy"            default="$(optenv HUSKY_BLACKFLY_SECONDARY_RPY 0 0 0)"/>
+  <!-- LiDAR -->
+  <xacro:arg name="ouster_enabled"              default="$(optenv HUSKY_OUSTER_ENABLED 1)" />
+  <xacro:arg name="ouster_topic"                default="$(optenv HUSKY_OUSTER_TOPIC points)"/>
+  <xacro:arg name="ouster_tower"                default="$(optenv HUSKY_OUSTER_TOWER 1)"/>
+  <xacro:arg name="ouster_prefix"               default="$(optenv HUSKY_OUSTER_PREFIX )"/>
+  <xacro:arg name="ouster_parent"               default="$(optenv HUSKY_OUSTER_PARENT top_plate_link)"/>
+  <xacro:arg name="ouster_xyz"                  default="$(optenv HUSKY_OUSTER_XYZ 0 0 0.4)" />
+  <xacro:arg name="ouster_rpy"                  default="$(optenv HUSKY_OUSTER_RPY 0 0 0)" />
 
   <!-- Bumper Extension -->
   <xacro:property name="husky_front_bumper_extend"  value="$(optenv HUSKY_FRONT_BUMPER_EXTEND 0)" />
   <xacro:property name="husky_rear_bumper_extend"   value="$(optenv HUSKY_REAR_BUMPER_EXTEND 0)" />
-
-  <!-- Height of the sensor arch in mm.  Must be either 510 or 300 -->
-  <xacro:arg name="sensor_arch"         default="$(optenv HUSKY_SENSOR_ARCH 0)" />
-  <xacro:arg name="sensor_arch_height"  default="$(optenv HUSKY_SENSOR_ARCH_HEIGHT 510)" />
-  <xacro:arg name="sensor_arch_xyz"     default="$(optenv HUSKY_SENSOR_ARCH_OFFSET 0 0 0)"/>
-  <xacro:arg name="sensor_arch_rpy"     default="$(optenv HUSKY_SENSOR_ARCH_RPY 0 0 0)"/>
 
   <!-- Extras -->
   <xacro:arg name="robot_namespace" default="$(optenv ROBOT_NAMESPACE /)" />
   <xacro:arg name="urdf_extras"     default="$(optenv HUSKY_URDF_EXTRAS empty.urdf)" />
   <xacro:arg name="cpr_urdf_extras" default="$(optenv CPR_URDF_EXTRAS empty.urdf)" />
 
-<!--  <xacro:arg name="gpu" default="true"/>-->
-<!--  <xacro:property name="gpu" value="$(arg gpu)" />-->
+  <xacro:arg name="gpu" default="true"/>
+  <xacro:property name="gpu" value="$(arg gpu)" />
 
   <!-- Included URDF/XACRO Files -->
-  <xacro:include filename="$(find husky_sim)/urdf/accessories/hokuyo_ust10.urdf.xacro" />
-  <xacro:include filename="$(find husky_sim)/urdf/accessories/intel_realsense.urdf.xacro"/>
-  <xacro:include filename="$(find husky_sim)/urdf/accessories/flir_blackfly_mount.urdf.xacro"/>
-  <xacro:include filename="$(find husky_sim)/urdf/accessories/sensor_arch.urdf.xacro"/>
-  <xacro:include filename="$(find husky_sim)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/>
-  <xacro:include filename="$(find husky_sim)/urdf/accessories/vlp16_mount.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/ids_camera.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/ouster_lidar.urdf.xacro"/>
+  <xacro:include filename="$(find ouster_description)/urdf/OS0-32.urdf.xacro"/>
+  <xacro:include filename="$(find husky_sim)/urdf/accessories/imu.urdf.xacro"/>
   <xacro:include filename="$(find husky_sim)/urdf/decorations.urdf.xacro" />
   <xacro:include filename="$(find husky_sim)/urdf/wheel.urdf.xacro" />
-  <xacro:include filename="$(find ouster_description)/urdf/OS1-64.urdf.xacro"/>
 
   <xacro:property name="M_PI" value="3.14159"/>
 
@@ -199,7 +127,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
   <!-- Base footprint is on the ground under the robot -->
   <link name="base_footprint"/>
-
   <joint name="base_footprint_joint" type="fixed">
     <origin xyz="0 0 ${wheel_vertical_offset - wheel_radius}" rpy="0 0 0" />
     <parent link="base_link" />
@@ -214,7 +141,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       <inertia ixx="0.6022" ixy="-0.02364" ixz="-0.1197" iyy="1.7386" iyz="-0.001544" izz="2.0296" />
     </inertial>
   </link>
-
   <joint name="inertial_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="base_link" />
@@ -238,292 +164,61 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- Husky Decorations -->
   <xacro:husky_decorate />
 
-  <!--
-    Add the main sensor arch if the user has specifically enabled it, or if a sensor
-    requires it for mounting
-  -->
-  <xacro:if value="$(arg sensor_arch)">
-    <xacro:sensor_arch prefix="" parent="top_plate_link" size="$(arg sensor_arch_height)">
-      <origin xyz="$(arg sensor_arch_xyz)" rpy="$(arg sensor_arch_rpy)"/>
-    </xacro:sensor_arch>
+  <!-- IDS Cameras -->
+  <xacro:if value="$(arg ids_front_enabled)">
+      <xacro:ids_sensor xyz="$(arg ids_front_xyz)"
+                        rpy="$(arg ids_front_rpy)"
+                        parent="$(arg ids_front_parent)"
+                        topic="$(arg ids_front_topic)"
+                        label="$(arg ids_front_label)">
+      </xacro:ids_sensor>
+  </xacro:if>
+  <xacro:if value="$(arg ids_left_enabled)">
+      <xacro:ids_sensor xyz="$(arg ids_left_xyz)"
+                          rpy="$(arg ids_left_rpy)"
+                          parent="$(arg ids_left_parent)"
+                          topic="$(arg ids_left_topic)"
+                          label="$(arg ids_left_label)">
+      </xacro:ids_sensor>
+  </xacro:if>
+  <xacro:if value="$(arg ids_right_enabled)">
+      <xacro:ids_sensor xyz="$(arg ids_right_xyz)"
+                          rpy="$(arg ids_right_rpy)"
+                          parent="$(arg ids_right_parent)"
+                          topic="$(arg ids_right_topic)"
+                          label="$(arg ids_right_label)">
+      </xacro:ids_sensor>
+  </xacro:if>
+  <xacro:if value="$(arg ids_rear_enabled)">
+      <xacro:ids_sensor xyz="$(arg ids_rear_xyz)"
+                          rpy="$(arg ids_rear_rpy)"
+                          parent="$(arg ids_rear_parent)"
+                          topic="$(arg ids_rear_topic)"
+                          label="$(arg ids_rear_label)">
+      </xacro:ids_sensor>
   </xacro:if>
 
-  <!--
-      IMU Link: Standard location to add an IMU (i.e. UM7 or Microstrain)
-  -->
-  <link name="imu_link"/>
-  <joint name="imu_joint" type="fixed">
-    <origin xyz="$(arg imu_xyz)" rpy="$(arg imu_rpy)" />
-    <parent link="$(arg imu_parent)" />
-    <child link="imu_link" />
-  </joint>
-  <gazebo reference="imu_link">
-  </gazebo>
-
-  <!--
-    SICK LMS1XX Priamry and Secondary Laser Scans
-  -->
-  <xacro:if value="$(arg laser_enabled)">
-    <xacro:sick_lms1xx_mount prefix="$(arg laser_prefix)"/>
-    <xacro:sick_lms1xx frame="$(arg laser_prefix)_laser" topic="$(arg laser_topic)" robot_namespace="$(arg robot_namespace)"/>
-
-    <joint name="$(arg laser_prefix)_laser_mount_joint" type="fixed">
-      <origin xyz="$(arg laser_xyz)" rpy="$(arg laser_rpy)" />
-      <parent link="$(arg laser_parent)" />
-      <child link="$(arg laser_prefix)_laser_mount" />
-    </joint>
+  <!-- Ouster LiDAR -->
+  <xacro:if value="$(arg ouster_enabled)">
+    <xacro:ouster_sensor xyz="$(arg ouster_xyz)"
+                         rpy="$(arg ouster_rpy)"
+                         parent="$(arg ouster_parent)">
+    </xacro:ouster_sensor>
   </xacro:if>
 
-  <xacro:if value="$(arg laser_secondary_enabled)">
-    <xacro:sick_lms1xx_mount prefix="$(arg laser_secondary_prefix)"/>
-    <xacro:sick_lms1xx frame="$(arg laser_secondary_prefix)_laser" topic="$(arg laser_secondary_topic)" robot_namespace="$(arg robot_namespace)"/>
+  <!-- IMU -->
+  <xacro:imu_sensor xyz="$(arg imu_xyz)"
+                    rpy="$(arg imu_rpy)"
+                    parent="$(arg imu_parent)"
+                    robot_namespace="$(arg robot_namespace)"/>
 
-    <joint name="$(arg laser_secondary_prefix)_laser_mount_joint" type="fixed">
-      <origin xyz="$(arg laser_secondary_xyz)" rpy="$(arg laser_secondary_rpy)" />
-      <parent link="$(arg laser_secondary_parent)" />
-      <child link="$(arg laser_secondary_prefix)_laser_mount" />
-    </joint>
-  </xacro:if>
-
-  <!--
-    Hokuyo UST10 Primary and Secondary Laser Scans
-  -->
-  <xacro:if value="$(arg laser_ust10_front_enabled)">
-    <xacro:hokuyo_ust10_mount topic="$(arg laser_ust10_front_topic)" prefix="$(arg laser_ust10_front_prefix)" parent_link="$(arg laser_ust10_front_parent)">
-        <origin xyz="$(arg laser_ust10_front_xyz)" rpy="$(arg laser_ust10_front_rpy)" />
-      </xacro:hokuyo_ust10_mount>
-  </xacro:if>
-
-  <xacro:if value="$(arg laser_ust10_rear_enabled)">
-    <xacro:hokuyo_ust10_mount topic="$(arg laser_ust10_rear_topic)" prefix="$(arg laser_ust10_rear_prefix)" parent_link="$(arg laser_ust10_rear_parent)">
-        <origin xyz="$(arg laser_ust10_rear_xyz)" rpy="$(arg laser_ust10_rear_rpy)" />
-      </xacro:hokuyo_ust10_mount>
-  </xacro:if>
-
-  <!-- Intel Realsense Models -->
-  <xacro:if value="${realsense_model == 'd435'}">
-    <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" />
-  </xacro:if>
-  <xacro:if value="${realsense_model == 'd435i'}">
-    <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
-  </xacro:if>
-  <xacro:if value="${realsense_model == 'd415'}">
-    <xacro:include filename="$(find realsense2_description)/urdf/_d415.urdf.xacro" />
-  </xacro:if>
-  <xacro:if value="${realsense_model == 'd455'}">
-    <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" />
-  </xacro:if>
-
-  <xacro:if value="$(arg realsense_enabled)">
-    <xacro:realsense_sensor rs_model="$(arg realsense_model)"
-                            prefix="$(arg realsense_prefix)"
-                            parent="$(arg realsense_parent)"
-                            topic="$(arg realsense_topic)"
-                            include="0">
-      <origin xyz="$(arg realsense_xyz)" rpy="$(arg realsense_rpy)"/>
-    </xacro:realsense_sensor>
-  </xacro:if>
-
-  <xacro:if value="$(arg realsense_left_enabled)">
-    <xacro:realsense_sensor rs_model="$(arg realsense_left_model)"
-                            prefix="$(arg realsense_left_prefix)"
-                            parent="$(arg realsense_left_parent)"
-                            topic="$(arg realsense_left_topic)"
-                            include="0">
-      <origin xyz="$(arg realsense_left_xyz)" rpy="$(arg realsense_left_rpy)"/>
-    </xacro:realsense_sensor>
-  </xacro:if>
-
-  <xacro:if value="$(arg realsense_right_enabled)">
-    <xacro:realsense_sensor rs_model="$(arg realsense_right_model)"
-                            prefix="$(arg realsense_right_prefix)"
-                            parent="$(arg realsense_right_parent)"
-                            topic="$(arg realsense_right_topic)"
-                            include="0">
-      <origin xyz="$(arg realsense_right_xyz)" rpy="$(arg realsense_right_rpy)"/>
-    </xacro:realsense_sensor>
-  </xacro:if>
-
-  <xacro:if value="$(arg realsense_rear_enabled)">
-    <xacro:realsense_sensor rs_model="$(arg realsense_rear_model)"
-                            prefix="$(arg realsense_rear_prefix)"
-                            parent="$(arg realsense_rear_parent)"
-                            topic="$(arg realsense_rear_topic)"
-                            include="0">
-      <origin xyz="$(arg realsense_rear_xyz)" rpy="$(arg realsense_rear_rpy)"/>
-    </xacro:realsense_sensor>
-  </xacro:if>
-
-  <!-- BlackflyS Camera Primary and Secondary -->
-  <xacro:if value="$(arg blackfly_enabled)">
-    <xacro:flir_blackfly_mount prefix="$(arg blackfly_prefix)"
-                                parent="$(arg blackfly_parent)"
-                                mount_enabled="$(arg blackfly_mount_enabled)"
-                                mount_angle="$(arg blackfly_mount_angle)">
-      <origin xyz="$(arg blackfly_xyz)" rpy="$(arg blackfly_rpy)"/>
-    </xacro:flir_blackfly_mount>
-  </xacro:if>
-
-  <xacro:if value="$(arg blackfly_secondary_enabled)">
-    <xacro:flir_blackfly_mount prefix="$(arg blackfly_secondary_prefix)"
-                                parent="$(arg blackfly_secondary_parent)"
-                                mount_enabled="$(arg blackfly_secondary_mount_enabled)"
-                                mount_angle="$(arg blackfly_secondary_mount_angle)">
-      <origin xyz="$(arg blackfly_secondary_xyz)" rpy="$(arg blackfly_secondary_rpy)"/>
-    </xacro:flir_blackfly_mount>
-  </xacro:if>
-
-  <!--
-    Velodyne 3D LiDAR Primary and Secondary
-  -->
-  <xacro:if value="$(arg laser_3d_secondary_enabled)">
-    <xacro:if value="$(arg laser_3d_tower)">
-      <xacro:vlp16_mount prefix="$(arg laser_3d_prefix)" parent_link="$(arg laser_3d_parent)" topic="$(arg laser_3d_topic)">
-        <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
-      </xacro:vlp16_mount>
-    </xacro:if>
-    <xacro:unless value="$(arg laser_3d_tower)">
-      <xacro:VLP-16 parent="$(arg laser_3d_parent)" topic="$(arg laser_3d_topic)" name="$(arg laser_3d_prefix)velodyne">
-        <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
-      </xacro:VLP-16>
-    </xacro:unless>
-  </xacro:if>
-
+  <!-- Gazebo control plugin -->
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>$(arg robot_namespace)</robotNamespace>
       <legacyModeNS>true</legacyModeNS>
     </plugin>
   </gazebo>
-
-  <gazebo>
-    <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
-      <robotNamespace>$(arg robot_namespace)</robotNamespace>
-      <updateRate>50.0</updateRate>
-      <bodyName>base_link</bodyName>
-      <topicName>imu/data</topicName>
-      <accelDrift>0.005 0.005 0.005</accelDrift>
-      <accelGaussianNoise>0.005 0.005 0.005</accelGaussianNoise>
-      <rateDrift>0.005 0.005 0.005 </rateDrift>
-      <rateGaussianNoise>0.005 0.005 0.005 </rateGaussianNoise>
-      <headingDrift>0.005</headingDrift>
-      <headingGaussianNoise>0.005</headingGaussianNoise>
-    </plugin>
-  </gazebo>
-
-  <joint name="gps_base_mount_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0" />
-    <parent link="base_link"/>
-    <child link="gps"/>
-  </joint>
-  <link name="gps"/>
-  <gazebo>
-    <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
-      <robotNamespace>$(arg robot_namespace)</robotNamespace>
-      <updateRate>40</updateRate>
-      <bodyName>base_link</bodyName>
-      <frameId>gps</frameId>
-      <topicName>gps/fix</topicName>
-      <velocityTopicName>/vel</velocityTopicName>
-      <referenceLatitude>50.090337</referenceLatitude>
-      <referenceLongitude>14.133275</referenceLongitude>
-      <referenceHeading>0</referenceHeading>
-      <referenceAltitude>0</referenceAltitude>
-      <drift>0.0001 0.0001 0.0001</drift>
-    </plugin>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="magnetometer_controller" filename="libhector_gazebo_ros_magnetic.so">
-      <alwaysOn>true</alwaysOn>
-      <updateRate>50.0</updateRate>
-      <bodyName>base_link</bodyName>
-      <topicName>imu/mag</topicName>
-      <offset>0 0 0</offset>
-      <drift>0.0 0.0 0.0</drift>
-      <gaussianNoise>0.0 0.0 0.0</gaussianNoise>
-      <declination>-9.3748</declination>
-      <inclination>-36.7067</inclination>
-      <magnitude>0.0000224340</magnitude>  <!-- 22434.0 nT -->
-      <referenceHeading>0</referenceHeading>
-      <useMagneticFieldMsgs>true</useMagneticFieldMsgs>
-    </plugin>
-  </gazebo>
-
-  <xacro:if value="$(arg laser_3d_enabled)">
-    <!-- Ouster sensor links and fixed joints -->
-    <joint name="ouster_base_mount_joint" type="fixed">
-      <origin xyz="$(arg laser_3d_xyz)" rpy="$(arg laser_3d_rpy)" />
-      <parent link="$(arg laser_3d_parent)"/>
-      <child link="ouster_link"/>
-    </joint>
-
-    <link name="ouster_link">
-      <inertial>
-         <mass value="0.33"/>
-         <origin xyz="0 0 0.0365" rpy="0 0 0" />
-         <inertia ixx="0.000241148" ixy="0" ixz="0"
-          iyy="0.000241148" iyz="0" izz="0.000264"/>
-      </inertial>
-      <collision name="base_collision">
-         <origin xyz="0 0 0.0365" rpy="0 0 0" />
-         <geometry>
-       <cylinder radius="0.04" length="0.073"/>
-         </geometry>
-      </collision>
-      <visual name="base_visual">
-         <origin xyz="0 0 0" rpy="0 0 1.5707" />
-         <geometry>
-        <mesh filename="package://ouster_description/meshes/os1_64.dae" />
-         </geometry>
-      </visual>
-    </link>
-    <!-- Gazebo requires the ouster_gazebo_plugins package -->
-    <!-- Run Ouster plugin with GPU: https://engcang.github.io/Ouster-Gazebo-Plugin-boosting-up-with-GPU-ray/ -->
-    <gazebo reference="ouster_link">
-<!--      <sensor type="ray" name="ouster-OS1-64">-->
-      <sensor type="gpu_ray" name="ouster-OS1-64">
-        <pose>0 0 0.035925 0 0 0</pose>
-        <visualize>false</visualize>
-        <update_rate>10</update_rate>
-        <always_on>1</always_on>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>1024</samples>
-              <resolution>1</resolution>
-              <min_angle>-3.1415926535897931</min_angle>
-              <max_angle>3.1415926535897931</max_angle>
-            </horizontal>
-            <vertical>
-              <samples>128</samples>
-              <resolution>1</resolution>
-              <min_angle>-${pi/4}</min_angle>
-              <max_angle>${pi/4}</max_angle>
-            </vertical>
-          </scan>
-          <range>
-            <min>0.25</min>  <!-- Datasheet says 0 cm, but that's a lie. -->
-            <max>50</max>
-            <resolution>0.01</resolution>
-          </range>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.01</stddev>
-          </noise>
-        </ray>
-<!--        <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ouster_laser.so">-->
-        <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ouster_gpu_laser.so">
-          <topicName>/points</topicName>
-          <frameName>ouster_link</frameName>
-          <min_range>0.9</min_range>
-          <max_range>75</max_range>
-          <gaussianNoise>0.008</gaussianNoise>
-        </plugin>
-      </sensor>
-    </gazebo>
-  </xacro:if>
 
   <!-- Optional custom includes. -->
   <xacro:include filename="$(arg urdf_extras)" />

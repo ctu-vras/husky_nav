@@ -26,6 +26,7 @@
   <depend>robot_state_publisher</depend>
   <depend>joint_state_publisher</depend>
   <depend>husky_description</depend>
+  <depend>realsense2_description</depend>
   <depend>navigation</depend>
 
   <!-- The export tag contains other, unspecified, tags -->

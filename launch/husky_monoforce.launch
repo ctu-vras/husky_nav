@@ -23,14 +23,14 @@
 
     <!-- Terrain Encoder -->
     <include file="$(find monoforce)/launch/terrain_encoder.launch">
-        <arg name="img_topics" value="['/realsense_front/color/image_raw/compressed',
-                                       '/realsense_left/color/image_raw/compressed',
-                                       '/realsense_rear/color/image_raw/compressed',
-                                       '/realsense_right/color/image_raw/compressed']"/>
-        <arg name="camera_info_topics" value="['/realsense_front/color/camera_info',
-                                               '/realsense_left/color/camera_info',
-                                               '/realsense_rear/color/camera_info',
-                                               '/realsense_right/color/camera_info']"/>
+        <arg name="img_topics" value="['/ids_camera_front/image_raw/compressed',
+                                       '/ids_camera_left/image_raw/compressed',
+                                       '/ids_camera_rear/image_raw/compressed',
+                                       '/ids_camera_right/image_raw/compressed',]"/>
+        <arg name="camera_info_topics" value="['/ids_camera_front/camera_info',
+                                               '/ids_camera_left/camera_info',
+                                               '/ids_camera_rear/camera_info',
+                                               '/ids_camera_right/camera_info']"/>
         <arg name="hm_frame" value="base_link"/>
         <arg name="max_msgs_delay" value="0.2"/>
         <arg name="max_age" value="0.5"/>

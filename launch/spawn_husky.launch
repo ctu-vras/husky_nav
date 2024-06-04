@@ -34,11 +34,6 @@
         <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>
     </node>
 
-    <!-- Additional nodes for specific accessories -->
-    <group if="$(optenv HUSKY_REALSENSE_ENABLED 0)">
-        <include file="$(find husky_gazebo)/launch/realsense.launch" />
-    </group>
-
     <!-- Spawn robot in gazebo -->
     <node name="spawn_husky_model" pkg="gazebo_ros" type="spawn_model"
       args="-x $(arg x)

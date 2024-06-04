@@ -62,8 +62,8 @@
               frame:=realsense          topic:=realsense
               h_fov:=1.5184351666666667 v_fov:=1.0122901111111111
               min_range:=0.105          max_range:=8.0
-              width:=640                height:=480
-              update_rate:=30
+              width:=1920                height:=1200
+              update_rate:=10
               robot_namespace:=/">
 
      <!--

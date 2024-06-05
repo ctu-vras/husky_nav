@@ -2,7 +2,7 @@
 <launch>
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
     <arg name="rviz" default="false" doc="Launch RViz or not"/>
-    <arg name="world" default=""/>
+    <arg name="world" default="$(dirname)/../worlds/oru_forest.world"/>
     <!-- Robot pose -->
     <arg name="robot_x" default="0.0"/>
     <arg name="robot_y" default="0.0"/>

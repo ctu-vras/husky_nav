@@ -10,7 +10,7 @@
 <!--     <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/> -->
     <arg name="world" default="$(dirname)/../worlds/oru_forest.world"/>
     <arg name="record" default="false" doc="Record input data or not"/>
-    <arg name="bag_path" default="$(dirname)/husky_sim.bag"/>
+    <arg name="bag_path" default="$(dirname)/husky_nav.bag"/>
 
     <!-- Husky Simulation -->
     <include file="$(dirname)/husky_sim.launch">

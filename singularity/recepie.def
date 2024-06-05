@@ -51,9 +51,9 @@ From: ros:noetic-perception
 
     # download dependencies
     cd "${ws}/src"
-    git clone https://github.com/ctu-vras/husky_sim.git -b monoforce
+    git clone https://github.com/ctu-vras/husky_nav.git -b monoforce
     wstool init
-    wstool merge husky_sim/dependencies.rosinstall
+    wstool merge husky_nav/dependencies.rosinstall
     # wstool merge ${SINGULARITY_ROOTFS}/../dependencies.rosinstall
     wstool up -j 4
 

@@ -35,10 +35,10 @@ The navigation pipeline is currently tested in simulator with Husky robot only.
   ```bash
   cd "${ws}/src"
 
-  git clone https://github.com/ctu-vras/husky_sim -b monoforce
+  git clone https://github.com/ctu-vras/husky_nav -b monoforce
   
   wstool init
-  wstool merge husky_sim/dependencies.rosinstall
+  wstool merge husky_nav/dependencies.rosinstall
   wstool up -j 4
   
   cd "${ws}"

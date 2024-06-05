@@ -27,6 +27,8 @@ class PathSelector:
                  waypoints_list,
                  waypoint_reached_dist,
                  selected_path_topic,
+                 waypoint_weight=1.0,
+                 path_force_weight=1.0,
                  robot_frame='base_link',
                  map_frame='map',
                  max_msgs_delay=0.5,
@@ -49,6 +51,8 @@ class PathSelector:
         self.waypoint_pub = rospy.Publisher('waypoint', PoseStamped, queue_size=1)
         self.wp_i = 0
         self.selected_path_pub = rospy.Publisher(self.selected_path_topic, Path, queue_size=1)
+        self.waypoint_weight = waypoint_weight
+        self.path_force_weight = path_force_weight
 
     def start(self):
         """
@@ -137,10 +141,8 @@ class PathSelector:
         assert np.all(path_costs >= 0)
 
         # select path with minimum distance to waypoint and cost
-        # selected_path_idx = np.argmin(path_dists_to_wp + path_costs)
-        # selected_path_idx = np.argmin(path_costs)
-        # selected_path_idx = np.argmin(path_dists_to_wp)
-        selected_path_idx = np.argmin(normalize(path_dists_to_wp) + 2.0 * normalize(path_costs))
+        costs = self.waypoint_weight * normalize(path_dists_to_wp) + self.path_force_weight * normalize(path_costs)
+        selected_path_idx = np.argmin(costs)
         rospy.loginfo(f'Selected path: {selected_path_idx}')
 
         # publish selected path
@@ -190,10 +192,13 @@ def main():
         (10.0, -5.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     ]
     waypoint_reached_dist = rospy.get_param('~waypoint_reached_dist', 1.0)
+    waypoint_weight = rospy.get_param('~waypoint_weight', 1.0)
+    path_force_weight = rospy.get_param('~path_force_weight', 1.0)
 
     node = PathSelector(paths_topic=paths_topic, path_costs_topic=path_costs_topic,
                         waypoints_list=waypoints_list, selected_path_topic=selected_path_topic,
                         waypoint_reached_dist=waypoint_reached_dist,
+                        waypoint_weight=waypoint_weight, path_force_weight=path_force_weight,
                         robot_frame=robot_frame, max_msgs_delay=max_msgs_delay,
                         proc_time_period=proc_time_period)
     node.start()

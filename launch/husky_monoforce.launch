@@ -74,7 +74,7 @@
     </include>
 
     <!-- Path selector -->
-    <node name="path_selector" pkg="husky_sim" type="path_selector">
+    <node name="path_selector" pkg="husky_navigation" type="path_selector">
         <rosparam subst_value="true">
             robot_frame: base_link
             map_frame: map

@@ -25,7 +25,7 @@ Please, refer to [INSTALL.md](docs/INSTALL.md) for installation instructions.
 ## Usage
 
 ```bash
-roslaunch husky_sim husky_monoforce.launch warp_dphys:=true
+roslaunch husky_navigation husky_monoforce.launch warp_dphys:=true
 ```
 
 ## Citation

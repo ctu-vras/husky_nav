@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>husky_sim</name>
+  <name>husky_navigation</name>
   <version>0.0.1</version>
   <description>Navigation pipeline with Traversability Estimation tested in Gazebo simulator</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="agishrus@felk.cvut.cz">Ruslan Agishev</maintainer>
   <license>BSD</license>
-  <url type="website">https://github.com/ctu-vras/husky_sim</url>
+  <url type="website">https://github.com/ctu-vras/husky_navigation</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 

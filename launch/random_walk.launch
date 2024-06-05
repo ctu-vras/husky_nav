@@ -16,7 +16,7 @@
     </include>
 
     <!-- Random path planner -->
-    <node name="random_path_planner" pkg="husky_sim" type="random_path_planner" output="screen">
+    <node name="random_path_planner" pkg="husky_navigation" type="random_path_planner" output="screen">
         <rosparam subst_value="true">
             plan_freq: 0.2
             robot_frame: base_footprint

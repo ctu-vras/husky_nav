@@ -60,7 +60,7 @@
                                   '/realsense_rear/color/camera_info'
                                   '/points'
                                   '/tf' '/tf_static'"/>
-        <arg name="path" value="$(dirname)/husky_navigation.bag"/>
+        <arg name="path" value="$(dirname)/husky_nav.bag"/>
         <arg name="delay" value="$(arg delay)"/>
     </include>
 

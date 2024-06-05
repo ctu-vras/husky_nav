@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>husky_sim</name>
+  <name>husky_nav</name>
   <version>0.0.0</version>
   <description>GPS-IMU navigation pipeline with Traversability Estimation and OSM data usage for Path Planning tested in Gazebo simulator</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="agishrus@felk.cvut.cz">Ruslan Agishev</maintainer>
   <license>BSD</license>
-  <url type="website">https://github.com/ctu-vras/husky_sim</url>
+  <url type="website">https://github.com/ctu-vras/husky_nav</url>
 
 
   <!-- The *depend tags are used to specify dependencies -->

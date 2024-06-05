@@ -37,10 +37,10 @@ The navigation pipeline is currently tested in simulator with Husky robot only.
   mkdir -p "${ws}/src"
   cd "${ws}/src"
 
-  git clone https://github.com/ctu-vras/husky_sim -b robingas
+  git clone https://github.com/ctu-vras/husky_nav -b robingas
 
   wstool init
-  wstool merge husky_sim/dependencies.rosinstall
+  wstool merge husky_nav/dependencies.rosinstall
   wstool up -j 4
 
   cd "${ws}"
@@ -58,13 +58,13 @@ used in the virtual worlds and place them to `$HOME/.gazebo/models/` folder.
 Start Gazebo simulator with Husky robot spawned:
 
 ```bash
-roslaunch husky_sim husky_gazebo.launch
+roslaunch husky_nav husky_gazebo.launch
 ```
 
 Launch navigation pipeline:
 
 ```bash
-roslaunch husky_sim navigation.launch rviz:=true
+roslaunch husky_nav navigation.launch rviz:=true
 ```
 
 ## Citation

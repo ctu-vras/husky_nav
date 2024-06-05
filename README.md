@@ -6,13 +6,13 @@ The point cloud map is converted to a mesh using the [Open3d](http://www.open3d.
 
 Real environment aerial image and point cloud map:
 
-<img src="./docs/imgs/DJI.JPG" height="300"/>
-<img src="./docs/imgs/cloud.png" height="300"/>
+<img src="./docs/imgs/DJI.JPG" height="250"/>
+<img src="./docs/imgs/cloud.png" height="250"/>
 
 Gazebo world and RViz visualization:
 
-<img src="./docs/imgs/gazebo_world.png" height="300"/>
-<img src="./docs/imgs/rviz.png" height="300"/>
+<img src="./docs/imgs/gazebo_world.png" height="250"/>
+<img src="./docs/imgs/rviz.png" height="250"/>
 
 ## Installation
 

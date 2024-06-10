@@ -3,8 +3,6 @@
     <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
     <arg name="robot" default="husky" doc="Robot name"/>
-    <arg name="n_cams" default="''" doc="Number of cameras to use for terrain encoding.
-                                         Using all cameras if no specified"/>
     <arg name="warp_dphys" default="true" doc="Using NVIDIA Warp-based differentiable physics or not"/>
     <arg name="traj_sim_time" default="8.0" doc="Simulation time horizon of the trajectories"/>
     <arg name="device" default="cpu" doc="Device to run the warp-based differentiable physics on"/>
@@ -17,8 +15,9 @@
         <arg name="gui" value="$(arg gui)"/>
     </include>
 
-    <!-- RGB Terrain Encoder -->
-    <include file="$(find monoforce)/launch/terrain_encoder.launch">
+    <!-- MonoForce -->
+    <include file="$(find monoforce)/launch/monoforce.launch">
+        <arg name="robot" value="$(arg robot)"/>
         <arg name="img_topics" value="['/ids_camera_front/image_raw/compressed',
                                        '/ids_camera_left/image_raw/compressed',
                                        '/ids_camera_rear/image_raw/compressed',
@@ -27,43 +26,8 @@
                                                '/ids_camera_left/camera_info',
                                                '/ids_camera_rear/camera_info',
                                                '/ids_camera_right/camera_info']"/>
-        <arg name="output_topic" value="height_map"/>
-        <arg name="hm_frame" value="base_link"/>
-        <arg name="max_msgs_delay" value="0.2"/>
-        <arg name="max_age" value="0.5"/>
-        <arg name="weights" value="$(find monoforce)/config/weights/lss/lss_robingas_$(arg robot).pt"/>
-        <arg name="dphys_config_path" value="$(find monoforce)/config/dphys_cfg.yaml"/>
-        <arg name="lss_config_path" value="$(find monoforce)/config/lss_cfg_$(arg robot).yaml"/>
-        <arg name="n_cams" default="$(arg n_cams)"/>
-    </include>
-
-    <!-- Lidar Terrain Encoder -->
-    <include if="0" file="$(find monoforce)/launch/geom_hm_estimator.launch">
-        <arg name="pts_topics" value="[/points]"/>
-        <arg name="output_topic" value="height_map"/>
-    </include>
-
-    <!-- Averaging height map predictions -->
-    <node if="0" name="heightmaps_merger" pkg="monoforce" type="heightmaps_merger" output="screen">
-        <rosparam subst_value="true">
-            robot_frame: base_link
-            map_frame: map
-            hm_topic: height_map
-            max_age: 2.0
-        </rosparam>
-        <remap from="height_map_merged" to="height_map_merged"/>
-        <remap from="grid_map_merged/terrain" to="grid_map_merged/terrain"/>
-    </node>
-
-    <!-- Diff Physics: paths sampling -->
-    <include file="$(find monoforce)/launch/dphysics.launch">
         <arg name="warp_dphys" value="$(arg warp_dphys)"/>
-        <arg name="robot" value="husky"/>
-        <arg name="hm_topic" value="height_map"/>
-<!--         <arg name="hm_topic" value="height_map_merged"/> -->
-        <arg name="hm_frame" value="base_link"/>
-        <arg name="max_age" value="2.0"/>
-        <arg name="total_sim_time" value="$(arg traj_sim_time)"/>
+        <arg name="traj_sim_time" value="$(arg traj_sim_time)"/>
         <arg name="device" value="$(arg device)"/>
     </include>
 
@@ -74,31 +38,16 @@
     </include>
 
     <!-- Path selector -->
-    <node name="path_selector" pkg="husky_nav" type="path_selector">
-        <rosparam subst_value="true">
-            robot_frame: base_link
-            map_frame: map
-            paths_topic: sampled_paths
-            path_costs_topic: path_costs
-            selected_path_topic: selected_path
-            waypoint_weight: 1.0
-            path_force_weight: 2.0
-        </rosparam>
-        <remap from="selected_path" to="selected_path"/>
-    </node>
+    <include file="$(dirname)/path_selector.launch">
+        <arg name="input_paths" value="sampled_paths"/>
+        <arg name="input_path_costs" value="path_costs"/>
+        <arg name="output_path" value="selected_path"/>
+    </include>
 
     <!-- Path follower -->
     <include file="$(dirname)/naex/follower.launch">
         <arg name="path_to_follow" value="selected_path"/>
-        <arg name="robot_frame" value="base_footprint"/>
-        <arg name="odom_frame" value="odom"/>
-        <arg name="map_frame" value="map"/>
-        <arg name="points" value="points"/>
-        <arg name="keep_path" value="1.0"/>
-        <arg name="obstacle_avoidance" value="false"/>
         <arg name="max_age" value="2.0"/>
-        <arg name="goal_reached_dist" value="0.2"/>
-        <arg name="local_goal_dims" default="'xy'"/>
     </include>
 
     <!-- RViz -->

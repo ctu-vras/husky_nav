@@ -5,13 +5,13 @@
     <arg name="path_to_follow" default="path"
          doc="Path topic to follow."/>
     <arg name="points" default="points_slow_filtered"/>
-    <arg name="keep_path" default="3."/>
+    <arg name="keep_path" default="1."/>
     <arg name="map_frame" default="map"/>
     <arg name="odom_frame" default="odom"/>
-    <arg name="robot_frame" default="base_footprint"/>
+    <arg name="robot_frame" default="base_link"/>
     <arg name="max_age" default="1.0"/>
     <arg name="obstacle_avoidance" default="false"/>
-    <arg name="local_goal_dims" default="'xyz'"/>
+    <arg name="local_goal_dims" default="'xy'"/>
     <arg name="goal_reached_dist" default="0.3"/>
     <arg name="look_ahead" default="0.8"/>
 

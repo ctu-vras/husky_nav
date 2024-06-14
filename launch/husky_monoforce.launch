@@ -26,6 +26,8 @@
                                                '/ids_camera_left/camera_info',
                                                '/ids_camera_rear/camera_info',
                                                '/ids_camera_right/camera_info']"/>
+<!--         <arg name="img_topics" value="['/ids_camera_front/image_raw/compressed']"/> -->
+<!--         <arg name="camera_info_topics" value="['/ids_camera_front/camera_info']"/> -->
         <arg name="warp_dphys" value="$(arg warp_dphys)"/>
         <arg name="traj_sim_time" value="$(arg traj_sim_time)"/>
         <arg name="device" value="$(arg device)"/>
@@ -42,13 +44,15 @@
         <arg name="input_paths" value="sampled_paths"/>
         <arg name="input_path_costs" value="path_costs"/>
         <arg name="output_path" value="selected_path"/>
-        <arg name="waypoints_list" value="[[0, 0, 0, 0, 0, 0, 1],
+        <arg name="waypoints_list" value="[
                                            [10, -5, 0, 0, 0, 0, 1],
                                            [10, 5, 0, 0, 0, 0, 1],
                                            [0, 5, 0, 0, 0, 0, 1],
                                            [0, -5, 0, 0, 0, 0, 1],
                                            [0, 0, 0, 0, 0, 0, 1],
                                            ]"/>
+        <arg name="waypoint_weight" default="2.0"/>
+        <arg name="path_force_weight" default="1.0"/>
     </include>
 
     <!-- Path follower -->

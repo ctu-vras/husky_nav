@@ -4,7 +4,7 @@ from threading import RLock
 import numpy as np
 import rospy
 from nav_msgs.msg import Path
-from visualization_msgs.msg import MarkerArray
+from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import PoseStamped
 from time import time
@@ -47,13 +47,13 @@ class PathSelector:
         self.proc_lock = RLock()
         self.max_msgs_delay = max_msgs_delay
         self.rate = rospy.Rate(1.0 / proc_time_period)
+        self.wp_i = 0
+        self.waypoint_weight = waypoint_weight
+        self.path_force_weight = path_force_weight
         self.subs = []
         self.wp_pub = rospy.Publisher('waypoint', PoseStamped, queue_size=1)
         self.route_pub = rospy.Publisher('waypoints_route', Path, queue_size=1)
-        self.wp_i = 0
         self.selected_path_pub = rospy.Publisher(self.selected_path_topic, Path, queue_size=1)
-        self.waypoint_weight = waypoint_weight
-        self.path_force_weight = path_force_weight
 
     def start(self):
         """
@@ -90,18 +90,34 @@ class PathSelector:
         path.header.stamp = rospy.Time.now() if stamp is None else stamp
         path.header.frame_id = self.map_frame
         for waypoint in waypoints_list:
-            pose = PoseStamped()
-            pose.header.stamp = path.header.stamp
-            pose.header.frame_id = path.header.frame_id
-            pose.pose.position.x = waypoint[0]
-            pose.pose.position.y = waypoint[1]
-            pose.pose.position.z = waypoint[2]
-            pose.pose.orientation.x = waypoint[3]
-            pose.pose.orientation.y = waypoint[4]
-            pose.pose.orientation.z = waypoint[5]
-            pose.pose.orientation.w = waypoint[6]
+            pose = self.waypoint_to_pose_stamped(waypoint, frame=self.map_frame, stamp=stamp)
             path.poses.append(pose)
         return path
+
+    def waypoint_to_pose_stamped(self, wp, frame, stamp=None):
+        assert len(wp) == 7  # x, y, z, qx, qy, qz, qw
+        pose = PoseStamped()
+        pose.header.stamp = rospy.Time.now() if stamp is None else stamp
+        pose.header.frame_id = frame
+        pose.pose.position.x = wp[0]
+        pose.pose.position.y = wp[1]
+        pose.pose.position.z = wp[2]
+        pose.pose.orientation.x = wp[3]
+        pose.pose.orientation.y = wp[4]
+        pose.pose.orientation.z = wp[5]
+        pose.pose.orientation.w = wp[6]
+        return pose
+
+    def get_path_dist_to_wp(self, path, xyz):
+        assert isinstance(path, Marker)
+        assert isinstance(xyz, np.ndarray)
+        assert xyz.shape == (3,)
+        # path_xyz = np.array([path.points[-1].x, path.points[-1].y, path.points[-1].z])
+        # path_dist_to_wp = np.linalg.norm(wp - path_xyz)
+        path_xyz = np.array([[point.x, point.y, point.z] for point in path.points])
+        path_dists = np.linalg.norm(path_xyz - xyz, axis=1)
+        path_dist = np.min(path_dists)
+        return path_dist
 
     def proc(self, *msgs):
         assert len(msgs) == 2, 'Number of messages must be 2'
@@ -134,27 +150,17 @@ class PathSelector:
                 return
 
         # publish waypoint
-        waypoint = PoseStamped()
-        waypoint.header.stamp = rospy.Time.now()
-        waypoint.header.frame_id = self.map_frame
-        waypoint.pose.position.x = current_wp_xyzq[0]
-        waypoint.pose.position.y = current_wp_xyzq[1]
-        waypoint.pose.position.z = current_wp_xyzq[2]
-        waypoint.pose.orientation.x = current_wp_xyzq[3]
-        waypoint.pose.orientation.y = current_wp_xyzq[4]
-        waypoint.pose.orientation.z = current_wp_xyzq[5]
-        waypoint.pose.orientation.w = current_wp_xyzq[6]
-        self.wp_pub.publish(waypoint)
+        wp_pose = self.waypoint_to_pose_stamped(current_wp_xyzq, frame=self.map_frame)
+        self.wp_pub.publish(wp_pose)
 
         # calculate distance to each path from the waypoint
         path_dists_to_wp = []
         path_costs = []
-        for i, (path_marker, cost) in enumerate(zip(msgs[0].markers, msgs[1].data)):
+        for i, (path_marker, cost) in enumerate(zip(paths_msg.markers, costs_msg.data)):
             # rospy.logdebug(f'Path {i} frame: %s' % path_marker.header.frame_id)
             # rospy.logdebug(f'Path {i} cost: %s' % cost)
             assert path_marker.header.frame_id == self.robot_frame
-            path_xyz_robot = np.array([path_marker.points[-1].x, path_marker.points[-1].y, path_marker.points[-1].z])
-            path_dist_to_wp = np.linalg.norm(current_wp_xyz_robot - path_xyz_robot)
+            path_dist_to_wp = self.get_path_dist_to_wp(path_marker, current_wp_xyz_robot)
             rospy.logdebug(f'Path {i} distance to waypoint: %s' % path_dist_to_wp)
             path_dists_to_wp.append(path_dist_to_wp)
 
@@ -180,17 +186,8 @@ class PathSelector:
             # transform pose to map frame
             xyz_map = robot_pose[:3, :3] @ xyz + robot_pose[:3, 3]
             q_map = np.array([0., 0., 0., 1.])  # identity quaternion as point does not have orientation
-
-            pose = PoseStamped()
-            pose.header.stamp = stamp
-            pose.header.frame_id = self.map_frame
-            pose.pose.position.x = xyz_map[0]
-            pose.pose.position.y = xyz_map[1]
-            pose.pose.position.z = xyz_map[2]
-            pose.pose.orientation.x = q_map[0]
-            pose.pose.orientation.y = q_map[1]
-            pose.pose.orientation.z = q_map[2]
-            pose.pose.orientation.w = q_map[3]
+            wp_map = np.concatenate([xyz_map, q_map])
+            pose = self.waypoint_to_pose_stamped(wp_map, frame=self.map_frame, stamp=stamp)
             path_to_publish.poses.append(pose)
         self.selected_path_pub.publish(path_to_publish)
 

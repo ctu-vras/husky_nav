@@ -287,7 +287,7 @@ class PathFollower(object):
         with self.cloud_lock:
             cloud = self.cloud
         if cloud is None:
-            rospy.loginfo('No cloud to check for obstacles.')
+            rospy.logdebug('No cloud to check for obstacles.')
             return True, None
         tf = numpify(pose)
         # tf = np.linalg.inv(tf)

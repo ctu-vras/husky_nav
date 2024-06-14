@@ -11,6 +11,7 @@ from time import time
 from message_filters import ApproximateTimeSynchronizer, Subscriber
 import tf2_ros
 from ros_numpy import numpify
+from scipy.spatial.transform import Rotation
 
 
 def normalize(v):
@@ -119,6 +120,43 @@ class PathSelector:
         path_dist = np.min(path_dists)
         return path_dist
 
+    def point_to_map_xyz(self, point, robot_pose):
+        xyz = np.array([point.x, point.y, point.z])
+        # transform pose to map frame
+        xyz_map = robot_pose[:3, :3] @ xyz + robot_pose[:3, 3]
+        return xyz_map
+
+    def publish_selected_path(self, marker, robot_pose):
+        stamp = marker.header.stamp
+
+        path_to_publish = Path()
+        path_to_publish.header.stamp = stamp
+        path_to_publish.header.frame_id = self.map_frame
+
+        q_map = np.array([0., 0., 0., 1.])  # identity quaternion as point does not have orientation
+        for i in range(len(marker.points) - 1):
+            point = marker.points[i]
+            xyz_map = self.point_to_map_xyz(point, robot_pose)
+
+            point_next = marker.points[i + 1]
+            xyz_map_next = self.point_to_map_xyz(point_next, robot_pose)
+
+            xy_diff = xyz_map_next[:2] - xyz_map[:2]
+            heading = np.arctan2(xy_diff[1], xy_diff[0])
+            q_map = Rotation.from_euler('z', heading).as_quat()
+
+            wp_map = np.concatenate([xyz_map, q_map])
+            pose = self.waypoint_to_pose_stamped(wp_map, frame=self.map_frame, stamp=stamp)
+            path_to_publish.poses.append(pose)
+
+        point = marker.points[-1]
+        xyz_map = self.point_to_map_xyz(point, robot_pose)
+        wp_map = np.concatenate([xyz_map, q_map])
+        pose = self.waypoint_to_pose_stamped(wp_map, frame=self.map_frame, stamp=stamp)
+        path_to_publish.poses.append(pose)
+
+        self.selected_path_pub.publish(path_to_publish)
+
     def proc(self, *msgs):
         assert len(msgs) == 2, 'Number of messages must be 2'
         assert isinstance(msgs[0], MarkerArray)
@@ -177,19 +215,7 @@ class PathSelector:
         rospy.loginfo(f'Selected path: {selected_path_idx}')
 
         # publish selected path
-        stamp = paths_msg.markers[selected_path_idx].header.stamp
-        path_to_publish = Path()
-        path_to_publish.header.stamp = stamp
-        path_to_publish.header.frame_id = self.map_frame
-        for point in paths_msg.markers[selected_path_idx].points:
-            xyz = np.array([point.x, point.y, point.z])
-            # transform pose to map frame
-            xyz_map = robot_pose[:3, :3] @ xyz + robot_pose[:3, 3]
-            q_map = np.array([0., 0., 0., 1.])  # identity quaternion as point does not have orientation
-            wp_map = np.concatenate([xyz_map, q_map])
-            pose = self.waypoint_to_pose_stamped(wp_map, frame=self.map_frame, stamp=stamp)
-            path_to_publish.poses.append(pose)
-        self.selected_path_pub.publish(path_to_publish)
+        self.publish_selected_path(paths_msg.markers[selected_path_idx], robot_pose)
 
     def spin(self):
         try:

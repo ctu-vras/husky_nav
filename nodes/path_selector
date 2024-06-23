@@ -220,7 +220,7 @@ class PathSelector:
 
 
 def main():
-    rospy.init_node('path_selector', anonymous=True, log_level=rospy.DEBUG)
+    rospy.init_node('path_selector', anonymous=True, log_level=rospy.INFO)
 
     paths_topic = rospy.get_param('~paths_topic', 'sampled_paths')
     path_costs_topic = rospy.get_param('~path_costs_topic', 'path_costs')

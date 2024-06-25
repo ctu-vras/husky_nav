@@ -8,7 +8,7 @@ The [MonoForce](https://github.com/ctu-vras/monoforce) package is used as robot-
 
 Trajectories prediction is based on the
 [NVIDIA-Warp](https://github.com/NVIDIA/warp) and
-[ParallelTrackSimulator](https://github.com/tichyt11/ParallelTrackSimulator)
+[ctu-vras/diffsim](https://github.com/ctu-vras/diffsim/tree/monoforce)
 packages.
 
 Navigation consists of the following stages, [video](https://drive.google.com/file/d/1OLnTtedNLX23HjNnXV7Sct_3xSFGxe2H/view?usp=sharing):

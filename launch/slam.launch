@@ -5,8 +5,10 @@
     <arg name="map_frame" default="map"/>
     <arg name="robot_frame" default="base_link"/>
     <arg name="delay" default="0.0"/>
+    <arg name="node_start_delay" default="0.0"/>
 
-    <node pkg="norlab_icp_mapper_ros" type="mapper_node" name="mapper_node">
+    <node pkg="norlab_icp_mapper_ros" type="mapper_node" name="mapper_node"
+          launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@'">
 		<remap from="points_in" to="$(arg cloud)"/>
 		<param name="robot_frame" value="$(arg robot_frame)"/>
 		<param name="odom_frame" value="$(arg odom_frame)"/>

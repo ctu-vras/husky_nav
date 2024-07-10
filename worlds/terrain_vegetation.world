@@ -18,7 +18,7 @@
         <falloff>0</falloff>
       </spot>
     </light>
-    <model name='terrain_vegetation'>
+    <model name='terrain'>
       <pose>0 0 0 0 -0 0</pose>
       <static>1</static>
       <link name='body'>
@@ -824,7 +824,7 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='terrain_vegetation'>
+      <model name='terrain'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='body'>

@@ -12,12 +12,6 @@
     <arg name="gui" value="$(arg gui)"/>
   </include>
 
-  <!-- Publish tf 'base_footprint' as pose.-->
-  <node pkg="elevation_mapping_demos" type="tf_to_pose_publisher.py" name="husky_pose_publisher">
-    <param name="from_frame" type="string" value="odom"/>
-    <param name="to_frame" type="string" value="base_footprint"/>
-  </node>
-
   <!-- Launch cloud filter nodelet. -->
   <node name="range_filter" pkg="nodelet" type="nodelet" args="standalone cloud_proc/range_filter">
       respawn="true" respawn_delay="1.0" output="log">
@@ -43,11 +37,24 @@
     </rosparam>
   </node>
 
+  <!-- Publish tf 'base_footprint' as pose.-->
+  <node pkg="elevation_mapping_demos" type="tf_to_pose_publisher.py" name="husky_pose_publisher">
+    <param name="from_frame" type="string" value="odom"/>
+    <param name="to_frame" type="string" value="base_footprint"/>
+  </node>
+
   <!-- Launch elevation mapping node. -->
   <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
     <rosparam command="load" file="$(dirname)/../config/elevation_mapping/robots/husky.yaml"/>
     <rosparam command="load" file="$(dirname)/../config/elevation_mapping/postprocessing/postprocessor_pipeline.yaml"/>
   </node>
+
+  <include if="0" file="$(find monoforce)/launch/dphysics.launch">
+    <arg name="warp_dphys" value="true"/>
+    <arg name="robot" value="husky"/>
+    <arg name="gridmap_topic" value="elevation_mapping/elevation_map"/>
+    <arg name="gridmap_frame" value="base_footprint"/>
+  </include>
 
   <!-- Launch RViz with the demo configuration. -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/elevation_mapping.rviz"/>

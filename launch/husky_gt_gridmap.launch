@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <arg name="rviz" default="true" doc="Launch RViz for data visualization or not"/>
+    <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
+    <arg name="robot" default="husky" doc="Robot name"/>
+    <arg name="warp_dphys" default="true" doc="Using NVIDIA Warp-based differentiable physics or not"/>
+    <arg name="traj_sim_time" default="8.0" doc="Simulation time horizon of the trajectories"/>
+    <arg name="device" default="cpu" doc="Device to run the warp-based differentiable physics on"/>
+    <arg name="world" default="$(dirname)/../worlds/terrain.world"/>
+
+    <!-- Gazebo world and spawn Husky robot -->
+    <include file="$(dirname)/husky_sim.launch">
+        <arg name="world" value="$(arg world)"/>
+        <arg name="gui" value="$(arg gui)"/>
+    </include>
+
+    <!-- Static transform from world to map -->
+    <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0.132 0 0 0 world map 100"/>
+    <!-- GT clouds -->
+    <node name="gt_gridmap" pkg="husky_nav" type="publish_gt_gridmap" output="screen">
+        <rosparam subst_value="true">
+            world_mesh: "$(dirname)/../worlds/meshes/terrain.obj"
+            robot_frame: base_link
+            world_frame: world
+            rate: 10
+            dist_max: 6.4
+        </rosparam>
+        <remap from="world_mesh" to="world_mesh"/>
+        <remap from="world_cloud" to="world_cloud"/>
+        <remap from="local_cloud" to="local_cloud"/>
+        <remap from="grid_map/terrain" to="grid_map/terrain"/>
+    </node>
+
+    <!-- Diff Physics: paths sampling -->
+    <include file="$(find monoforce)/launch/dphysics.launch">
+        <arg name="warp_dphys" value="true"/>
+        <arg name="robot" value="husky"/>
+        <arg name="gridmap_topic" value="grid_map/terrain"/>
+        <arg name="gridmap_frame" value="base_link"/>
+        <arg name="traj_sim_time" value="6.0"/>
+        <arg name="device" value="cpu"/>
+    </include>
+
+    <!-- SLAM -->
+    <include file="$(dirname)/slam.launch">
+        <arg name="cloud" value="points"/>
+        <arg name="odom_frame" value="odom"/>
+        <arg name="node_start_delay" value="2.0"/>
+    </include>
+
+    <!-- Path selector -->
+    <include file="$(dirname)/path_selector.launch">
+        <arg name="input_paths" value="sampled_paths"/>
+        <arg name="input_path_costs" value="path_costs"/>
+        <arg name="output_path" value="selected_path"/>
+        <arg name="waypoints_list" value="[
+                                           [10, -5, 0, 0, 0, 0, 1],
+                                           [10, 5, 0, 0, 0, 0, 1],
+                                           [0, 5, 0, 0, 0, 0, 1],
+                                           [0, -5, 0, 0, 0, 0, 1],
+                                           [0, 0, 0, 0, 0, 0, 1],
+                                           ]"/>
+        <arg name="waypoint_weight" default="1.0"/>
+        <arg name="path_force_weight" default="1.0"/>
+    </include>
+
+    <!-- Path follower -->
+    <include file="$(dirname)/naex/follower.launch">
+        <arg name="path_to_follow" value="selected_path"/>
+        <arg name="max_age" value="2.0"/>
+    </include>
+
+    <!-- RViz -->
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/monoforce_gt.rviz"/>
+</launch>

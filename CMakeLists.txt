@@ -28,5 +28,6 @@ install(
         path_to_map
         path_selector
         random_path_planner
+        publish_gt_gridmap
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/nodes
 )

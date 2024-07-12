@@ -55,6 +55,7 @@ class PathSelector:
         self.wp_pub = rospy.Publisher('waypoint', PoseStamped, queue_size=1)
         self.route_pub = rospy.Publisher('waypoints_route', Path, queue_size=1)
         self.selected_path_pub = rospy.Publisher(self.selected_path_topic, Path, queue_size=1)
+        self.xy_dist_to_wp = np.inf
 
     def start(self):
         """
@@ -65,7 +66,9 @@ class PathSelector:
         rospy.loginfo('Subscribing to %s' % self.path_costs_topic)
         self.subs.append(Subscriber(self.path_costs_topic, Float32MultiArray))
         self.sync = ApproximateTimeSynchronizer(self.subs, queue_size=1, slop=self.max_msgs_delay, allow_headerless=True)
-        self.sync.registerCallback(self.callback)
+        self.sync.registerCallback(self.path_selection_callback)
+        rospy.loginfo('Starting waypoint distance timer')
+        self.wp_dist_timer = rospy.Timer(rospy.Duration(0.1), self.wp_dist_callback)
 
     def get_map_pose(self, frame, stamp=None):
         if stamp is None:
@@ -78,7 +81,22 @@ class PathSelector:
         pose = np.array(numpify(tf.transform), dtype=np.float32).reshape((4, 4))
         return pose
 
-    def callback(self, *msgs):
+    def wp_dist_callback(self, event):
+        robot_pose = self.get_map_pose(self.robot_frame)
+        if robot_pose is None:
+            rospy.logwarn('Could not get robot pose')
+            return
+        if self.wp_i >= len(self.waypoints_list):
+            rospy.loginfo('All waypoints reached. Stopping the timer.')
+            self.wp_dist_timer.shutdown()
+            return
+        current_wp_xyzq = self.waypoints_list[self.wp_i]
+        current_wp_xyz = current_wp_xyzq[:3]
+        current_wp_xyz_robot = robot_pose[:3, :3].T @ (current_wp_xyz - robot_pose[:3, 3])
+        self.xy_dist_to_wp = np.linalg.norm(current_wp_xyz_robot[:2])
+        rospy.loginfo(f'Distance to waypoint: {self.xy_dist_to_wp}')
+
+    def path_selection_callback(self, *msgs):
         with self.proc_lock:
             rospy.logdebug('Received %d messages' % len(msgs))
             t0 = time()
@@ -118,7 +136,8 @@ class PathSelector:
         path_xyz = np.array([[point.x, point.y, point.z] for point in path.points])
         path_dists = np.linalg.norm(path_xyz - xyz, axis=1)
         path_dist = np.min(path_dists)
-        return path_dist
+        path_dist_id = np.argmin(path_dists)
+        return path_dist, path_dist_id
 
     def point_to_map_xyz(self, point, robot_pose):
         xyz = np.array([point.x, point.y, point.z])
@@ -126,7 +145,13 @@ class PathSelector:
         xyz_map = robot_pose[:3, :3] @ xyz + robot_pose[:3, 3]
         return xyz_map
 
-    def publish_selected_path(self, marker, robot_pose):
+    def publish_selected_path(self, marker, robot_pose, closest_point_id=None):
+        if closest_point_id is None:
+            closest_point_id = len(marker.points)
+        assert isinstance(marker, Marker)
+        assert isinstance(robot_pose, np.ndarray)
+        assert robot_pose.shape == (4, 4)
+        assert closest_point_id <= len(marker.points)
         stamp = marker.header.stamp
 
         path_to_publish = Path()
@@ -134,7 +159,7 @@ class PathSelector:
         path_to_publish.header.frame_id = self.map_frame
 
         q_map = np.array([0., 0., 0., 1.])
-        for i in range(len(marker.points)):
+        for i in range(closest_point_id):
             point = marker.points[i]
             xyz_map = self.point_to_map_xyz(point, robot_pose)
 
@@ -166,14 +191,17 @@ class PathSelector:
         # select waypoint
         current_wp_xyzq = self.waypoints_list[self.wp_i]
 
+        # publish waypoint
+        wp_pose = self.waypoint_to_pose_stamped(current_wp_xyzq, frame=self.map_frame)
+        self.wp_pub.publish(wp_pose)
+
         # transform waypoint to robot frame
         robot_pose = self.get_map_pose(self.robot_frame)
         current_wp_xyz = current_wp_xyzq[:3]
         current_wp_xyz_robot = robot_pose[:3, :3].T @ (current_wp_xyz - robot_pose[:3, 3])
-        # distance to waypoint
-        xy_dist_to_wp = np.linalg.norm(current_wp_xyz_robot[:2])
-        rospy.logdebug(f'Distance to waypoint: {xy_dist_to_wp}')
-        if xy_dist_to_wp < self.waypoint_reached_dist:
+
+        # check if waypoint is reached
+        if self.xy_dist_to_wp < self.waypoint_reached_dist:
             self.wp_i += 1
             rospy.loginfo(f'Waypoint reached. New waypoint index: {self.wp_i}')
             if self.wp_i == len(self.waypoints_list):
@@ -182,20 +210,18 @@ class PathSelector:
                     sub.unregister()
                 return
 
-        # publish waypoint
-        wp_pose = self.waypoint_to_pose_stamped(current_wp_xyzq, frame=self.map_frame)
-        self.wp_pub.publish(wp_pose)
-
         # calculate distance to each path from the waypoint
         path_dists_to_wp = []
         path_costs = []
+        closest_point_ids = []
         for i, (path_marker, cost) in enumerate(zip(paths_msg.markers, costs_msg.data)):
             # rospy.logdebug(f'Path {i} frame: %s' % path_marker.header.frame_id)
             # rospy.logdebug(f'Path {i} cost: %s' % cost)
             assert path_marker.header.frame_id == self.robot_frame
-            path_dist_to_wp = self.get_path_dist_to_wp(path_marker, current_wp_xyz_robot)
+            path_dist_to_wp, closest_point_id = self.get_path_dist_to_wp(path_marker, current_wp_xyz_robot)
             rospy.logdebug(f'Path {i} distance to waypoint: %s' % path_dist_to_wp)
             path_dists_to_wp.append(path_dist_to_wp)
+            closest_point_ids.append(closest_point_id)  # from path points to waypoint
 
             path_costs.append(cost)
         path_dists_to_wp = np.array(path_dists_to_wp)
@@ -206,11 +232,13 @@ class PathSelector:
 
         # select path with minimum distance to waypoint and cost
         costs = self.waypoint_weight * normalize(path_dists_to_wp) + self.path_force_weight * normalize(path_costs)
-        selected_path_idx = np.argmin(costs)
-        rospy.loginfo(f'Selected path: {selected_path_idx}')
+        selected_path_id = np.argmin(costs)
+        selected_path_closest_point_id = closest_point_ids[selected_path_id]
+        rospy.loginfo(f'Selected path id: {selected_path_id} with cost: {costs[selected_path_id]}'
+                      f' and closest point id: {selected_path_closest_point_id}')
 
         # publish selected path
-        self.publish_selected_path(paths_msg.markers[selected_path_idx], robot_pose)
+        self.publish_selected_path(paths_msg.markers[selected_path_id], robot_pose, selected_path_closest_point_id)
 
     def spin(self):
         try:

@@ -75,7 +75,7 @@ class PathFollower(object):
         self.local_goal_dims = rospy.get_param('~local_goal_dims', 'xy')
         assert self.local_goal_dims in ('xy', 'xyz')
         self.goal_reached_dist = rospy.get_param('~goal_reached_dist', 0.2)
-        self.goal_reached_angle = rospy.get_param('~goal_reached_angle', 0.2)
+        self.goal_reached_angle = float(rospy.get_param('~goal_reached_angle', 0.2))
         self.use_path_theta = rospy.get_param('~use_path_theta', 'last')
         assert self.use_path_theta in ('none', 'last', 'all')
         self.max_age = rospy.get_param('~max_age', 1.0)

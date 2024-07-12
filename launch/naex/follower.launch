@@ -12,11 +12,11 @@
     <arg name="max_age" default="1.0"/>
     <arg name="obstacle_avoidance" default="false"/>
     <arg name="local_goal_dims" default="'xy'"/>
-    <arg name="goal_reached_dist" default="0.5"/>
+    <arg name="goal_reached_dist" default="0.3"/>
     <arg name="look_ahead" default="0.8"/>
 
     <node name="path_follower" pkg="husky_nav" type="path_follower"
-          respawn="true" respawn_delay="1.0" output="screen">
+          respawn="true" respawn_delay="1.0">
 
         <rosparam subst_value="true">
             map_frame: $(arg map_frame)
@@ -24,7 +24,7 @@
             robot_frame: $(arg robot_frame)
             control_freq: 10.0
             goal_reached_dist: $(arg goal_reached_dist)
-            goal_reached_angle: np.inf
+            goal_reached_angle: Inf
             use_path_theta: none
             max_age: $(arg max_age)
             obstacle_avoidance: $(arg obstacle_avoidance)

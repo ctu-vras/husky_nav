@@ -6,7 +6,7 @@
     <arg name="input_path_costs" default="path_costs"/>
     <arg name="output_path" default="selected_path"/>
     <arg name="waypoint_weight" default="1.0"/>
-    <arg name="path_force_weight" default="2.0"/>
+    <arg name="path_force_weight" default="1.0"/>
     <arg name="waypoints_list" default="[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]]"/>
 
     <node name="path_selector" pkg="husky_nav" type="path_selector" output="screen">

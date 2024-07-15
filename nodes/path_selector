@@ -70,7 +70,7 @@ class PathSelector:
         rospy.loginfo('Starting waypoint distance timer')
         self.wp_dist_timer = rospy.Timer(rospy.Duration(0.1), self.wp_dist_callback)
 
-    def get_map_pose(self, frame, stamp=None):
+    def get_pose(self, frame, stamp=None):
         if stamp is None:
             stamp = rospy.Time(0)
         try:
@@ -82,7 +82,7 @@ class PathSelector:
         return pose
 
     def wp_dist_callback(self, event):
-        robot_pose = self.get_map_pose(self.robot_frame)
+        robot_pose = self.get_pose(self.robot_frame)
         if robot_pose is None:
             rospy.logwarn('Could not get robot pose')
             return
@@ -196,7 +196,10 @@ class PathSelector:
         self.wp_pub.publish(wp_pose)
 
         # transform waypoint to robot frame
-        robot_pose = self.get_map_pose(self.robot_frame)
+        robot_pose = self.get_pose(self.robot_frame)
+        if robot_pose is None:
+            rospy.logwarn('Could not get robot pose')
+            return
         current_wp_xyz = current_wp_xyzq[:3]
         current_wp_xyz_robot = robot_pose[:3, :3].T @ (current_wp_xyz - robot_pose[:3, 3])
 
@@ -254,6 +257,7 @@ def main():
     path_costs_topic = rospy.get_param('~path_costs_topic', 'path_costs')
     selected_path_topic = rospy.get_param('~selected_path_topic', 'selected_path')
     robot_frame = rospy.get_param('~robot_frame', 'base_link')
+    map_frame = rospy.get_param('~map_frame', 'map')
     max_msgs_delay = rospy.get_param('~max_msgs_delay', 0.1)
     proc_time_period = rospy.get_param('~proc_time_period', 1.0)
     waypoints_list = rospy.get_param('~waypoints_list', [[0., 0., 0., 0., 0., 0., 1.]])
@@ -265,7 +269,8 @@ def main():
                         waypoints_list=waypoints_list, selected_path_topic=selected_path_topic,
                         waypoint_reached_dist=waypoint_reached_dist,
                         waypoint_weight=waypoint_weight, path_force_weight=path_force_weight,
-                        robot_frame=robot_frame, max_msgs_delay=max_msgs_delay,
+                        robot_frame=robot_frame, map_frame=map_frame,
+                        max_msgs_delay=max_msgs_delay,
                         proc_time_period=proc_time_period)
     node.start()
     node.spin()

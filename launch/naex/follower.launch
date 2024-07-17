@@ -24,7 +24,7 @@
             robot_frame: $(arg robot_frame)
             control_freq: 10.0
             goal_reached_dist: $(arg goal_reached_dist)
-            goal_reached_angle: Inf
+            goal_reached_angle: 0.2
             use_path_theta: none
             max_age: $(arg max_age)
             obstacle_avoidance: $(arg obstacle_avoidance)

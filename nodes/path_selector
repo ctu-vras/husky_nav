@@ -158,6 +158,10 @@ class PathSelector:
         path_to_publish.header.stamp = stamp
         path_to_publish.header.frame_id = self.map_frame
 
+        # 1 < closest_point_id <= path_length
+        closest_point_id = min(closest_point_id, len(marker.points))
+        closest_point_id = max(1, closest_point_id)
+
         q_map = np.array([0., 0., 0., 1.])
         for i in range(closest_point_id):
             point = marker.points[i]

@@ -240,7 +240,7 @@ class PathSelector:
         # select path with minimum distance to waypoint and cost
         costs = self.waypoint_weight * normalize(path_dists_to_wp) + self.path_force_weight * normalize(path_costs)
         selected_path_id = np.argmin(costs)
-        selected_path_closest_point_id = closest_point_ids[selected_path_id]
+        selected_path_closest_point_id = closest_point_ids[selected_path_id] if self.waypoint_weight > 0.0 else None
         rospy.loginfo(f'Selected path id: {selected_path_id} with cost: {costs[selected_path_id]}'
                       f' and closest point id: {selected_path_closest_point_id}')
 

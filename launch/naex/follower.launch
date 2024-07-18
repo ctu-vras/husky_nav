@@ -24,7 +24,7 @@
             robot_frame: $(arg robot_frame)
             control_freq: 10.0
             goal_reached_dist: $(arg goal_reached_dist)
-            goal_reached_angle: 0.2
+            goal_reached_angle: 0.4
             use_path_theta: none
             max_age: $(arg max_age)
             obstacle_avoidance: $(arg obstacle_avoidance)
@@ -36,7 +36,7 @@
             max_path_dist: [2.0, 2.5, 2.5, 2.5]
             look_ahead: $(arg look_ahead)
             max_speed: 0.5
-            allow_backward: true
+            allow_backward: false
             max_force_through_speed: 0.2
             max_angular_rate: 0.2
             keep_path: $(arg keep_path)

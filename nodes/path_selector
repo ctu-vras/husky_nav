@@ -145,14 +145,15 @@ class PathSelector:
         xyz_map = robot_pose[:3, :3] @ xyz + robot_pose[:3, 3]
         return xyz_map
 
-    def publish_selected_path(self, marker, robot_pose, closest_point_id=None):
+    def publish_selected_path(self, marker, robot_pose, closest_point_id=None, stamp=None):
         if closest_point_id is None:
             closest_point_id = len(marker.points)
         assert isinstance(marker, Marker)
         assert isinstance(robot_pose, np.ndarray)
         assert robot_pose.shape == (4, 4)
         assert closest_point_id <= len(marker.points)
-        stamp = marker.header.stamp
+        if stamp is None:
+            stamp = marker.header.stamp
 
         path_to_publish = Path()
         path_to_publish.header.stamp = stamp
@@ -186,6 +187,7 @@ class PathSelector:
         assert isinstance(msgs[0], MarkerArray)
         assert isinstance(msgs[1], Float32MultiArray)
         paths_msg, costs_msg = msgs
+        stamp = paths_msg.markers[0].header.stamp
         rospy.loginfo('Received %d paths and %d path costs' % (len(paths_msg.markers), len(costs_msg.data)))
 
         # publish waypoints route
@@ -200,7 +202,7 @@ class PathSelector:
         self.wp_pub.publish(wp_pose)
 
         # transform waypoint to robot frame
-        robot_pose = self.get_pose(self.robot_frame)
+        robot_pose = self.get_pose(self.robot_frame, stamp=stamp)
         if robot_pose is None:
             rospy.logwarn('Could not get robot pose')
             return
@@ -245,7 +247,7 @@ class PathSelector:
                       f' and closest point id: {selected_path_closest_point_id}')
 
         # publish selected path
-        self.publish_selected_path(paths_msg.markers[selected_path_id], robot_pose, selected_path_closest_point_id)
+        self.publish_selected_path(paths_msg.markers[selected_path_id], robot_pose, selected_path_closest_point_id, stamp=stamp)
 
     def spin(self):
         try:

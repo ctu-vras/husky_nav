@@ -4,7 +4,7 @@
     <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
     <arg name="robot" default="husky" doc="Robot name"/>
     <arg name="warp_dphys" default="true" doc="Using NVIDIA Warp-based differentiable physics or not"/>
-    <arg name="traj_sim_time" default="8.0" doc="Simulation time horizon of the trajectories"/>
+    <arg name="traj_sim_time" default="10.0" doc="Simulation time horizon of the trajectories"/>
     <arg name="device" default="cpu" doc="Device to run the warp-based differentiable physics on"/>
     <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
 <!--     <arg name="world" default="$(dirname)/../worlds/terrain.world"/> -->

@@ -3,15 +3,23 @@
 Navigation with Husky robot only from RGB images.
 The [ctu-vras/monoforce](https://github.com/ctu-vras/monoforce) package is used as robot-terrain interaction and path planning pipeline.
 
-![Husky in Gazebo](docs/imgs/cameras.png)
-![Husky in Gazebo](docs/imgs/husky_monoforce.png)
+[//]: # (![]&#40;docs/imgs/forest_navigation_video_teaser.png&#41;)
+
+<p align="center">
+  <a href="https://drive.google.com/file/d/1mqKEh_3VHZo4kDcJXP572SD1BVw37hSf/view?usp=drive_link">
+  <img src="docs/imgs/forest_navigation_video_teaser.png" alt="5 minute CVPR presentation video link">
+  </a>
+</p>
 
 Trajectories prediction is based on the
 [NVIDIA/warp](https://github.com/NVIDIA/warp) and
 [ctu-vras/diffsim](https://github.com/ctu-vras/diffsim/)
 packages.
 
-Navigation consists of the following stages, [video](https://drive.google.com/file/d/1OLnTtedNLX23HjNnXV7Sct_3xSFGxe2H/view?usp=sharing):
+![Husky in Gazebo](docs/imgs/cameras.png)
+![Husky in Gazebo](docs/imgs/husky_monoforce.png)
+
+Navigation consists of the following stages:
 - **Image acquisition**: RGB images are acquired from the Gazebo simulator.
 - **Height map prediction**: The Terrain Encoder part of the MonoForce is used to estimate terrain properties.
 - **Trajectories prediction**: The Diff Physics part of the MonoForce is used to shoot the robot trajectories.

@@ -36,7 +36,7 @@
             max_path_dist: [2.0, 2.5, 2.5, 2.5]
             look_ahead: $(arg look_ahead)
             max_speed: 0.5
-            allow_backward: false
+            allow_backward: true
             max_force_through_speed: 0.2
             max_angular_rate: 0.2
             keep_path: $(arg keep_path)

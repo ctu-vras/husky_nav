@@ -19,6 +19,8 @@
             waypoint_weight: $(arg waypoint_weight)
             path_force_weight: $(arg path_force_weight)
             waypoints_list: $(arg waypoints_list)
+            wp_lookahead_dist: 10.0
+            waypoint_reached_dist: 1.0
         </rosparam>
     </node>
 </launch>

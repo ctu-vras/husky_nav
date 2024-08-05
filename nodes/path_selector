@@ -26,8 +26,9 @@ class PathSelector:
                  paths_topic,
                  path_costs_topic,
                  waypoints_list,
-                 waypoint_reached_dist,
                  selected_path_topic,
+                 waypoint_reached_dist,
+                 wp_lookahead_dist=10.0,
                  waypoint_weight=1.0,
                  path_force_weight=1.0,
                  robot_frame='base_link',
@@ -40,6 +41,7 @@ class PathSelector:
         # x, y, z, qx, qy, qz, qw
         self.waypoints_list = waypoints_list
         self.waypoint_reached_dist = waypoint_reached_dist
+        self.wp_lookahead_dist = wp_lookahead_dist
         self.paths_topic = paths_topic
         self.path_costs_topic = path_costs_topic
         self.selected_path_topic = selected_path_topic
@@ -242,7 +244,13 @@ class PathSelector:
         # select path with minimum distance to waypoint and cost
         costs = self.waypoint_weight * normalize(path_dists_to_wp) + self.path_force_weight * normalize(path_costs)
         selected_path_id = np.argmin(costs)
-        selected_path_closest_point_id = closest_point_ids[selected_path_id] if self.waypoint_weight > 0.0 else None
+        selected_path_closest_point_id = closest_point_ids[selected_path_id]
+        if self.waypoint_weight <= 0.0:
+            selected_path_closest_point_id = None
+        if self.xy_dist_to_wp > self.wp_lookahead_dist:
+            rospy.logdebug(f'Distance to waypoint is greater than lookahead: {self.xy_dist_to_wp} > {self.wp_lookahead_dist}.'
+                           f' Following the complete path.')
+            selected_path_closest_point_id = None
         rospy.loginfo(f'Selected path id: {selected_path_id} with cost: {costs[selected_path_id]}'
                       f' and closest point id: {selected_path_closest_point_id}')
 
@@ -268,12 +276,14 @@ def main():
     proc_time_period = rospy.get_param('~proc_time_period', 1.0)
     waypoints_list = rospy.get_param('~waypoints_list', [[0., 0., 0., 0., 0., 0., 1.]])
     waypoint_reached_dist = rospy.get_param('~waypoint_reached_dist', 1.0)
+    wp_lookahead_dist = rospy.get_param('~wp_lookahead_dist', 10.0)
     waypoint_weight = rospy.get_param('~waypoint_weight', 1.0)
     path_force_weight = rospy.get_param('~path_force_weight', 1.0)
 
     node = PathSelector(paths_topic=paths_topic, path_costs_topic=path_costs_topic,
                         waypoints_list=waypoints_list, selected_path_topic=selected_path_topic,
                         waypoint_reached_dist=waypoint_reached_dist,
+                        wp_lookahead_dist=wp_lookahead_dist,
                         waypoint_weight=waypoint_weight, path_force_weight=path_force_weight,
                         robot_frame=robot_frame, map_frame=map_frame,
                         max_msgs_delay=max_msgs_delay,

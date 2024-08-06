@@ -1,7 +1,8 @@
 # Husky MonoForce
 
-Navigation with Husky robot only from RGB images.
-The [ctu-vras/monoforce](https://github.com/ctu-vras/monoforce) package is used as robot-terrain interaction and path planning pipeline.
+Navigation with Husky robot with the
+[ctu-vras/monoforce](https://github.com/ctu-vras/monoforce)
+package used as robot-terrain interaction and path planning pipeline.
 
 [//]: # (![]&#40;docs/imgs/forest_navigation_video_teaser.png&#41;)
 

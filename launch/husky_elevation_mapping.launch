@@ -49,11 +49,17 @@
     <rosparam command="load" file="$(dirname)/../config/elevation_mapping/postprocessing/postprocessor_pipeline.yaml"/>
   </node>
 
-  <include if="0" file="$(find monoforce)/launch/dphysics.launch">
-    <arg name="warp_dphys" value="true"/>
+  <!-- SLAM -->
+  <include file="$(dirname)/slam.launch">
+    <arg name="cloud" value="points"/>
+  </include>
+
+  <include if="1" file="$(find monoforce)/launch/dphysics.launch">
+    <arg name="warp_dphys" value="false"/>
     <arg name="robot" value="husky"/>
-    <arg name="gridmap_topic" value="elevation_mapping/elevation_map"/>
-    <arg name="gridmap_frame" value="base_footprint"/>
+    <arg name="gridmap_topic" value="elevation_mapping/elevation_map_raw"/>
+    <arg name="gridmap_layer" value="elevation_inpainted"/>
+    <arg name="max_age" value="1.0"/>
   </include>
 
   <!-- Launch RViz with the demo configuration. -->

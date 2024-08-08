@@ -5,6 +5,7 @@
   <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
   <arg name="robot" default="husky" doc="Robot name"/>
   <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
+  <arg name="engine" default="warp" doc="Using NVIDIA Warp- or Pytorch-based differentiable physics"/>
 
   <!-- Gazebo world and spawn Husky robot -->
   <include file="$(dirname)/husky_sim.launch">
@@ -39,7 +40,7 @@
 
   <!-- Publish tf 'base_footprint' as pose.-->
   <node pkg="elevation_mapping_demos" type="tf_to_pose_publisher.py" name="husky_pose_publisher">
-    <param name="from_frame" type="string" value="odom"/>
+    <param name="from_frame" type="string" value="map"/>
     <param name="to_frame" type="string" value="base_footprint"/>
   </node>
 
@@ -55,7 +56,7 @@
   </include>
 
   <include if="1" file="$(find monoforce)/launch/dphysics.launch">
-    <arg name="warp_dphys" value="false"/>
+    <arg name="engine" value="$(arg engine)"/>
     <arg name="robot" value="husky"/>
     <arg name="gridmap_topic" value="elevation_mapping/elevation_map_raw"/>
     <arg name="gridmap_layer" value="elevation_inpainted"/>
@@ -63,6 +64,6 @@
   </include>
 
   <!-- Launch RViz with the demo configuration. -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/elevation_mapping.rviz"/>
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/rviz/elevation_mapping.rviz"/>
 
 </launch>

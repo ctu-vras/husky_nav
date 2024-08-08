@@ -58,7 +58,7 @@
     <!-- Path follower -->
     <include file="$(dirname)/naex/follower.launch">
         <arg name="path_to_follow" value="selected_path"/>
-        <arg name="max_age" value="6.0"/>
+        <arg name="max_age" value="10.0"/>
         <arg name="map_frame" value="map"/>
         <arg name="keep_path" value="2.0"/>
     </include>

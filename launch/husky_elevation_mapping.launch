@@ -5,7 +5,7 @@
   <arg name="gui" default="false" doc="Launch Gazebo GUI or not"/>
   <arg name="robot" default="husky" doc="Robot name"/>
   <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
-  <arg name="engine" default="warp" doc="Using NVIDIA Warp- or Pytorch-based differentiable physics"/>
+  <arg name="engine" default="torch" doc="Using NVIDIA Warp- or Pytorch-based differentiable physics"/>
 
   <!-- Gazebo world and spawn Husky robot -->
   <include file="$(dirname)/husky_sim.launch">
@@ -79,7 +79,7 @@
                                        [0, 0, 0, 0, 0, 0, 1],
                                        ]"/>
     <arg name="waypoint_weight" default="1.0"/>
-    <arg name="path_force_weight" default="0.0"/>
+    <arg name="path_force_weight" default="2.0"/>
     <arg name="map_frame" value="map"/>
   </include>
 

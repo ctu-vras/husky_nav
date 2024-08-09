@@ -72,13 +72,15 @@ class PathSelector:
         rospy.loginfo('Starting waypoint distance timer')
         self.wp_dist_timer = rospy.Timer(rospy.Duration(0.1), self.wp_dist_callback)
 
-    def get_pose(self, frame, stamp=None):
+    def get_pose(self, frame, target_frame=None, stamp=None):
         if stamp is None:
             stamp = rospy.Time(0)
+        if target_frame is None:
+            target_frame = self.map_frame
         try:
-            tf = self.tf_buffer.lookup_transform(self.map_frame, frame, stamp, rospy.Duration(1.0))
+            tf = self.tf_buffer.lookup_transform(target_frame, frame, stamp, rospy.Duration(1.0))
         except Exception as ex:
-            rospy.logerr('Could not transform from %s to %s: %s.', frame, self.map_frame, ex)
+            rospy.logerr('Could not transform from %s to %s: %s.', frame, target_frame, ex)
             return None
         pose = np.array(numpify(tf.transform), dtype=np.float32).reshape((4, 4))
         return pose
@@ -100,7 +102,7 @@ class PathSelector:
 
     def path_selection_callback(self, *msgs):
         with self.proc_lock:
-            rospy.logdebug('Received %d messages' % len(msgs))
+            rospy.logdebug('Received %d (paths and costs) messages' % len(msgs))
             t0 = time()
             self.proc(*msgs)
             rospy.logdebug('Processing time: %.3f [sec]' % (time() - t0))
@@ -204,12 +206,12 @@ class PathSelector:
         self.wp_pub.publish(wp_pose)
 
         # transform waypoint to robot frame
-        robot_pose = self.get_pose(self.robot_frame, stamp=stamp)
-        if robot_pose is None:
-            rospy.logwarn('Could not get robot pose')
+        paths_origin_pose = self.get_pose(paths_msg.markers[0].header.frame_id, stamp=stamp)
+        if paths_origin_pose is None:
+            rospy.logwarn('Could not get paths origin pose')
             return
         current_wp_xyz = current_wp_xyzq[:3]
-        current_wp_xyz_robot = robot_pose[:3, :3].T @ (current_wp_xyz - robot_pose[:3, 3])
+        current_wp_xyz_paths_origin = paths_origin_pose[:3, :3].T @ (current_wp_xyz - paths_origin_pose[:3, 3])
 
         # check if waypoint is reached
         if self.xy_dist_to_wp < self.waypoint_reached_dist:
@@ -228,8 +230,7 @@ class PathSelector:
         for i, (path_marker, cost) in enumerate(zip(paths_msg.markers, costs_msg.data)):
             # rospy.logdebug(f'Path {i} frame: %s' % path_marker.header.frame_id)
             # rospy.logdebug(f'Path {i} cost: %s' % cost)
-            assert path_marker.header.frame_id == self.robot_frame
-            path_dist_to_wp, closest_point_id = self.get_path_dist_to_wp(path_marker, current_wp_xyz_robot)
+            path_dist_to_wp, closest_point_id = self.get_path_dist_to_wp(path_marker, current_wp_xyz_paths_origin)
             rospy.logdebug(f'Path {i} distance to waypoint: %s' % path_dist_to_wp)
             path_dists_to_wp.append(path_dist_to_wp)
             closest_point_ids.append(closest_point_id)  # from path points to waypoint
@@ -255,7 +256,7 @@ class PathSelector:
                       f' and closest point id: {selected_path_closest_point_id}')
 
         # publish selected path
-        self.publish_selected_path(paths_msg.markers[selected_path_id], robot_pose, selected_path_closest_point_id, stamp=stamp)
+        self.publish_selected_path(paths_msg.markers[selected_path_id], paths_origin_pose, selected_path_closest_point_id, stamp=stamp)
 
     def spin(self):
         try:

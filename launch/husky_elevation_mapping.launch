@@ -6,6 +6,7 @@
   <arg name="robot" default="husky" doc="Robot name"/>
   <arg name="world" default="$(dirname)/../worlds/terrain_vegetation.world"/>
   <arg name="engine" default="torch" doc="Using NVIDIA Warp- or Pytorch-based differentiable physics"/>
+  <arg name="device" default="cpu" doc="Device to run the differentiable physics"/>
 
   <!-- Gazebo world and spawn Husky robot -->
   <include file="$(dirname)/husky_sim.launch">
@@ -64,6 +65,7 @@
     <arg name="gridmap_topic" value="grid_map/terrain"/>
     <arg name="gridmap_layer" value="elevation_inpainted"/>
     <arg name="max_age" value="1.0"/>
+    <arg name="device" value="$(arg device)"/>
   </include>
 
   <!-- Path selector -->
